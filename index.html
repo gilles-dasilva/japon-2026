@@ -4,22 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>🗾 Japon 2026</title>
-
-<!-- PWA META TAGS -->
 <meta name="application-name" content="Japon 2026">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Japon 2026">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f172a">
-<meta name="description" content="Itinéraire interactif du voyage Japon 2026 — Osaka, Kyoto, Tokyo">
-
-<!-- PWA ICONS (Apple + Android) -->
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
-
-<!-- iOS splash screens -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -28,92 +20,118 @@
   --gold:#d4af37;--gold-light:rgba(212,175,55,0.15);
   --dark:#0f172a;--surface:#1a2236;--surface2:#242f46;
   --border:rgba(212,175,55,0.2);--text:#f8f1e5;--muted:rgba(248,241,229,0.6);
-  --j1:#8B5CF6;--j2:#D85A30;--j3:#059669;
-  --j4:#e879f9;--j5:#f59e0b;--j6:#06b6d4;--j7:#ef4444;
+  --osaka:#D85A30;--kyoto:#8B5CF6;--tokyo:#e11d48;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(--text);overflow:hidden;}
-#app{display:flex;height:100vh;}
 
-/* SIDEBAR */
-#sidebar{width:410px;min-width:410px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:1000;}
+/* ── ÉCRANS ── */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--dark);transform:translateX(100%);transition:transform 0.35s cubic-bezier(.4,0,.2,1);z-index:10;}
+.screen.active{transform:translateX(0);}
+.screen.back{transform:translateX(-30%);}
+#screen-home{transform:translateX(0);z-index:10;}
 
-/* CITY SWITCHER */
-.city-switcher{display:flex;background:#070f1d;border-bottom:1px solid var(--border);flex-shrink:0;}
-.city-btn{flex:1;padding:12px 8px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);transition:all 0.2s;border:none;background:none;border-bottom:3px solid transparent;}
-.city-btn:hover{color:var(--text);}
-.city-btn.active-osaka{color:#D85A30;border-bottom-color:#D85A30;background:rgba(216,90,48,0.1);}
-.city-btn.active-kyoto{color:#8B5CF6;border-bottom-color:#8B5CF6;background:rgba(139,92,246,0.1);}
-    .city-btn.active-tokyo{color:#e11d48;border-bottom-color:#e11d48;background:rgba(225,29,72,0.1);}
-.city-btn .city-emoji{font-size:18px;display:block;margin-bottom:3px;}
+/* ── HEADER ── */
+.app-header{
+  padding:calc(14px + var(--safe-top)) 20px 14px;
+  background:linear-gradient(180deg,rgba(15,23,42,0.98),rgba(15,23,42,0.85));
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+  position:relative;z-index:2;
+}
+.btn-back{background:none;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;font-family:'Lora',serif;display:flex;align-items:center;gap:6px;}
+.header-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);flex:1;}
+.header-sub{font-size:11px;color:var(--muted);}
 
-/* HEADER */
-.sidebar-header{padding:16px 20px 14px;background:linear-gradient(135deg,#070f1d,#1a2236);border-bottom:1px solid var(--border);flex-shrink:0;}
-.trip-label{font-size:9px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:4px;margin-bottom:3px;}
-.trip-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:2px;}
-.trip-dates{font-size:11px;color:var(--muted);margin-bottom:10px;}
-.hotel-info{background:var(--gold-light);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px;}
-.hotel-name{font-size:11px;font-weight:700;color:var(--gold);}
-.hotel-addr{font-size:10px;color:var(--muted);margin-top:1px;}
+/* ── HOME ── */
+#screen-home{background:var(--dark);}
+.home-header{padding:calc(20px + var(--safe-top)) 24px 16px;text-align:center;}
+.home-logo{font-size:48px;margin-bottom:8px;}
+.home-title{font-family:'Playfair Display',serif;font-size:28px;color:var(--text);margin-bottom:4px;}
+.home-sub{font-size:13px;color:var(--muted);}
+.cities-list{flex:1;overflow-y:auto;padding:16px 16px calc(16px + var(--safe-bottom));display:flex;flex-direction:column;gap:14px;}
 
-/* DAY TABS */
-.day-tabs{display:flex;background:var(--dark);border-bottom:1px solid var(--border);flex-shrink:0;}
-.day-tab{flex:1;padding:10px 4px;text-align:center;cursor:pointer;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);transition:all 0.2s;border-bottom:3px solid transparent;border-top:none;border-left:none;border-right:none;background:none;}
-.day-tab .tab-day{font-size:13px;display:block;margin-bottom:2px;}
-.day-tab.active-j1{color:var(--j1);border-bottom-color:var(--j1);background:rgba(139,92,246,0.08);}
-.day-tab.active-j2{color:var(--j2);border-bottom-color:var(--j2);background:rgba(216,90,48,0.08);}
-.day-tab.active-j3{color:var(--j3);border-bottom-color:var(--j3);background:rgba(5,150,105,0.08);}
-.day-tab.active-j4{color:var(--j4);border-bottom-color:var(--j4);background:rgba(232,121,249,0.08);}
-.day-tab.active-j5{color:var(--j5);border-bottom-color:var(--j5);background:rgba(245,158,11,0.08);}
-.day-tab.active-j6{color:var(--j6);border-bottom-color:var(--j6);background:rgba(6,182,212,0.08);}
-.day-tab.active-j7{color:var(--j7);border-bottom-color:var(--j7);background:rgba(239,68,68,0.08);}
-.day-tab.active-j8{color:#6366f1;border-bottom-color:#6366f1;background:#6366f11a;}
-.step-num.j8{background:#6366f133;color:#6366f1;border:2px solid #6366f1;}
-.day-tab.active-j9{color:#ec4899;border-bottom-color:#ec4899;background:#ec48991a;}
-.step-num.j9{background:#ec489933;color:#ec4899;border:2px solid #ec4899;}
-.day-tab.active-j10{color:#f97316;border-bottom-color:#f97316;background:#f973161a;}
-.step-num.j10{background:#f9731633;color:#f97316;border:2px solid #f97316;}
-.day-tab.active-j11{color:#0ea5e9;border-bottom-color:#0ea5e9;background:#0ea5e91a;}
-.step-num.j11{background:#0ea5e933;color:#0ea5e9;border:2px solid #0ea5e9;}
-.day-tab.active-j12{color:#10b981;border-bottom-color:#10b981;background:#10b9811a;}
-.step-num.j12{background:#10b98133;color:#10b981;border:2px solid #10b981;}
-.day-tab.active-j13{color:#8b5cf6;border-bottom-color:#8b5cf6;background:#8b5cf61a;}
-.step-num.j13{background:#8b5cf633;color:#8b5cf6;border:2px solid #8b5cf6;}
-.day-tab.active-j14{color:#ef4444;border-bottom-color:#ef4444;background:#ef44441a;}
-.step-num.j14{background:#ef444433;color:#ef4444;border:2px solid #ef4444;}
+.city-card{
+  border-radius:18px;overflow:hidden;position:relative;height:160px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.city-card:active{transform:scale(0.98);}
+.city-card-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.55);}
+.city-card-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,23,42,0.7),rgba(15,23,42,0.2));}
+.city-card-content{position:relative;z-index:1;height:100%;padding:20px;display:flex;flex-direction:column;justify-content:space-between;}
+.city-card-top{display:flex;align-items:center;gap:12px;}
+.city-emoji-big{font-size:32px;}
+.city-card-name{font-family:'Playfair Display',serif;font-size:24px;color:#fff;}
+.city-card-dates{font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px;}
+.city-card-bottom{display:flex;align-items:center;justify-content:space-between;}
+.city-card-days{font-size:12px;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.15);padding:4px 10px;border-radius:999px;}
+.city-card-arrow{font-size:20px;color:rgba(255,255,255,0.9);}
+.city-bar{position:absolute;bottom:0;left:0;right:0;height:4px;}
+.osaka-bar{background:var(--osaka);}
+.kyoto-bar{background:var(--kyoto);}
+.tokyo-bar{background:var(--tokyo);}
 
+/* ── CITY SCREEN ── */
+#screen-city{}
+.days-list{flex:1;overflow-y:auto;padding:12px 16px calc(16px + var(--safe-bottom));-webkit-overflow-scrolling:touch;}
+.day-row{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:16px;margin-bottom:10px;cursor:pointer;
+  display:flex;align-items:center;gap:14px;
+  transition:transform 0.15s,box-shadow 0.15s;
+}
+.day-row:active{transform:scale(0.98);}
+.day-badge{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex-shrink:0;font-family:'Playfair Display',serif;
+}
+.day-badge-dk{font-size:13px;font-weight:700;color:#fff;}
+.day-badge-date{font-size:9px;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:0.5px;}
+.day-info{flex:1;min-width:0;}
+.day-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);margin-bottom:3px;}
+.day-preview{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.day-count{font-size:11px;color:var(--gold);background:var(--gold-light);padding:2px 8px;border-radius:999px;white-space:nowrap;}
 
-/* CONTENT */
-#day-content{flex:1;overflow-y:auto;}
-#day-content::-webkit-scrollbar{width:4px;}
-#day-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-.day-intro{padding:14px 18px 10px;}
-.day-intro-title{font-family:'Playfair Display';font-size:16px;color:var(--gold);margin-bottom:3px;}
-.day-intro-sub{font-size:11px;color:var(--muted);line-height:1.5;}
+/* ── DAY SCREEN ── */
+#screen-day{}
+.day-content-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.day-intro-box{padding:16px 18px 12px;background:linear-gradient(180deg,var(--surface),transparent);}
+.day-intro-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);margin-bottom:4px;}
+.day-intro-sub{font-size:12px;color:var(--muted);line-height:1.5;}
 
-/* STEPS */
-.step{margin:0 12px 9px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.15s,box-shadow 0.2s;}
-.step:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.4);}
-.step.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(212,175,55,0.2);}
-.step-header{padding:11px 13px;display:flex;align-items:center;gap:11px;}
-.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Playfair Display';}
-.step-num.j1{background:rgba(139,92,246,0.2);color:var(--j1);border:2px solid var(--j1);}
-.step-num.j2{background:rgba(216,90,48,0.2);color:var(--j2);border:2px solid var(--j2);}
-.step-num.j3{background:rgba(5,150,105,0.2);color:var(--j3);border:2px solid var(--j3);}
-.step-num.j4{background:rgba(232,121,249,0.2);color:var(--j4);border:2px solid var(--j4);}
-.step-num.j5{background:rgba(245,158,11,0.2);color:var(--j5);border:2px solid var(--j5);}
-.step-num.j6{background:rgba(6,182,212,0.2);color:var(--j6);border:2px solid var(--j6);}
-.step-num.j7{background:rgba(239,68,68,0.2);color:var(--j7);border:2px solid var(--j7);}
+/* BOUTON CARTE */
+.map-cta{
+  margin:4px 16px 14px;
+  background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.08));
+  border:1px solid var(--gold);border-radius:14px;
+  padding:14px 18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.2s;
+}
+.map-cta:active{background:rgba(212,175,55,0.25);}
+.map-cta-left{display:flex;align-items:center;gap:10px;}
+.map-cta-icon{font-size:24px;}
+.map-cta-text{font-size:14px;font-weight:700;color:var(--gold);}
+.map-cta-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.map-cta-arrow{font-size:18px;color:var(--gold);}
+
+.step-card{margin:0 14px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.step-header{padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.step-num-badge{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;font-family:'Playfair Display',serif;}
 .step-info{flex:1;min-width:0;}
-.step-time{font-size:9px;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
-.step-name{font-family:'Playfair Display';font-size:14px;color:var(--text);}
-.step-type{font-size:10px;color:var(--muted);margin-top:1px;}
-.step-address{font-size:9px;color:rgba(212,175,55,0.65);margin-top:2px;}
-.step-emoji{font-size:19px;flex-shrink:0;}
-.step-img{width:100%;height:110px;object-fit:cover;display:block;border-top:1px solid var(--border);cursor:zoom-in;}
-.step-desc{padding:9px 13px 11px;font-size:11px;color:var(--muted);line-height:1.6;}
-.step-tags{display:flex;gap:4px;flex-wrap:wrap;padding:0 13px 11px;}
-.step-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:2px 7px;border-radius:999px;}
+.step-time{font-size:10px;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
+.step-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);}
+.step-type{font-size:11px;color:var(--muted);margin-top:1px;}
+.step-addr{font-size:10px;color:rgba(212,175,55,0.6);margin-top:2px;}
+.step-emoji{font-size:20px;flex-shrink:0;}
+.step-img{width:100%;height:120px;object-fit:cover;display:block;border-top:1px solid var(--border);cursor:zoom-in;}
+.step-body{padding:10px 14px 12px;font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid rgba(212,175,55,0.1);}
+.step-tags{display:flex;gap:4px;flex-wrap:wrap;padding:0 14px 12px;}
+.step-tag{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:999px;}
 .tag-gratuit{background:rgba(5,150,105,0.2);color:#34d399;}
 .tag-payant{background:rgba(239,68,68,0.2);color:#f87171;}
 .tag-incontournable{background:rgba(212,175,55,0.2);color:var(--gold);}
@@ -121,144 +139,148 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 .tag-repas{background:rgba(245,158,11,0.2);color:#fbbf24;}
 .tag-shopping{background:rgba(168,85,247,0.2);color:#c084fc;}
 .tag-excursion{background:rgba(16,185,129,0.2);color:#6ee7b7;}
+.wc-badge{margin:0 14px 8px;padding:7px 11px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;font-size:10px;color:rgba(96,165,250,0.9);}
+.transport-row{margin:0 14px 8px 52px;padding:9px 12px;border-left:2px dashed var(--border);font-size:11px;color:var(--muted);}
+.transport-row strong{color:var(--text);}
+.day-tip-box{margin:0 14px 20px;padding:12px 14px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:10px;font-size:12px;color:var(--muted);line-height:1.6;}
+.day-tip-box strong{color:var(--gold);}
 
-/* TRANSPORT */
-.transport-block{margin:0 12px 7px 44px;padding:9px 12px;border-left:2px dashed var(--border);font-size:11px;color:var(--muted);}
-.transport-header{display:flex;align-items:center;gap:8px;margin-bottom:3px;}
-.transport-icon{font-size:15px;}
-.transport-line{font-weight:700;color:var(--text);font-size:11px;}
-.transport-detail{font-size:10px;color:var(--muted);line-height:1.4;}
+/* ── MAP SCREEN ── */
+#screen-map{z-index:20;}
+.map-screen-header{
+  padding:calc(14px + var(--safe-top)) 16px 12px;
+  background:rgba(15,23,42,0.95);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  backdrop-filter:blur(10px);
+}
+#map-full{flex:1;z-index:1;}
 
-/* WC & TIP */
-.wc-block{margin:0 12px 7px;padding:7px 11px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:7px;font-size:10px;color:rgba(96,165,250,0.9);display:flex;align-items:center;gap:7px;}
-.day-tip{margin:0 12px 18px;padding:11px 13px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:9px;font-size:11px;color:var(--muted);line-height:1.6;}
-.day-tip strong{color:var(--gold);}
+/* TOOLBAR BAS DE CARTE */
+.map-toolbar{
+  padding:10px 12px calc(10px + var(--safe-bottom));
+  background:rgba(15,23,42,0.95);
+  border-top:1px solid var(--border);
+  display:flex;gap:8px;flex-shrink:0;
+  backdrop-filter:blur(10px);
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.map-toolbar::-webkit-scrollbar{display:none;}
+.tool-btn{
+  flex-shrink:0;
+  padding:8px 14px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);font-size:12px;font-weight:700;
+  cursor:pointer;font-family:'Lora',serif;display:flex;align-items:center;gap:6px;
+  white-space:nowrap;transition:all 0.2s;
+}
+.tool-btn.active{background:rgba(212,175,55,0.15);border-color:var(--gold);color:var(--gold);}
+.tool-btn.anim-active{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#f87171;}
 
-/* MAP */
-#map-container{flex:1;position:relative;}
-#map{width:100%;height:100%;z-index:1;}
-.map-controls{position:absolute;top:12px;right:12px;z-index:1000;display:flex;flex-direction:column;gap:7px;}
-.map-btn{padding:7px 13px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:'Lora',serif;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-.map-btn:hover{border-color:var(--gold);color:var(--gold);}
-.map-btn.active{background:rgba(212,175,55,0.15);border-color:var(--gold);color:var(--gold);}
-.map-btn.anim-active{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#f87171;}
-.map-legend{position:absolute;bottom:20px;right:12px;z-index:1000;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px 14px;font-size:10px;}
-.legend-title{font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;font-size:9px;margin-bottom:7px;}
+/* LÉGENDE CARTE */
+.map-legend-float{
+  position:absolute;bottom:70px;right:10px;z-index:1000;
+  background:rgba(15,23,42,0.9);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;font-size:10px;
+  backdrop-filter:blur(6px);
+}
 .legend-item{display:flex;align-items:center;gap:7px;margin-bottom:4px;color:var(--muted);}
 .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .legend-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
 
 /* LIGHTBOX */
-#lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.96);flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+#lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.96);flex-direction:column;align-items:center;justify-content:center;padding:20px;}
 #lightbox.open{display:flex;}
-#lb-img{max-width:90%;max-height:70vh;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.6);}
-#lb-info{text-align:center;margin-top:1.5rem;}
-#lb-name{font-family:'Playfair Display';font-size:20px;color:var(--gold);margin-bottom:4px;}
-#lb-addr{font-size:12px;color:var(--muted);margin-bottom:4px;}
-#lb-desc{font-size:12px;color:rgba(248,241,229,0.8);max-width:580px;line-height:1.6;}
-.lb-close{position:absolute;top:18px;right:22px;color:#fff;font-size:28px;cursor:pointer;background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;}
+#lb-img{max-width:100%;max-height:65vh;object-fit:contain;border-radius:10px;}
+#lb-info{text-align:center;margin-top:16px;padding:0 10px;}
+#lb-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:4px;}
+#lb-addr{font-size:11px;color:var(--muted);margin-bottom:6px;}
+#lb-desc{font-size:12px;color:rgba(248,241,229,0.8);line-height:1.5;}
+.lb-close{position:absolute;top:calc(16px + var(--safe-top));right:16px;color:#fff;font-size:26px;cursor:pointer;background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;}
 
-/* ANIMATION */
+/* ANIM DOT */
 .anim-dot{width:16px;height:16px;border-radius:50%;background:#ef4444;border:3px solid #fff;animation:ping 1.2s ease-in-out infinite;}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(239,68,68,0.6);}70%{box-shadow:0 0 0 10px rgba(239,68,68,0);}100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}}
 
 /* LEAFLET */
 .leaflet-container{background:#0f172a !important;}
+.leaflet-control-zoom{margin-top:calc(8px + var(--safe-top)) !important;margin-right:8px !important;}
 .leaflet-control-zoom a{background:var(--surface) !important;color:var(--gold) !important;border-color:var(--border) !important;}
 .leaflet-popup-content-wrapper{background:var(--surface) !important;border:1px solid var(--border) !important;border-radius:12px !important;box-shadow:0 10px 30px rgba(0,0,0,0.7) !important;color:var(--text) !important;}
 .leaflet-popup-tip{background:var(--surface) !important;}
-.popup-img{width:100%;height:120px;object-fit:cover;border-radius:7px;margin-bottom:9px;cursor:pointer;}
-.popup-name{font-family:'Playfair Display';font-size:14px;color:var(--gold);margin-bottom:2px;}
+.popup-img{width:100%;height:110px;object-fit:cover;border-radius:7px;margin-bottom:8px;cursor:pointer;}
+.popup-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);margin-bottom:2px;}
 .popup-addr{font-size:9px;color:rgba(212,175,55,0.65);margin-bottom:3px;}
 .popup-desc{font-size:10px;color:rgba(248,241,229,0.8);line-height:1.5;}
 .popup-zoom{margin-top:7px;font-size:10px;color:var(--gold);cursor:pointer;}
 .popup-opt-badge{display:inline-block;font-size:9px;font-weight:700;background:rgba(251,191,36,0.2);color:#fbbf24;padding:2px 7px;border-radius:999px;margin-bottom:5px;}
-
-@media(max-width:768px){
-  #app{flex-direction:column;}
-  #sidebar{width:100%;min-width:unset;height:58vh;border-right:none;border-bottom:1px solid var(--border);}
-  #map-container{height:42vh;}
-  .map-legend{display:none;}
-  .city-switcher button{font-size:10px;padding:10px 4px;}
-  .city-btn .city-emoji{font-size:16px;}
-  .sidebar-header{padding:12px 16px 10px;}
-  .trip-title{font-size:20px;}
-  .trip-dates{font-size:11px;margin-bottom:8px;}
-  .hotel-info{padding:8px 10px;}
-  .hotel-name{font-size:11px;}
-  .hotel-addr{font-size:10px;}
-  .day-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  .day-tabs::-webkit-scrollbar{display:none;}
-  .day-tab{min-width:60px;padding:8px 4px;}
-  .day-tab .tab-day{font-size:12px;}
-  .step{margin:0 10px 8px;}
-  .step-header{padding:10px 12px;}
-  .step-name{font-size:14px;}
-  .step-img{height:100px;}
-  .step-desc{font-size:11px;padding:8px 12px 10px;}
-  .map-controls{top:8px;right:8px;gap:5px;}
-  .map-btn{padding:6px 10px;font-size:11px;}
-  .day-intro{padding:12px 16px 8px;}
-  .day-intro-title{font-size:15px;}
-  .day-intro-sub{font-size:11px;}
-  .transport-block{margin:0 10px 6px 40px;padding:8px 10px;}
-  .wc-block{margin:0 10px 6px;padding:6px 10px;font-size:10px;}
-  .day-tip{margin:0 10px 16px;padding:10px 12px;font-size:11px;}
-  /* Carte prend toute la largeur en bas */
-  #map-container{position:relative;}
-}
-/* Très petits écrans */
-@media(max-width:380px){
-  .day-tab .tab-day{font-size:11px;}
-  .step-name{font-size:13px;}
-  .map-btn{font-size:10px;padding:5px 8px;}
-}
-/* Mode paysage mobile */
-@media(max-width:900px) and (orientation:landscape){
-  #app{flex-direction:row;}
-  #sidebar{width:340px;min-width:340px;height:100vh;}
-  #map-container{height:100vh;}
-}
 </style>
 </head>
 <body>
-<div id="app">
-<div id="sidebar">
 
-  <!-- CITY SWITCHER -->
-  <div class="city-switcher">
-    <button class="city-btn active-osaka" id="cbtn-osaka" onclick="switchCity('osaka')">
-      <span class="city-emoji">🏯</span>OSAKA
-    </button>
-    <button class="city-btn" id="cbtn-kyoto" onclick="switchCity('kyoto')">
-      <span class="city-emoji">⛩️</span>KYOTO
-    </button>
-    <button class="city-btn" id="cbtn-tokyo" onclick="switchCity('tokyo')">
-      <span class="city-emoji">🗼</span>TOKYO
-    </button>
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ÉCRAN 1 — ACCUEIL                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="home-header">
+    <div class="home-logo">🗾</div>
+    <div class="home-title">Japon 2026</div>
+    <div class="home-sub">15 — 28 octobre · 14 jours · 4 familles</div>
   </div>
-
-  <!-- HEADER (dynamique) -->
-  <div class="sidebar-header" id="city-header"></div>
-
-  <!-- TABS JOURS (dynamique) -->
-  <div class="day-tabs" id="day-tabs"></div>
-
-  <!-- CONTENU -->
-  <div id="day-content"></div>
+  <div class="cities-list" id="cities-list">
+    <!-- Généré par JS -->
+  </div>
 </div>
 
-<div id="map-container">
-  <div id="map"></div>
-  <div class="map-controls">
-    <button class="map-btn" id="btn-opt" onclick="toggleOptional()">💡 Activités non planifiées</button>
-    <button class="map-btn" id="btn-toilettes" onclick="toggleToilettes()">🚻 Toilettes publiques</button>
-    <button class="map-btn" id="btn-konbini" onclick="toggleKonbini()">🏪 Konbini (7-Eleven · FM · Lawson)</button>
-    <button class="map-btn" id="btn-stations" onclick="toggleStations()">🚇 Gares & Stations de métro</button>
-    <button class="map-btn" id="btn-anim" onclick="toggleAnimation()">▶ Animer l'itinéraire</button>
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ÉCRAN 2 — JOURNÉES D'UNE VILLE                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-city">
+  <div class="app-header">
+    <button class="btn-back" onclick="goBack('home')">← Villes</button>
+    <div>
+      <div class="header-title" id="city-header-title"></div>
+      <div class="header-sub" id="city-header-sub"></div>
+    </div>
   </div>
-  <div class="map-legend" id="map-legend"></div>
+  <div class="days-list" id="days-list"></div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ÉCRAN 3 — DÉTAIL D'UNE JOURNÉE                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-day">
+  <div class="app-header">
+    <button class="btn-back" id="btn-back-day" onclick="goBack('city')">← Jours</button>
+    <div>
+      <div class="header-title" id="day-header-title"></div>
+      <div class="header-sub" id="day-header-sub"></div>
+    </div>
+  </div>
+  <div class="day-content-scroll" id="day-content-scroll"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ÉCRAN 4 — CARTE PLEIN ÉCRAN                            -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-map">
+  <div class="map-screen-header">
+    <button class="btn-back" onclick="goBack('day')">← Journée</button>
+    <div>
+      <div class="header-title" id="map-header-title"></div>
+    </div>
+  </div>
+  <div style="flex:1;position:relative;">
+    <div id="map-full"></div>
+    <div class="map-legend-float" id="map-legend-float"></div>
+  </div>
+  <div class="map-toolbar">
+    <button class="tool-btn" id="btn-opt" onclick="toggleOptional()">💡 Non planifié</button>
+    <button class="tool-btn" id="btn-toilettes" onclick="toggleToilettes()">🚻 Toilettes</button>
+    <button class="tool-btn" id="btn-konbini" onclick="toggleKonbini()">🏪 Konbini</button>
+    <button class="tool-btn" id="btn-stations" onclick="toggleStations()">🚇 Stations</button>
+    <button class="tool-btn" id="btn-anim" onclick="toggleAnimation()">▶ Animer</button>
+  </div>
 </div>
 
 <!-- LIGHTBOX -->
@@ -278,7 +300,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 // TUILE CARTE — MapTiler Vector Tiles (chargement rapide, labels anglais forcés)
 // ============================================================================
 const MAPTILER_KEY = '1oBsmSWNFattubU4Bwxk';
-const map = L.map('map', {center:[34.665,135.503], zoom:13, preferCanvas:true});
+
 
 // Tuiles raster MapTiler Darkmatter — labels anglais à tous les zooms
 L.tileLayer(
@@ -1070,17 +1092,17 @@ const CITIES = {
   }
 };
 
-let currentCity = 'osaka';
+
 let currentDay = 'j1';
-let optVisible = false, toilettesVisible = false;
-let animRunning = false, animInterval = null, animMarker = null, animStep = 0;
+
+
 
 // Map layers — on ne les recrée qu'une fois
 const layerGroups = {};  // keyed by dayKey
-const optLayers = { osaka: L.layerGroup(), kyoto: L.layerGroup(), tokyo: L.layerGroup() };
-const toilettesLayers = { osaka: L.layerGroup(), kyoto: L.layerGroup(), tokyo: L.layerGroup() };
-const hotelMarkers = {};
-const stepMarkers = {};
+
+
+
+
 
 // ============================================================================
 // ICONS
@@ -1105,551 +1127,406 @@ function mkWcIcon(){
 }
 
 // ============================================================================
-// BUILD ALL LAYERS AT STARTUP
-// ============================================================================
-function popupHtml(step, showFull){
-  const imgHtml = step.img ? `<img src="${step.img}" class="popup-img" onclick="openLightboxStep('${step.id}')" onerror="this.style.display='none'">` : '';
-  return `<div style="width:240px">${imgHtml}<div class="popup-name">${step.emoji} ${step.name}</div><div class="popup-addr">📍 ${step.address}</div><div class="popup-desc">${step.desc ? step.desc.substring(0,120)+'...' : ''}</div>${step.wc?`<div style="margin-top:7px;font-size:10px;color:#22d3ee">🚻 ${step.wc}</div>`:''} ${step.img?`<div class="popup-zoom" onclick="openLightboxStep('${step.id}')">🔍 Voir en grand</div>`:''}</div>`;
+
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const CITY_IMAGES = {
+  osaka:'https://images.pexels.com/photos/34729046/pexels-photo-34729046.jpeg?auto=compress&cs=tinysrgb&w=800',
+  kyoto:'https://images.pexels.com/photos/36940470/pexels-photo-36940470.jpeg?auto=compress&cs=tinysrgb&w=800',
+  tokyo:'https://images.pexels.com/photos/19693257/pexels-photo-19693257.jpeg?auto=compress&cs=tinysrgb&w=800',
+};
+const CITY_COLORS = {osaka:'var(--osaka)',kyoto:'var(--kyoto)',tokyo:'var(--tokyo)'};
+const DAY_COLORS = {
+  j1:'#8B5CF6',j2:'#D85A30',j3:'#059669',
+  j4:'#e879f9',j5:'#f59e0b',j6:'#06b6d4',j7:'#ef4444',
+  j8:'#6366f1',j9:'#ec4899',j10:'#f97316',j11:'#0ea5e9',j12:'#10b981',j13:'#8b5cf6',j14:'#ef4444'
+};
+const DAY_DATES = {
+  j1:'15 oct',j2:'16 oct',j3:'17 oct',j4:'18 oct',j5:'19 oct',j6:'20 oct',j7:'21 oct',
+  j8:'22 oct',j9:'23 oct',j10:'24 oct',j11:'25 oct',j12:'26 oct',j13:'27 oct',j14:'28 oct'
+};
+
+let currentCity = null;
+let currentDayKey = null;
+let screenStack = ['home'];
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active','back');
+  });
+  // Mettre les écrans précédents en back
+  const screens = ['screen-home','screen-city','screen-day','screen-map'];
+  const order = {home:0,city:1,day:2,map:3};
+  const cur = order[id] ?? 0;
+  screens.forEach((sid,i) => {
+    const el = document.getElementById(sid);
+    if(i < cur) el.classList.add('back');
+    else if(sid === 'screen-'+id) el.classList.add('active');
+  });
 }
 
-Object.keys(CITIES).forEach(cityKey => {
-  const city = CITIES[cityKey];
-
-  // Hotel marker
-  hotelMarkers[cityKey] = L.marker([city.hotel.lat, city.hotel.lng], {icon: mkHotelIcon()})
-    .bindPopup(`<div class="popup-name">🏨 ${city.hotel.name}</div><div class="popup-addr">${city.hotel.address}</div>`);
-
-  // Optional markers
-  city.optional.forEach(o => {
-    const imgH = o.img ? `<img src="${o.img}" class="popup-img" onclick="openLightboxOpt('${o.id}','${cityKey}')" onerror="this.style.display='none'">` : '';
-    L.marker([o.lat, o.lng], {icon: mkOptIcon(o.emoji)})
-      .bindPopup(`<div style="width:240px">${imgH}<div class="popup-opt-badge">💡 Non planifié · ${o.votes} vote${o.votes>1?'s':''}</div><div class="popup-name">${o.emoji} ${o.name}</div><div class="popup-addr">📍 ${o.address}</div><div class="popup-desc">${o.desc}</div>${o.img?`<div class="popup-zoom" onclick="openLightboxOpt('${o.id}','${cityKey}')">🔍 Voir en grand</div>`:''}</div>`, {maxWidth:260})
-      .addTo(optLayers[cityKey]);
-  });
-
-  // Toilettes
-  city.toilettes.forEach(wc => {
-    L.marker([wc.lat, wc.lng], {icon: mkWcIcon()})
-      .bindPopup(`<div class="popup-name">🚻 Toilettes publiques</div><div class="popup-addr">${wc.address}</div>`)
-      .addTo(toilettesLayers[cityKey]);
-  });
-
-  // Day layers
-  city.dayKeys.forEach(dk => {
-    layerGroups[dk] = L.layerGroup();
-    const day = city.days[dk];
-
-    day.steps.forEach(step => {
-      if(step.isTransit){
-        if(step.fromLat) L.marker([step.fromLat,step.fromLng],{icon:mkTransitIcon()}).addTo(layerGroups[dk]).bindPopup(`<div class="popup-name">🚉 Départ</div><div class="popup-addr">${step.transport.from||''}</div><div class="popup-desc">${step.transport.line||''} · ${step.transport.duration||''}</div>`);
-        if(step.toLat) L.marker([step.toLat,step.toLng],{icon:mkTransitIcon()}).addTo(layerGroups[dk]).bindPopup(`<div class="popup-name">🚉 Arrivée</div><div class="popup-addr">${step.transport.to||''}</div><div class="popup-desc">${step.transport.note||''}</div>`);
-        if(step.fromLat && step.toLat) L.polyline([[step.fromLat,step.fromLng],[step.toLat,step.toLng]],{color:'#3b82f6',weight:3,dashArray:'8,6',opacity:0.7}).addTo(layerGroups[dk]);
-        return;
-      }
-      if(step.isHotel || !step.lat) return;
-      const icon = step.isAirport ? mkAirportIcon() : mkIcon(day.color, step.num||'•');
-      const m = L.marker([step.lat, step.lng], {icon}).addTo(layerGroups[dk]);
-      stepMarkers[step.id] = m;
-      m.bindPopup(popupHtml(step), {maxWidth:260});
-    });
-
-    // J1 special : KIX lines
-    if(dk === 'j1'){
-      L.polyline([[34.435,135.244],[34.6198,135.5045]],{color:'#3b82f6',weight:3,dashArray:'8,6',opacity:0.7}).addTo(layerGroups.j1);
-      L.polyline([[34.6198,135.5045],[34.6543,135.5055]],{color:'#3b82f6',weight:3,dashArray:'8,6',opacity:0.7}).addTo(layerGroups.j1);
-    }
-  });
-});
-
-// Show initial state
-layerGroups.j1.addTo(map);
-hotelMarkers.osaka.addTo(map);
-setTimeout(()=>map.flyToBounds([[34.435,135.244],[34.690,135.530]],{padding:[40,40],duration:1.5}),400);
-
-// ============================================================================
-// CITY SWITCHER
-// ============================================================================
-function switchCity(cityKey){
-  stopAnimation();
-
-  // Update buttons
-  document.querySelectorAll('.city-btn').forEach(b=>b.className='city-btn');
-  document.getElementById(`cbtn-${cityKey}`).classList.add(`active-${cityKey}`);
-
-  // Remove current layers
-  const prev = CITIES[currentCity];
-  prev.dayKeys.forEach(dk=>map.removeLayer(layerGroups[dk]));
-  hotelMarkers[currentCity].remove();
-  if(optVisible) map.removeLayer(optLayers[currentCity]);
-  if(toilettesVisible) map.removeLayer(toilettesLayers[currentCity]);
-
-  currentCity = cityKey;
-  const city = CITIES[cityKey];
-  currentDay = city.dayKeys[0];
-
-  // Add new city's first day + hotel
-  layerGroups[currentDay].addTo(map);
-  hotelMarkers[cityKey].addTo(map);
-  if(optVisible) optLayers[cityKey].addTo(map);
-  if(toilettesVisible) toilettesLayers[cityKey].addTo(map);
-
-  // Fly to city
-  map.flyTo(city.center, city.zoom, {duration:1.2});
-
-  // Re-render UI
-  renderCityHeader();
-  renderTabs();
-  renderDay(currentDay);
-  updateLegend();
+function goBack(to) {
+  if(to === 'home') showScreen('home');
+  else if(to === 'city') showScreen('city');
+  else if(to === 'day') { stopAnimation(); showScreen('day'); }
 }
+window.goBack = goBack;
 
-// ============================================================================
-// DAY SWITCHER
-// ============================================================================
-function showDay(dk){
-  stopAnimation();
-  const city = CITIES[currentCity];
-  city.dayKeys.forEach(d=>map.removeLayer(layerGroups[d]));
-  currentDay = dk;
-  layerGroups[dk].addTo(map);
-
-  // Tabs active state
-  city.dayKeys.forEach(d=>{
-    const t=document.getElementById(`tab-${d}`);
-    if(t){t.className='day-tab';if(d===dk)t.classList.add(`active-${d}`);}
-  });
-
-  // Fly to bounds
-  const coords = city.days[dk].steps.filter(s=>s.lat&&!s.isHotel&&!s.isAirport).map(s=>[s.lat,s.lng]);
-  if(coords.length>1){try{map.flyToBounds(L.latLngBounds(coords),{padding:[60,60],duration:1});}catch(e){}}
-
-  renderDay(dk);
-}
-window.showDay = showDay;
-
-// ============================================================================
-// RENDER HEADER
-// ============================================================================
-function renderCityHeader(){
-  const city = CITIES[currentCity];
-  document.getElementById('city-header').innerHTML = `
-    <div class="trip-label">Japon 2026 — Étape ${currentCity==='osaka'?'01':'02'}</div>
-    <div class="trip-title">${city.emoji} ${city.label}</div>
-    <div class="trip-dates">${city.dates}</div>
-    <div class="hotel-info">
-      <div style="font-size:19px">🏨</div>
-      <div>
-        <div class="hotel-name">${city.hotel.name}</div>
-        <div class="hotel-addr">${city.hotel.address}</div>
+// ── ÉCRAN ACCUEIL ──
+function renderHome() {
+  const list = document.getElementById('cities-list');
+  list.innerHTML = '';
+  Object.keys(CITIES).forEach(ck => {
+    const city = CITIES[ck];
+    const nDays = city.dayKeys.length;
+    const color = CITY_COLORS[ck] || '#fff';
+    const img = CITY_IMAGES[ck] || '';
+    const div = document.createElement('div');
+    div.className = 'city-card';
+    div.innerHTML = `
+      <div class="city-card-bg" style="background-image:url('${img}')"></div>
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <div class="city-card-top">
+          <span class="city-emoji-big">${city.emoji}</span>
+          <div>
+            <div class="city-card-name">${city.label}</div>
+            <div class="city-card-dates">${city.dates}</div>
+          </div>
+        </div>
+        <div class="city-card-bottom">
+          <span class="city-card-days">${nDays} journée${nDays>1?'s':''}</span>
+          <span class="city-card-arrow">›</span>
+        </div>
       </div>
-    </div>`;
+      <div class="city-bar ${ck}-bar"></div>`;
+    div.onclick = () => openCity(ck);
+    list.appendChild(div);
+  });
 }
 
-// ============================================================================
-// RENDER TABS
-// ============================================================================
-function renderTabs(){
-  const city = CITIES[currentCity];
-  const dayLabels = {
-    j1:'15 OCT',j2:'16 OCT',j3:'17 OCT',
-    j4:'18 OCT',j5:'19 OCT',j6:'20 OCT',j7:'21 OCT',
-    j8:'22 OCT',j9:'23 OCT',j10:'24 OCT',j11:'25 OCT',j12:'26 OCT',j13:'27 OCT',j14:'28 OCT'
-  };
-  const html = city.dayKeys.map(dk=>`
-    <button class="day-tab ${dk===currentDay?`active-${dk}`:''}" id="tab-${dk}" onclick="showDay('${dk}')">
-      <span class="tab-day">${dk.toUpperCase()}</span>${dayLabels[dk]}
-    </button>`).join('');
-  document.getElementById('day-tabs').innerHTML = html;
+// ── ÉCRAN VILLE ──
+function openCity(ck) {
+  currentCity = ck;
+  const city = CITIES[ck];
+  document.getElementById('city-header-title').textContent = city.emoji + ' ' + city.label;
+  document.getElementById('city-header-sub').textContent = city.dates;
+
+  const list = document.getElementById('days-list');
+  list.innerHTML = '';
+  city.dayKeys.forEach(dk => {
+    const day = city.days[dk];
+    const color = DAY_COLORS[dk] || '#888';
+    const date = DAY_DATES[dk] || '';
+    // Résumé : noms des étapes numérotées
+    const steps = day.steps.filter(s => s.num && !s.isTransit && !s.isHotel && !s.isAirport);
+    const preview = steps.map(s => s.name.replace(/ — .*/,'').split('(')[0].trim()).slice(0,3).join(' · ');
+    const nSteps = steps.length;
+    const row = document.createElement('div');
+    row.className = 'day-row';
+    row.innerHTML = `
+      <div class="day-badge" style="background:${color}22;border:2px solid ${color}">
+        <span class="day-badge-dk" style="color:${color}">${dk.toUpperCase()}</span>
+        <span class="day-badge-date">${date}</span>
+      </div>
+      <div class="day-info">
+        <div class="day-title">${day.intro.replace(/[🌸🎌🌃🎋🕊️🌅🗻🎀🌿🎆🦌🛕🎎💎♨️🌟🛫✈️]/g,'').trim()}</div>
+        <div class="day-preview">${preview || day.introSub.substring(0,60)+'...'}</div>
+      </div>
+      <span class="day-count">${nSteps} étape${nSteps>1?'s':''}</span>`;
+    row.onclick = () => openDay(ck, dk);
+    list.appendChild(row);
+  });
+  showScreen('city');
 }
 
-// ============================================================================
-// RENDER DAY CONTENT
-// ============================================================================
-function renderDay(dk){
-  const day = CITIES[currentCity].days[dk];
-  let html = `<div class="day-intro"><div class="day-intro-title">${day.intro}</div><div class="day-intro-sub">${day.introSub}</div></div>`;
+// ── ÉCRAN JOURNÉE ──
+function openDay(ck, dk) {
+  currentCity = ck;
+  currentDayKey = dk;
+  const city = CITIES[ck];
+  const day = city.days[dk];
+  const color = DAY_COLORS[dk] || '#888';
+  const date = DAY_DATES[dk] || '';
 
-  day.steps.forEach(step=>{
-    if(step.isTransit){
-      const t=step.transport;
-      html+=`<div class="transport-block"><div class="transport-header"><span class="transport-icon">${t.icon}</span><span class="transport-line">${t.from?`${t.from} → ${t.to}`:t.text}</span></div><div class="transport-detail">${t.line||t.detail||''} · ${t.duration||''} · <strong>${t.price||''}</strong></div>${t.note?`<div class="transport-detail" style="margin-top:3px;opacity:0.8">${t.note}</div>`:''}</div>`;
+  document.getElementById('day-header-title').textContent = dk.toUpperCase() + ' — ' + date;
+  document.getElementById('day-header-sub').textContent = day.label;
+
+  let html = `<div class="day-intro-box">
+    <div class="day-intro-title">${day.intro}</div>
+    <div class="day-intro-sub">${day.introSub}</div>
+  </div>`;
+
+  // Bouton carte
+  const nSteps = day.steps.filter(s=>s.num&&!s.isTransit).length;
+  html += `<div class="map-cta" onclick="openMap('${ck}','${dk}')">
+    <div class="map-cta-left">
+      <span class="map-cta-icon">🗺️</span>
+      <div>
+        <div class="map-cta-text">Voir sur la carte</div>
+        <div class="map-cta-sub">${nSteps} lieux · Transports · Toilettes · Konbini</div>
+      </div>
+    </div>
+    <span class="map-cta-arrow">›</span>
+  </div>`;
+
+  // Étapes
+  let stepNum = 0;
+  day.steps.forEach(step => {
+    if(step.isTransit) {
+      const t = step.transport;
+      html += `<div class="transport-row"><strong>${t.icon} ${t.from||t.text||''} ${t.to?'→ '+t.to:''}</strong><br>${t.line||t.detail||''} · ${t.duration||''} <strong>${t.price||''}</strong>${t.note?'<br><span style="opacity:0.7">'+t.note+'</span>':''}</div>`;
       return;
     }
-    if(step.isHotel && !step.img && step.id!=='hotel-j1' && step.id!=='hotel-kyoto') return;
+    if(step.isHotel && !step.img && step.id !== 'hotel-j1' && step.id !== 'hotel-kyoto' && step.id !== 'hotel-tokyo') return;
 
-    const isCheckin = step.id==='hotel-j1'||step.id==='hotel-kyoto';
-    const numDisplay = step.isAirport?'✈️': (step.num!==null&&step.num!==undefined)?step.num: (isCheckin?'🏨':'→');
-    const numStyle = step.isAirport||isCheckin ? `style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0"` : `class="step-num ${dk}"`;
-    const imgHtml = step.img ? `<img class="step-img" src="${step.img}" alt="${step.name}" loading="lazy" onclick="openLightboxStep('${step.id}')" title="Cliquer pour agrandir">` : '';
-    const tagsHtml = (step.tags||[]).map(t=>{
-      const L={gratuit:'Gratuit',payant:'Entrée payante',incontournable:'⭐ Incontournable',kids:'👶 Kids-friendly',repas:'🍜 Repas',shopping:'🛍️ Shopping',excursion:'🚅 Excursion'};
+    const n = step.num;
+    const numDisplay = step.isAirport ? '✈️' : (n !== null && n !== undefined) ? n : '→';
+    const numStyle = (n !== null && n !== undefined && !step.isAirport) 
+      ? `background:${color}33;color:${color};border:2px solid ${color};` : 'font-size:18px;';
+    
+    const imgHtml = step.img ? `<img class="step-img" src="${step.img}?auto=compress&cs=tinysrgb&w=600" loading="lazy" onclick="openLightboxStep('${step.id}','${ck}','${dk}')" onerror="this.style.display='none'">` : '';
+    
+    const tagsHtml = (step.tags||[]).map(t => {
+      const L={gratuit:'Gratuit',payant:'Payant',incontournable:'⭐ Incontournable',kids:'👶 Kids',repas:'🍜 Repas',shopping:'🛍️ Shopping',excursion:'🚅 Excursion'};
       const C={gratuit:'gratuit',payant:'payant',incontournable:'incontournable',kids:'kids',repas:'repas',shopping:'shopping',excursion:'excursion'};
       return `<span class="step-tag tag-${C[t]||t}">${L[t]||t}</span>`;
     }).join('');
 
-    html+=`<div class="step" id="ui-${step.id}" onclick="focusStep('${step.id}')">
-      <div class="step-header">
-        <div ${numStyle}>${numDisplay}</div>
+    html += `<div class="step-card">
+      <div class="step-header" onclick="openLightboxStep('${step.id}','${ck}','${dk}')">
+        <div class="step-num-badge" style="${numStyle}">${numDisplay}</div>
         <div class="step-info">
           <div class="step-time">${step.time}</div>
           <div class="step-name">${step.name}</div>
           <div class="step-type">${step.type}</div>
-          <div class="step-address">📍 ${step.address}</div>
+          ${step.address?`<div class="step-addr">📍 ${step.address}</div>`:''}
         </div>
-        <div class="step-emoji">${step.emoji}</div>
+        <span class="step-emoji">${step.emoji}</span>
       </div>
       ${imgHtml}
-      ${step.desc?`<div class="step-desc">${step.desc}</div>`:''}
-      ${step.wc?`<div class="wc-block">🚻 ${step.wc}</div>`:''}
+      ${step.desc?`<div class="step-body">${step.desc}</div>`:''}
+      ${step.wc?`<div class="wc-badge">🚻 ${step.wc}</div>`:''}
       ${tagsHtml?`<div class="step-tags">${tagsHtml}</div>`:''}
     </div>`;
 
-    if(step.transport && !step.isTransit && !step.isHotel){
-      html+=`<div class="transport-block"><div class="transport-header"><span class="transport-icon">${step.transport.icon}</span><span class="transport-line">${step.transport.text||''}</span></div><div class="transport-detail">${step.transport.detail||''}</div></div>`;
+    if(step.transport && !step.isTransit && !step.isHotel) {
+      const t = step.transport;
+      html += `<div class="transport-row"><strong>${t.icon} ${t.text||''}</strong><br>${t.detail||''}</div>`;
     }
   });
 
-  html+=`<div class="day-tip">${day.tip}</div><div style="height:24px"></div>`;
-  document.getElementById('day-content').innerHTML = html;
-  document.getElementById('day-content').scrollTop = 0;
+  html += `<div class="day-tip-box">${day.tip}</div><div style="height:20px"></div>`;
+
+  document.getElementById('day-content-scroll').innerHTML = html;
+  document.getElementById('day-content-scroll').scrollTop = 0;
+  showScreen('day');
 }
 
-function focusStep(id){
-  const allSteps = Object.values(CITIES[currentCity].days).flatMap(d=>d.steps);
-  const step = allSteps.find(s=>s.id===id);
-  if(!step||!step.lat)return;
-  map.flyTo([step.lat,step.lng],16,{duration:0.8});
-  if(stepMarkers[id]) setTimeout(()=>stepMarkers[id].openPopup(),900);
-  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
-  const el=document.getElementById(`ui-${id}`);if(el)el.classList.add('active');
-}
-window.focusStep=focusStep;
+// ── ÉCRAN CARTE ──
+let mapInitialized = false;
+let map = null;
+const dayLayers = {};
+const optLayers = {osaka:null,kyoto:null,tokyo:null};
+const toilettesLayers = {osaka:null,kyoto:null,tokyo:null};
+const konbiniLayer = {osaka:null,kyoto:null,tokyo:null};
+const stationsLayer = {osaka:null,kyoto:null,tokyo:null};
+const hotelMarkers = {};
+const stepMarkers = {};
+let optVisible=false,toilettesVisible=false,konbiniVisible=false,stationsVisible=false;
+let konbiniLoaded={osaka:false,kyoto:false,tokyo:false};
+let stationsLoaded={osaka:false,kyoto:false,tokyo:false};
+let animRunning=false,animInterval=null,animMarker=null,animStep=0;
 
-// ============================================================================
-// LEGEND
-// ============================================================================
-function updateLegend(){
-  const city = CITIES[currentCity];
-  const dayLegend = city.dayKeys.map(dk=>`<div class="legend-item"><div class="legend-dot" style="background:${city.days[dk].color}"></div>${dk.toUpperCase()} — ${city.days[dk].date}</div>`).join('');
-  document.getElementById('map-legend').innerHTML=`
-    <div class="legend-title">Légende</div>
+function initMap() {
+  if(mapInitialized) return;
+  mapInitialized = true;
+  map = L.map('map-full',{center:[34.665,135.503],zoom:13,zoomControl:true,preferCanvas:true});
+  const KEY='1oBsmSWNFattubU4Bwxk';
+  L.tileLayer(`https://api.maptiler.com/maps/darkmatter/{z}/{x}/{y}.png?key=${KEY}`,{
+    attribution:'© MapTiler © OpenStreetMap',maxZoom:20,tileSize:512,zoomOffset:-1,
+    keepBuffer:4,updateWhenIdle:false
+  }).addTo(map);
+
+  // Init layers pour chaque ville
+  Object.keys(CITIES).forEach(ck => {
+    optLayers[ck] = L.layerGroup();
+    toilettesLayers[ck] = L.layerGroup();
+    konbiniLayer[ck] = L.layerGroup();
+    stationsLayer[ck] = L.layerGroup();
+    const city = CITIES[ck];
+
+    // Hôtel
+    hotelMarkers[ck] = L.marker([city.hotel.lat,city.hotel.lng],{icon:L.divIcon({
+      html:`<div style="background:#d4af37;border:3px solid #fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 12px rgba(0,0,0,0.6)">🏨</div>`,
+      className:'',iconSize:[36,36],iconAnchor:[18,18]})})
+      .bindPopup(`<div class="popup-name">🏨 ${city.hotel.name}</div><div class="popup-addr">${city.hotel.address}</div>`);
+
+    // Optionnels
+    city.optional.forEach(o => {
+      const icon = L.divIcon({html:`<div style="background:#92400e;border:2.5px solid #fbbf24;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,0.5)">${o.emoji}</div>`,className:'',iconSize:[28,28],iconAnchor:[14,14]});
+      const imgH = o.img?`<img src="${o.img}" class="popup-img" onclick="showLightbox('${encodeURIComponent(o.img)}','${encodeURIComponent(o.emoji+' '+o.name)}','${encodeURIComponent(o.address)}','${encodeURIComponent(o.desc)}')" onerror="this.style.display='none'">`:'' ;
+      L.marker([o.lat,o.lng],{icon})
+        .bindPopup(`<div style="width:230px">${imgH}<div class="popup-opt-badge">💡 Non planifié</div><div class="popup-name">${o.emoji} ${o.name}</div><div class="popup-addr">📍 ${o.address}</div><div class="popup-desc">${o.desc.substring(0,120)}</div></div>`,{maxWidth:250})
+        .addTo(optLayers[ck]);
+    });
+
+    // Toilettes
+    city.toilettes.forEach(wc => {
+      L.marker([wc.lat,wc.lng],{icon:L.divIcon({html:`<div style="background:#0891b2;border:2px solid rgba(255,255,255,0.8);border-radius:4px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px">🚻</div>`,className:'',iconSize:[22,22],iconAnchor:[11,11]})})
+        .bindPopup(`<div class="popup-name">🚻 Toilettes</div><div class="popup-addr">${wc.address}</div>`)
+        .addTo(toilettesLayers[ck]);
+    });
+
+    // Konbini statiques
+    const src = ck==='tokyo' ? STATIC_KONBINI_TOKYO : (STATIC_KONBINI[ck]||[]);
+    src.forEach(k => {
+      const bg={'7-eleven':'#007b40','familymart':'#0066cc','lawson':'#003087'};
+      const lbl={'7-eleven':'7','familymart':'FM','lawson':'L'};
+      const c=bg[k.type]||'#16a34a',l=lbl[k.type]||'K';
+      const icon=L.divIcon({html:`<div style="background:${c};border:2px solid #fff;border-radius:4px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff">${l}</div>`,className:'',iconSize:[20,20],iconAnchor:[10,10]});
+      const brand=k.type==='7-eleven'?'7-Eleven':k.type==='familymart'?'FamilyMart':'Lawson';
+      L.marker([k.lat,k.lng],{icon}).bindPopup(`<div class="popup-name">🏪 ${brand}</div><div class="popup-addr">${k.name}</div><div class="popup-desc">Ouvert 24h/24 · ATM · Wi-Fi</div>`).addTo(konbiniLayer[ck]);
+    });
+    konbiniLoaded[ck]=true;
+
+    // Stations statiques
+    const srcS = ck==='tokyo' ? STATIC_STATIONS_TOKYO : (STATIC_STATIONS[ck]||[]);
+    srcS.forEach(s => {
+      const isSubway=s.type==='subway';
+      const icon=L.divIcon({html:`<div style="background:${isSubway?'#ea580c':'#b45309'};border:2px solid #fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px">${isSubway?'🚇':'🚂'}</div>`,className:'',iconSize:[22,22],iconAnchor:[11,11]});
+      L.marker([s.lat,s.lng],{icon}).bindPopup(`<div class="popup-name">${isSubway?'🚇':'🚂'} ${s.name}</div><div class="popup-desc">${s.line||''}</div>`).addTo(stationsLayer[ck]);
+    });
+    stationsLoaded[ck]=true;
+
+    // Day layers
+    city.dayKeys.forEach(dk => {
+      dayLayers[dk] = L.layerGroup();
+      const day = city.days[dk];
+      const color = DAY_COLORS[dk]||'#888';
+      day.steps.forEach(step => {
+        if(step.isTransit) {
+          if(step.fromLat) L.marker([step.fromLat,step.fromLng],{icon:mkTransitIcon()}).addTo(dayLayers[dk]).bindPopup(`<div class="popup-name">🚉 ${step.transport.from||'Départ'}</div><div class="popup-desc">${step.transport.line||''}</div>`);
+          if(step.toLat) L.marker([step.toLat,step.toLng],{icon:mkTransitIcon()}).addTo(dayLayers[dk]).bindPopup(`<div class="popup-name">🚉 ${step.transport.to||'Arrivée'}</div><div class="popup-desc">${step.transport.note||''}</div>`);
+          if(step.fromLat&&step.toLat) L.polyline([[step.fromLat,step.fromLng],[step.toLat,step.toLng]],{color:'#3b82f6',weight:3,dashArray:'8,6',opacity:0.7}).addTo(dayLayers[dk]);
+          return;
+        }
+        if(step.isHotel||!step.lat) return;
+        const icon = step.isAirport
+          ? L.divIcon({html:`<div style="background:#6b7280;border:3px solid #fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:15px">✈️</div>`,className:'',iconSize:[34,34],iconAnchor:[17,17]})
+          : L.divIcon({html:`<div style="background:${color};border:3px solid rgba(255,255,255,0.9);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:white;font-family:serif;box-shadow:0 2px 10px rgba(0,0,0,0.6)">${step.num||'•'}</div>`,className:'',iconSize:[32,32],iconAnchor:[16,16]});
+        const m = L.marker([step.lat,step.lng],{icon}).addTo(dayLayers[dk]);
+        stepMarkers[step.id] = m;
+        const imgH=step.img?`<img src="${step.img}?auto=compress&cs=tinysrgb&w=400" class="popup-img" onclick="openLightboxStep('${step.id}','${ck}','${dk}')" onerror="this.style.display='none'">`:'' ;
+        m.bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">${step.emoji} ${step.name}</div><div class="popup-addr">📍 ${step.address||''}</div><div class="popup-desc">${(step.desc||'').substring(0,100)}...</div>${step.img?`<div class="popup-zoom" onclick="openLightboxStep('${step.id}','${ck}','${dk}')">🔍 Voir en grand</div>`:''}</div>`,{maxWidth:250});
+      });
+      // J1 special KIX lines
+      if(dk==='j1'){
+        L.polyline([[34.435,135.244],[34.6198,135.5045]],{color:'#3b82f6',weight:3,dashArray:'8,6',opacity:0.7}).addTo(dayLayers.j1);
+        L.polyline([[34.6198,135.5045],[34.6543,135.5055]],{color:'#3b82f6',weight:3,dashArray:'8,6',opacity:0.7}).addTo(dayLayers.j1);
+      }
+    });
+  });
+}
+
+function mkTransitIcon(){
+  return L.divIcon({html:`<div style="background:#3b82f6;border:2px solid rgba(255,255,255,0.7);border-radius:4px;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px">🚉</div>`,className:'',iconSize:[18,18],iconAnchor:[9,9]});
+}
+
+function openMap(ck, dk) {
+  initMap();
+  currentCity = ck;
+  currentDayKey = dk;
+  const city = CITIES[ck];
+  const day = city.days[dk];
+  document.getElementById('map-header-title').textContent = dk.toUpperCase() + ' — ' + day.label.split('—')[1]?.trim() || day.intro;
+
+  // Retirer tous les layers
+  Object.keys(dayLayers).forEach(k => { try{map.removeLayer(dayLayers[k]);}catch(e){} });
+  Object.keys(CITIES).forEach(k => {
+    try{hotelMarkers[k].remove();}catch(e){}
+    if(optVisible) try{map.removeLayer(optLayers[k]);}catch(e){}
+    if(toilettesVisible) try{map.removeLayer(toilettesLayers[k]);}catch(e){}
+    if(konbiniVisible) try{map.removeLayer(konbiniLayer[k]);}catch(e){}
+    if(stationsVisible) try{map.removeLayer(stationsLayer[k]);}catch(e){}
+  });
+
+  // Ajouter hôtel + jour courant
+  hotelMarkers[ck].addTo(map);
+  dayLayers[dk].addTo(map);
+  if(optVisible) optLayers[ck].addTo(map);
+  if(toilettesVisible) toilettesLayers[ck].addTo(map);
+  if(konbiniVisible) konbiniLayer[ck].addTo(map);
+  if(stationsVisible) stationsLayer[ck].addTo(map);
+
+  // Fly to bounds
+  const coords = day.steps.filter(s=>s.lat&&!s.isHotel&&!s.isAirport).map(s=>[s.lat,s.lng]);
+  if(coords.length>1) { try{map.flyToBounds(L.latLngBounds(coords),{padding:[50,50],duration:0.8});}catch(e){} }
+
+  // Légende
+  updateMapLegend(ck, dk);
+  showScreen('map');
+  setTimeout(()=>map.invalidateSize(),350);
+}
+
+function updateMapLegend(ck, dk) {
+  const color = DAY_COLORS[dk]||'#888';
+  const day = CITIES[ck].days[dk];
+  document.getElementById('map-legend-float').innerHTML = `
     <div class="legend-item"><div class="legend-dot" style="background:#d4af37"></div>🏨 Hôtel</div>
-    ${dayLegend}
-    <div class="legend-item"><div class="legend-sq" style="background:#3b82f6;border-radius:2px"></div>🚉 Transport</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;opacity:0.7"></div>💡 Non planifié</div>
-    <div class="legend-item"><div class="legend-sq" style="background:#0891b2;border-radius:2px"></div>🚻 Toilettes</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>🏪 Konbini</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#ea580c"></div>🚇 Stations</div>`;
+    <div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${dk.toUpperCase()} — ${DAY_DATES[dk]||''}</div>
+    <div class="legend-item"><div class="legend-sq" style="background:#3b82f6;border-radius:2px"></div>🚉 Transport</div>`;
 }
 
-// ============================================================================
-// TOGGLES
-// ============================================================================
+// ── TOGGLES ──
 function toggleOptional(){
   optVisible=!optVisible;
   const btn=document.getElementById('btn-opt');
-  if(optVisible){optLayers[currentCity].addTo(map);btn.classList.add('active');btn.textContent='✅ Activités non planifiées (masquer)';}
-  else{map.removeLayer(optLayers[currentCity]);btn.classList.remove('active');btn.textContent='💡 Activités non planifiées';}
+  if(optVisible){if(optLayers[currentCity])optLayers[currentCity].addTo(map);btn.classList.add('active');btn.textContent='✅ Non planifié';}
+  else{if(optLayers[currentCity])map.removeLayer(optLayers[currentCity]);btn.classList.remove('active');btn.textContent='💡 Non planifié';}
 }
 function toggleToilettes(){
   toilettesVisible=!toilettesVisible;
   const btn=document.getElementById('btn-toilettes');
-  if(toilettesVisible){toilettesLayers[currentCity].addTo(map);btn.classList.add('active');btn.textContent='✅ Toilettes (masquer)';}
-  else{map.removeLayer(toilettesLayers[currentCity]);btn.classList.remove('active');btn.textContent='🚻 Toilettes publiques';}
+  if(toilettesVisible){if(toilettesLayers[currentCity])toilettesLayers[currentCity].addTo(map);btn.classList.add('active');btn.textContent='✅ Toilettes';}
+  else{if(toilettesLayers[currentCity])map.removeLayer(toilettesLayers[currentCity]);btn.classList.remove('active');btn.textContent='🚻 Toilettes';}
 }
-window.toggleOptional=toggleOptional;
-window.toggleToilettes=toggleToilettes;
-
-// ============================================================================
-// KONBINI & STATIONS — Overpass via proxy CORS public
-// ============================================================================
-const konbiniLayer = L.layerGroup();
-const stationsLayer = L.layerGroup();
-let konbiniLoaded = {osaka:false, kyoto:false, tokyo:false};
-let stationsLoaded = {osaka:false, kyoto:false, tokyo:false};
-let konbiniVisible = false, stationsVisible = false;
-
-const CITY_BOUNDS = {
-  osaka: {s:34.54, w:135.44, n:34.87, e:135.58},
-  kyoto: {s:34.93, w:135.67, n:35.08, e:135.84},
-  tokyo: {s:35.50, w:139.50, n:35.82, e:139.95}
-};
-
-// Données statiques complètes — utilisées si Overpass échoue
-const STATIC_KONBINI = {
-  osaka:[
-    // Zone Ebisucho / Shinsekai / Hôtel
-    {lat:34.6558,lng:135.5067,type:'7-eleven',name:'7-Eleven Ebisucho'},
-    {lat:34.6545,lng:135.5055,type:'lawson',name:'Lawson Ebisucho'},
-    {lat:34.6527,lng:135.5061,type:'familymart',name:'FamilyMart Shinsekai'},
-    {lat:34.6521,lng:135.5075,type:'7-eleven',name:'7-Eleven Tsutenkaku'},
-    {lat:34.6538,lng:135.5090,type:'lawson',name:'Lawson Tennoji N'},
-    // Zone Dotonbori / Namba
-    {lat:34.6688,lng:135.5009,type:'familymart',name:'FamilyMart Dotonbori'},
-    {lat:34.6695,lng:135.5020,type:'7-eleven',name:'7-Eleven Dotonbori E'},
-    {lat:34.6682,lng:135.4995,type:'lawson',name:'Lawson Namba'},
-    {lat:34.6655,lng:135.5038,type:'7-eleven',name:'7-Eleven Nipponbashi'},
-    {lat:34.6640,lng:135.5020,type:'familymart',name:'FamilyMart Namba S'},
-    {lat:34.6620,lng:135.5005,type:'lawson',name:'Lawson Namba Parks'},
-    {lat:34.6672,lng:135.5060,type:'7-eleven',name:'7-Eleven Hozenji'},
-    // Zone Shinsaibashi / America-Mura
-    {lat:34.6710,lng:135.5018,type:'7-eleven',name:'7-Eleven Shinsaibashi'},
-    {lat:34.6725,lng:135.5030,type:'familymart',name:'FamilyMart Shinsaibashi N'},
-    {lat:34.6700,lng:135.4998,type:'lawson',name:'Lawson America-Mura'},
-    {lat:34.6735,lng:135.5010,type:'7-eleven',name:'7-Eleven Shinsaibashi N'},
-    // Zone Kuromon / Doguya
-    {lat:34.6654,lng:135.5062,type:'lawson',name:'Lawson Kuromon'},
-    {lat:34.6645,lng:135.5045,type:'familymart',name:'FamilyMart Doguya-suji'},
-    // Zone Château d'Osaka
-    {lat:34.6865,lng:135.5255,type:'7-eleven',name:'7-Eleven Osaka Castle'},
-    {lat:34.6850,lng:135.5230,type:'familymart',name:'FamilyMart Osakajo Park'},
-    {lat:34.6880,lng:135.5270,type:'lawson',name:'Lawson Moriguchi'},
-    // Zone Tennoji / Shitenno-ji
-    {lat:34.6543,lng:135.5162,type:'lawson',name:'Lawson Tennoji'},
-    {lat:34.6530,lng:135.5140,type:'7-eleven',name:'7-Eleven Shitenno-ji'},
-    {lat:34.6555,lng:135.5175,type:'familymart',name:'FamilyMart Tennoji E'},
-    // Zone Umeda / Osaka Station
-    {lat:34.7025,lng:135.4960,type:'7-eleven',name:'7-Eleven Umeda'},
-    {lat:34.7010,lng:135.4975,type:'familymart',name:'FamilyMart Osaka Station'},
-    {lat:34.7038,lng:135.4950,type:'lawson',name:'Lawson Umeda W'},
-    // Zone Minoh / Katsuoji
-    {lat:34.8108,lng:135.5232,type:'familymart',name:'FamilyMart Minoh-Kayano'},
-    {lat:34.8350,lng:135.4800,type:'lawson',name:'Lawson Minoh'},
-    // Zone Sumiyoshi / Sud
-    {lat:34.6124,lng:135.4940,type:'7-eleven',name:'7-Eleven Sumiyoshi'},
-    {lat:34.6090,lng:135.4920,type:'familymart',name:'FamilyMart Sumiyoshi S'},
-    // Zone Tanimachi / Centre-est
-    {lat:34.6810,lng:135.5195,type:'7-eleven',name:'7-Eleven Tanimachi'},
-    {lat:34.6780,lng:135.5180,type:'lawson',name:'Lawson Tanimachi S'},
-    // Zone KIX / Aeroport
-    {lat:34.4380,lng:135.2450,type:'7-eleven',name:'7-Eleven KIX Airport'},
-    {lat:34.4360,lng:135.2430,type:'familymart',name:'FamilyMart KIX T1'},
-  ],
-  kyoto:[
-    // Zone Higashiyama / Gion / Hôtel
-    {lat:35.0036,lng:135.7784,type:'7-eleven',name:'7-Eleven Higashiyama'},
-    {lat:35.0020,lng:135.7775,type:'familymart',name:'FamilyMart Sanjo Higashi'},
-    {lat:35.0038,lng:135.7760,type:'lawson',name:'Lawson Gion'},
-    {lat:35.0010,lng:135.7790,type:'7-eleven',name:'7-Eleven Ninenzaka'},
-    // Zone Kiyomizu-dera
-    {lat:34.9950,lng:135.7848,type:'familymart',name:'FamilyMart Kiyomizu'},
-    {lat:34.9975,lng:135.7838,type:'lawson',name:'Lawson Kiyomizuzaka'},
-    // Zone Pontocho / Kawaramachi
-    {lat:35.0074,lng:135.7697,type:'7-eleven',name:'7-Eleven Pontocho'},
-    {lat:35.0060,lng:135.7685,type:'familymart',name:'FamilyMart Kawaramachi'},
-    {lat:35.0085,lng:135.7710,type:'lawson',name:'Lawson Sanjo Kawaramachi'},
-    // Zone Nishiki / Centre
-    {lat:35.0049,lng:135.7653,type:'7-eleven',name:'7-Eleven Nishiki'},
-    {lat:35.0040,lng:135.7640,type:'familymart',name:'FamilyMart Shijo Karasuma'},
-    {lat:35.0055,lng:135.7665,type:'lawson',name:'Lawson Teramachi'},
-    // Zone Kyoto Station
-    {lat:34.9860,lng:135.7590,type:'lawson',name:'Lawson Kyoto Station'},
-    {lat:34.9855,lng:135.7575,type:'7-eleven',name:'7-Eleven Kyoto Station W'},
-    {lat:34.9865,lng:135.7605,type:'familymart',name:'FamilyMart Kyoto Station E'},
-    // Zone Fushimi Inari
-    {lat:34.9671,lng:135.7730,type:'7-eleven',name:'7-Eleven Inari'},
-    {lat:34.9685,lng:135.7715,type:'familymart',name:'FamilyMart Fushimi'},
-    // Zone Nanzen-ji / Okazaki
-    {lat:35.0116,lng:135.7934,type:'lawson',name:'Lawson Nanzenji'},
-    {lat:35.0098,lng:135.7910,type:'7-eleven',name:'7-Eleven Okazaki'},
-    // Zone Arashiyama
-    {lat:35.0090,lng:135.6785,type:'7-eleven',name:'7-Eleven Arashiyama'},
-    {lat:35.0155,lng:135.6760,type:'familymart',name:'FamilyMart Saga-Arashiyama'},
-    {lat:35.0070,lng:135.6800,type:'lawson',name:'Lawson Arashiyama S'},
-    // Zone Ryoan-ji / Kinkaku-ji
-    {lat:35.0345,lng:135.7188,type:'7-eleven',name:'7-Eleven Ryoanji'},
-    {lat:35.0395,lng:135.7295,type:'familymart',name:'FamilyMart Kinkakuji'},
-    // Zone Nijo-jo
-    {lat:35.0142,lng:135.7483,type:'lawson',name:'Lawson Nijo-jo'},
-    {lat:35.0120,lng:135.7465,type:'7-eleven',name:'7-Eleven Nijo'},
-    // Zone Manga Museum / Karasuma-Oike
-    {lat:35.0093,lng:135.7612,type:'familymart',name:'FamilyMart Karasuma-Oike'},
-    {lat:35.0075,lng:135.7598,type:'lawson',name:'Lawson Rokkaku'},
-    // Zone Sanjusangen-do
-    {lat:34.9885,lng:135.7735,type:'7-eleven',name:'7-Eleven Sanjusangendo'},
-  ]
-};
-
-const STATIC_STATIONS = {
-  osaka:[
-    {lat:34.6543,lng:135.5055,name:'Ebisucho (K18)',type:'subway',line:'Sakaisuji'},
-    {lat:34.6627,lng:135.5011,name:'Namba',type:'subway',line:'Midosuji / Yotsubashi / Sennichimae'},
-    {lat:34.6847,lng:135.5198,name:'Tanimachi 4-chome',type:'subway',line:'Tanimachi / Chuo'},
-    {lat:34.6522,lng:135.5155,name:'Tennoji',type:'subway',line:'Midosuji / Tanimachi / JR'},
-    {lat:34.6198,lng:135.5045,name:'Tengachaya (K20)',type:'subway',line:'Sakaisuji'},
-    {lat:34.8108,lng:135.5230,name:'Minoh-Kayano (M06)',type:'subway',line:'Midosuji'},
-    {lat:34.6671,lng:135.5020,name:'Nipponbashi (K17)',type:'subway',line:'Sakaisuji / Sennichimae'},
-    {lat:34.6710,lng:135.5025,name:'Shinsaibashi (M19)',type:'subway',line:'Midosuji'},
-    {lat:34.6780,lng:135.5180,name:'Tanimachi 6-chome',type:'subway',line:'Tanimachi'},
-    {lat:34.6920,lng:135.5180,name:'Morinomiya',type:'subway',line:'Chuo / Nagahori'},
-    {lat:34.7025,lng:135.4960,name:'Umeda',type:'subway',line:'Midosuji'},
-    {lat:34.7000,lng:135.4975,name:'Osaka Station (JR)',type:'rail',line:'JR Osaka / Tokaido'},
-    {lat:34.4350,lng:135.2440,name:'Kansai Airport (JR)',type:'rail',line:'Nankai Airport Express'},
-    {lat:34.6124,lng:135.4938,name:'Sumiyoshi-Toriimae (HK)',type:'rail',line:'Hankai Tram'},
-    {lat:34.6890,lng:135.5260,name:'Osakajokoen (JR)',type:'rail',line:'JR Loop'},
-    {lat:34.6551,lng:135.4284,name:'Osakako (C11)',type:'subway',line:'Chuo'},
-    {lat:34.6673,lng:135.4978,name:'Namba (Nankai)',type:'rail',line:'Nankai'},
-    {lat:34.6500,lng:135.5100,name:'Imamiya',type:'rail',line:'JR Loop / Osaka-Namba'},
-    {lat:34.6730,lng:135.5060,name:'Nagahoribashi (N17)',type:'subway',line:'Nagahori Tsurumi-ryokuchi'},
-    {lat:34.6610,lng:135.5070,name:'Nihombashi (K16)',type:'subway',line:'Sakaisuji'},
-  ],
-  kyoto:[
-    {lat:35.0036,lng:135.7783,name:'Higashiyama (T10)',type:'subway',line:'Tozai'},
-    {lat:34.9858,lng:135.7588,name:'Kyoto Station (JR)',type:'rail',line:'JR Tokaido / Nara / Kintetsu'},
-    {lat:35.0093,lng:135.7609,name:'Karasuma-Oike (K08/T13)',type:'subway',line:'Karasuma / Tozai'},
-    {lat:34.9671,lng:135.7727,name:'Inari (JR)',type:'rail',line:'JR Nara Line'},
-    {lat:34.6851,lng:135.8329,name:'Nara (JR)',type:'rail',line:'JR Nara Line'},
-    {lat:35.0142,lng:135.7481,name:'Nijo-jo-mae (T12)',type:'subway',line:'Tozai'},
-    {lat:35.0154,lng:135.6751,name:'Arashiyama (Hankyu)',type:'rail',line:'Hankyu Arashiyama'},
-    {lat:35.0085,lng:135.6785,name:'Arashiyama (Keifuku)',type:'rail',line:'Keifuku / Randen'},
-    {lat:35.0175,lng:135.7240,name:'Emmachi (JR)',type:'rail',line:'JR Sagano'},
-    {lat:35.0088,lng:135.7690,name:'Sanjo (Keihan)',type:'rail',line:'Keihan'},
-    {lat:35.0041,lng:135.7685,name:'Gion-Shijo (Keihan)',type:'rail',line:'Keihan'},
-    {lat:34.9880,lng:135.7760,name:'Tofukuji (JR/Keihan)',type:'rail',line:'JR Nara / Keihan'},
-    {lat:35.0345,lng:135.7185,name:'Ryoanji (bus stop)',type:'subway',line:'City Bus'},
-    {lat:35.0093,lng:135.7478,name:'Nijojo (T12)',type:'subway',line:'Tozai'},
-    {lat:34.9860,lng:135.7580,name:'Kyoto Station (Subway)',type:'subway',line:'Karasuma (K11)'},
-    {lat:35.0110,lng:135.7600,name:'Shijo (K09)',type:'subway',line:'Karasuma'},
-    {lat:35.0270,lng:135.7480,name:'Kinkakuji (bus)',type:'subway',line:'City Bus 101/204'},
-    {lat:35.0270,lng:135.7982,name:'Ginkakuji (bus)',type:'subway',line:'City Bus 100'},
-    {lat:35.0115,lng:135.7933,name:'Nanzenji (bus)',type:'subway',line:'City Bus 5'},
-    {lat:34.9881,lng:135.7731,name:'Sanjusangendo-mae (bus)',type:'subway',line:'City Bus 206/208'},
-  ]
-};
-
-const STATIC_TOILETTES = {
-  osaka:[
-    {name:"Toilettes — Dotonbori (pont)",lat:34.6685,lng:135.5008,address:"Dotonbori canal"},
-    {name:"Toilettes — Dotonbori (rue)",lat:34.6692,lng:135.5025,address:"Dotonbori E"},
-    {name:"Toilettes — Namba Parks",lat:34.6615,lng:135.5015,address:"Namba Parks B1"},
-    {name:"Toilettes — Kuromon Ichiba",lat:34.6655,lng:135.5062,address:"Dans le marché"},
-    {name:"Toilettes — Osaka Castle Park N",lat:34.6900,lng:135.5250,address:"Parc nord"},
-    {name:"Toilettes — Osaka Castle Park S",lat:34.6820,lng:135.5240,address:"Parc sud"},
-    {name:"Toilettes — Osaka Castle Park E",lat:34.6860,lng:135.5300,address:"Jardin est"},
-    {name:"Toilettes — Shinsekai",lat:34.6520,lng:135.5058,address:"Entrée Shinsekai"},
-    {name:"Toilettes — Shinsekai S",lat:34.6505,lng:135.5070,address:"Shinsekai sud"},
-    {name:"Toilettes — Shinsaibashi",lat:34.6720,lng:135.5015,address:"Arcade Shinsaibashi"},
-    {name:"Toilettes — America-Mura",lat:34.6695,lng:135.5005,address:"Triangle Park"},
-    {name:"Toilettes — Tennoji Park",lat:34.6535,lng:135.5155,address:"Tennoji Park"},
-    {name:"Toilettes — Shitenno-ji",lat:34.6544,lng:135.5165,address:"Temple Shitenno-ji"},
-    {name:"Toilettes — Umeda Sky",lat:34.7055,lng:135.4908,address:"Umeda Sky Building"},
-    {name:"Toilettes — Osaka Station",lat:34.7020,lng:135.4965,address:"Osaka Station"},
-    {name:"Toilettes — Minoh-Kayano",lat:34.8108,lng:135.5230,address:"Station Minoh-Kayano"},
-    {name:"Toilettes — Katsuoji",lat:34.8457,lng:135.4705,address:"Temple Katsuoji"},
-    {name:"Toilettes — KIX Airport",lat:34.4360,lng:135.2445,address:"Terminal 1"},
-    {name:"Toilettes — Hozenji",lat:34.6680,lng:135.5026,address:"Ruelle Hozenji"},
-    {name:"Toilettes — Namba Yasaka",lat:34.6615,lng:135.4968,address:"Sanctuaire"},
-  ],
-  kyoto:[
-    {name:"Toilettes — Fushimi Inari (entrée)",lat:34.9673,lng:135.7728,address:"Entrée sanctuaire"},
-    {name:"Toilettes — Fushimi Inari (mi-pente)",lat:34.9710,lng:135.7750,address:"Yotsutsuji"},
-    {name:"Toilettes — Kiyomizu-dera",lat:34.9950,lng:135.7849,address:"Porte Nio-mon"},
-    {name:"Toilettes — Kiyomizu (rue)",lat:34.9970,lng:135.7838,address:"Kiyomizuzaka"},
-    {name:"Toilettes — Ninenzaka",lat:34.9995,lng:135.7820,address:"Ninen-zaka"},
-    {name:"Toilettes — Gion Hanamikoji",lat:35.0038,lng:135.7756,address:"Gion centre"},
-    {name:"Toilettes — Pontocho",lat:35.0074,lng:135.7694,address:"Pontocho alley"},
-    {name:"Toilettes — Nishiki Market",lat:35.0049,lng:135.7650,address:"Dans le marché"},
-    {name:"Toilettes — Arashiyama (bambous)",lat:35.0170,lng:135.6726,address:"Forêt bambous"},
-    {name:"Toilettes — Arashiyama (pont)",lat:35.0085,lng:135.6785,address:"Pont Togetsukyō"},
-    {name:"Toilettes — Arashiyama (Tenryu-ji)",lat:35.0155,lng:135.6750,address:"Temple Tenryu-ji"},
-    {name:"Toilettes — Gioji (mousse)",lat:35.0285,lng:135.6745,address:"Temple Giō-ji"},
-    {name:"Toilettes — Ryoan-ji",lat:35.0345,lng:135.7188,address:"Temple Ryoan-ji"},
-    {name:"Toilettes — Nijo-jo",lat:35.0142,lng:135.7481,address:"Château Nijo-jo"},
-    {name:"Toilettes — Nanzen-ji",lat:35.0115,lng:135.7933,address:"Temple Nanzen-ji"},
-    {name:"Toilettes — Sanjusangen-do",lat:34.9881,lng:135.7731,address:"Temple Sanjusangen-do"},
-    {name:"Toilettes — Manga Museum",lat:35.0093,lng:135.7609,address:"Musée Manga"},
-    {name:"Toilettes — Kyoto Station",lat:34.9858,lng:135.7590,address:"JR Kyoto Station"},
-    {name:"Toilettes — Heian Jingu",lat:35.0163,lng:135.7826,address:"Sanctuaire Heian"},
-    {name:"Toilettes — Nara (Todai-ji)",lat:34.6893,lng:135.8399,address:"Nara Park"},
-    {name:"Toilettes — Nara (Kasugataisha)",lat:34.6813,lng:135.8449,address:"Kasuga Grand Shrine"},
-  ]
-};
-
-function mkKonbiniIcon(type){
-  const bg={'7-eleven':'#007b40','familymart':'#0066cc','lawson':'#003087'};
-  const lbl={'7-eleven':'7','familymart':'FM','lawson':'L'};
-  const c=bg[type]||'#16a34a', l=lbl[type]||'K';
-  return L.divIcon({html:`<div style="background:${c};border:2px solid #fff;border-radius:4px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.5)">${l}</div>`,className:'',iconSize:[22,22],iconAnchor:[11,11]});
-}
-function mkStationIcon(type){
-  const isSubway=type==='subway';
-  return L.divIcon({html:`<div style="background:${isSubway?'#ea580c':'#b45309'};border:2px solid #fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,0.5)">${isSubway?'🚇':'🚂'}</div>`,className:'',iconSize:[24,24],iconAnchor:[12,12]});
-}
-
-function loadKonbiniFromStatic(city){
-  const src = city === 'tokyo' ? STATIC_KONBINI_TOKYO : STATIC_KONBINI[city];
-  (src||[]).forEach(k=>{
-    const brand=k.type==='7-eleven'?'7-Eleven':k.type==='familymart'?'FamilyMart':'Lawson';
-    L.marker([k.lat,k.lng],{icon:mkKonbiniIcon(k.type)})
-      .bindPopup(`<div class="popup-name">🏪 ${brand}</div><div class="popup-addr">${k.name}</div><div class="popup-desc">Ouvert 24h/24 · ATM · Wi-Fi gratuit</div>`)
-      .addTo(konbiniLayer);
-  });
-}
-function loadStationsFromStatic(city){
-  const src = city === 'tokyo' ? STATIC_STATIONS_TOKYO : STATIC_STATIONS[city];
-  (src||[]).forEach(s=>{
-    L.marker([s.lat,s.lng],{icon:mkStationIcon(s.type)})
-      .bindPopup(`<div class="popup-name">${s.type==='subway'?'🚇':'🚂'} ${s.name}</div><div class="popup-desc">${s.line||''}</div>`)
-      .addTo(stationsLayer);
-  });
-}
-
-function loadKonbini(city){
-  if(konbiniLoaded[city]) return Promise.resolve();
-  loadKonbiniFromStatic(city);
-  konbiniLoaded[city]=true;
-  return Promise.resolve();
-}
-
-function loadStations(city){
-  if(stationsLoaded[city]) return Promise.resolve();
-  loadStationsFromStatic(city);
-  stationsLoaded[city]=true;
-  return Promise.resolve();
-}
-
 function toggleKonbini(){
   konbiniVisible=!konbiniVisible;
   const btn=document.getElementById('btn-konbini');
-  if(konbiniVisible){
-    loadKonbini(currentCity).then(()=>{konbiniLayer.addTo(map);btn.classList.add('active');btn.textContent='✅ Konbini (masquer)';});
-  } else {
-    map.removeLayer(konbiniLayer);btn.classList.remove('active');btn.textContent='🏪 Konbini (7-Eleven · FM · Lawson)';
-  }
+  if(konbiniVisible){if(konbiniLayer[currentCity])konbiniLayer[currentCity].addTo(map);btn.classList.add('active');btn.textContent='✅ Konbini';}
+  else{if(konbiniLayer[currentCity])map.removeLayer(konbiniLayer[currentCity]);btn.classList.remove('active');btn.textContent='🏪 Konbini';}
 }
 function toggleStations(){
   stationsVisible=!stationsVisible;
   const btn=document.getElementById('btn-stations');
-  if(stationsVisible){
-    loadStations(currentCity).then(()=>{stationsLayer.addTo(map);btn.classList.add('active');btn.textContent='✅ Stations (masquer)';});
-  } else {
-    map.removeLayer(stationsLayer);btn.classList.remove('active');btn.textContent='🚇 Gares & Stations de métro';
-  }
+  if(stationsVisible){if(stationsLayer[currentCity])stationsLayer[currentCity].addTo(map);btn.classList.add('active');btn.textContent='✅ Stations';}
+  else{if(stationsLayer[currentCity])map.removeLayer(stationsLayer[currentCity]);btn.classList.remove('active');btn.textContent='🚇 Stations';}
 }
-window.toggleKonbini=toggleKonbini;
-window.toggleStations=toggleStations;
+window.toggleOptional=toggleOptional;window.toggleToilettes=toggleToilettes;window.toggleKonbini=toggleKonbini;window.toggleStations=toggleStations;
 
-// ============================================================================
-// ANIMATION
-// ============================================================================
-function getAnimPoints(dk){
-  const city=CITIES[currentCity];
-  const pts=[{lat:city.hotel.lat,lng:city.hotel.lng,name:'Hôtel',emoji:'🏨'}];
-  city.days[dk].steps.forEach(s=>{
+// ── ANIMATION ──
+function getAnimPoints(ck,dk){
+  const pts=[{lat:CITIES[ck].hotel.lat,lng:CITIES[ck].hotel.lng,name:'Hôtel',emoji:'🏨'}];
+  CITIES[ck].days[dk].steps.forEach(s=>{
     if(s.lat&&!s.isHotel&&!s.isAirport)pts.push({lat:s.lat,lng:s.lng,name:s.name,emoji:s.emoji});
-    if(s.isTransit&&s.fromLat)pts.push({lat:s.fromLat,lng:s.fromLng,name:`Départ: ${s.transport?.from||''}`,emoji:'🚉'});
-    if(s.isTransit&&s.toLat)pts.push({lat:s.toLat,lng:s.toLng,name:`Arrivée: ${s.transport?.to||''}`,emoji:'🚉'});
+    if(s.isTransit&&s.fromLat)pts.push({lat:s.fromLat,lng:s.fromLng,name:s.transport?.from||'',emoji:'🚉'});
+    if(s.isTransit&&s.toLat)pts.push({lat:s.toLat,lng:s.toLng,name:s.transport?.to||'',emoji:'🚉'});
   });
   return pts;
 }
 function toggleAnimation(){animRunning?stopAnimation():startAnimation();}
 function startAnimation(){
+  if(!map||!currentCity||!currentDayKey)return;
   stopAnimation();animRunning=true;
   document.getElementById('btn-anim').classList.add('anim-active');
-  document.getElementById('btn-anim').textContent="⏹ Arrêter l'animation";
-  const pts=getAnimPoints(currentDay);if(pts.length<2)return;
+  document.getElementById('btn-anim').textContent='⏹ Stop';
+  const pts=getAnimPoints(currentCity,currentDayKey);
+  if(pts.length<2)return;
   animStep=0;
-  const icon=L.divIcon({html:`<div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center"><div class="anim-dot"></div></div>`,className:'',iconSize:[20,20],iconAnchor:[10,10]});
+  const icon=L.divIcon({html:`<div style="width:18px;height:18px;display:flex;align-items:center;justify-content:center"><div class="anim-dot"></div></div>`,className:'',iconSize:[18,18],iconAnchor:[9,9]});
   animMarker=L.marker([pts[0].lat,pts[0].lng],{icon,zIndexOffset:9999}).addTo(map);
   map.flyTo([pts[0].lat,pts[0].lng],15,{duration:0.8});
   animInterval=setInterval(()=>{
@@ -1661,81 +1538,41 @@ function startAnimation(){
 }
 function stopAnimation(){
   animRunning=false;clearInterval(animInterval);
-  if(animMarker){map.removeLayer(animMarker);animMarker=null;}
+  if(animMarker&&map){try{map.removeLayer(animMarker);}catch(e){}}
+  animMarker=null;
   document.getElementById('btn-anim').classList.remove('anim-active');
-  document.getElementById('btn-anim').textContent="▶ Animer l'itinéraire";
+  document.getElementById('btn-anim').textContent='▶ Animer';
 }
 window.toggleAnimation=toggleAnimation;
 
-// ============================================================================
-// LIGHTBOX
-// ============================================================================
-function showLightbox(img,name,addr,desc){
-  document.getElementById('lb-img').src=img;
-  document.getElementById('lb-name').textContent=name;
-  document.getElementById('lb-addr').textContent=`📍 ${addr}`;
-  document.getElementById('lb-desc').textContent=desc;
+// ── LIGHTBOX ──
+function showLightbox(imgEnc,nameEnc,addrEnc,descEnc){
+  document.getElementById('lb-img').src=decodeURIComponent(imgEnc);
+  document.getElementById('lb-name').textContent=decodeURIComponent(nameEnc);
+  document.getElementById('lb-addr').textContent='📍 '+decodeURIComponent(addrEnc);
+  document.getElementById('lb-desc').textContent=decodeURIComponent(descEnc);
   document.getElementById('lightbox').classList.add('open');
 }
-function openLightboxStep(id){
-  const step=Object.values(CITIES[currentCity].days).flatMap(d=>d.steps).find(s=>s.id===id);
+function openLightboxStep(id,ck,dk){
+  const allSteps=Object.values(CITIES[ck].days[dk].steps||CITIES[ck].days).flatMap(d=>Array.isArray(d)?d:d.steps||[]);
+  const step=CITIES[ck].days[dk].steps.find(s=>s.id===id);
   if(!step||!step.img)return;
-  showLightbox(step.img,`${step.emoji} ${step.name}`,step.address,step.desc);
-}
-function openLightboxOpt(id, cityKey){
-  const o=CITIES[cityKey||currentCity].optional.find(x=>x.id===id);
-  if(!o||!o.img)return;
-  showLightbox(o.img,`${o.emoji} ${o.name}`,o.address,o.desc);
+  showLightbox(encodeURIComponent(step.img),encodeURIComponent(step.emoji+' '+step.name),encodeURIComponent(step.address||''),encodeURIComponent(step.desc||''));
 }
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
-window.openLightboxStep=openLightboxStep;
-window.openLightboxOpt=openLightboxOpt;
-window.closeLightbox=closeLightbox;
+window.openLightboxStep=openLightboxStep;window.showLightbox=showLightbox;window.closeLightbox=closeLightbox;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
-
-
-// ============================================================================
-// CITY SWITCHER EXPOSED
-// ============================================================================
-// Wrapper switchCity pour recharger konbini/stations selon la ville
-const _baseSwitchCity = switchCity;
-window.switchCity = function(cityKey){
-  // Reset layers dynamiques sur l'ancienne ville
-  if(konbiniVisible){ map.removeLayer(konbiniLayer); }
-  if(stationsVisible){ map.removeLayer(stationsLayer); }
-  _baseSwitchCity(cityKey);
-  // Recharger sur la nouvelle ville si visibles
-  if(konbiniVisible){ loadKonbini(cityKey).then(()=>konbiniLayer.addTo(map)); }
-  if(stationsVisible){ loadStations(cityKey).then(()=>stationsLayer.addTo(map)); }
-};
-
-// ============================================================================
-// INIT
-// ============================================================================
-renderCityHeader();
-renderTabs();
-renderDay('j1');
-updateLegend();
+// ── INIT ──
+renderHome();
 </script>
+
 <script>
-// ============================================================
-// SERVICE WORKER — Cache offline pour utilisation sans réseau
-// ============================================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('SW enregistré:', reg.scope))
-      .catch(err => console.log('SW erreur:', err));
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 }
 </script>
 </body>
 </html>
-// ============================================================================
-// DONNÉES — TOKYO
-
-
-
-
-
