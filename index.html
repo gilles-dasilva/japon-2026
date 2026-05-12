@@ -1569,8 +1569,26 @@ renderHome();
 
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('sw.js');
+      // Quand un nouveau SW est installé, recharger la page automatiquement
+      reg.addEventListener('updatefound', () => {
+        const newSW = reg.installing;
+        newSW.addEventListener('statechange', () => {
+          if(newSW.state === 'activated') {
+            console.log('[APP] Nouvelle version disponible, rechargement...');
+            window.location.reload();
+          }
+        });
+      });
+      // Écouter le message du SW pour recharger
+      navigator.serviceWorker.addEventListener('message', e => {
+        if(e.data && e.data.type === 'SW_UPDATED') {
+          window.location.reload();
+        }
+      });
+    } catch(e) {}
   });
 }
 </script>
