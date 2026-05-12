@@ -1,8 +1,9 @@
 {
-  "name": "Japon 2026 — Itinéraire",
+  "name": "Japon 2026",
   "short_name": "Japon 2026",
-  "description": "Itinéraire interactif du voyage Japon 2026 — Osaka, Kyoto, Tokyo",
-  "start_url": "./",
+  "description": "Itinéraire Osaka · Kyoto · Tokyo — Oct. 2026",
+  "start_url": "/japon-2026/",
+  "scope": "/japon-2026/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
@@ -10,18 +11,28 @@
   "lang": "fr",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/japon-2026/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "/japon-2026/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/japon-2026/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/japon-2026/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ],
-  "categories": ["travel", "maps"],
-  "screenshots": []
+  ]
 }
