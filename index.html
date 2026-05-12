@@ -297,25 +297,8 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // ============================================================================
-// TUILE CARTE — MapTiler Vector Tiles (chargement rapide, labels anglais forcés)
-// ============================================================================
+// Clé MapTiler — la carte est initialisée dans initMap()
 const MAPTILER_KEY = '1oBsmSWNFattubU4Bwxk';
-
-
-// Tuiles raster MapTiler Darkmatter — labels anglais à tous les zooms
-L.tileLayer(
-  `https://api.maptiler.com/maps/darkmatter/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
-  {
-    attribution: '© <a href="https://www.maptiler.com">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 20,
-    tileSize: 512,
-    zoomOffset: -1,
-    crossOrigin: true,
-    keepBuffer: 4,       // garde 4 tuiles en cache autour de la vue
-    updateWhenIdle: false,
-    updateWhenZooming: false
-  }
-).addTo(map);
 
 // ============================================================================
 // DONNÉES — OSAKA
@@ -1564,7 +1547,16 @@ window.openLightboxStep=openLightboxStep;window.showLightbox=showLightbox;window
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
 // ── INIT ──
-renderHome();
+try {
+  renderHome();
+} catch(err) {
+  console.error('[INIT ERROR]', err);
+  document.getElementById('cities-list').innerHTML = 
+    '<div style="padding:20px;color:#f87171;font-size:13px;line-height:1.6">' +
+    '<strong>Erreur de chargement:</strong><br>' + err.message + '<br><br>' +
+    '<pre style="font-size:10px;color:#fbbf24;overflow:auto">' + err.stack + '</pre>' +
+    '</div>';
+}
 </script>
 
 <script>
