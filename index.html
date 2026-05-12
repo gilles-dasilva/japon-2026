@@ -174,7 +174,51 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 .popup-zoom{margin-top:7px;font-size:10px;color:var(--gold);cursor:pointer;}
 .popup-opt-badge{display:inline-block;font-size:9px;font-weight:700;background:rgba(251,191,36,0.2);color:#fbbf24;padding:2px 7px;border-radius:999px;margin-bottom:5px;}
 
-@media(max-width:768px){#app{flex-direction:column;}#sidebar{width:100%;min-width:unset;height:55vh;}#map-container{height:45vh;}.map-legend{display:none;}}
+@media(max-width:768px){
+  #app{flex-direction:column;}
+  #sidebar{width:100%;min-width:unset;height:58vh;border-right:none;border-bottom:1px solid var(--border);}
+  #map-container{height:42vh;}
+  .map-legend{display:none;}
+  .city-switcher button{font-size:10px;padding:10px 4px;}
+  .city-btn .city-emoji{font-size:16px;}
+  .sidebar-header{padding:12px 16px 10px;}
+  .trip-title{font-size:20px;}
+  .trip-dates{font-size:11px;margin-bottom:8px;}
+  .hotel-info{padding:8px 10px;}
+  .hotel-name{font-size:11px;}
+  .hotel-addr{font-size:10px;}
+  .day-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .day-tabs::-webkit-scrollbar{display:none;}
+  .day-tab{min-width:60px;padding:8px 4px;}
+  .day-tab .tab-day{font-size:12px;}
+  .step{margin:0 10px 8px;}
+  .step-header{padding:10px 12px;}
+  .step-name{font-size:14px;}
+  .step-img{height:100px;}
+  .step-desc{font-size:11px;padding:8px 12px 10px;}
+  .map-controls{top:8px;right:8px;gap:5px;}
+  .map-btn{padding:6px 10px;font-size:11px;}
+  .day-intro{padding:12px 16px 8px;}
+  .day-intro-title{font-size:15px;}
+  .day-intro-sub{font-size:11px;}
+  .transport-block{margin:0 10px 6px 40px;padding:8px 10px;}
+  .wc-block{margin:0 10px 6px;padding:6px 10px;font-size:10px;}
+  .day-tip{margin:0 10px 16px;padding:10px 12px;font-size:11px;}
+  /* Carte prend toute la largeur en bas */
+  #map-container{position:relative;}
+}
+/* Très petits écrans */
+@media(max-width:380px){
+  .day-tab .tab-day{font-size:11px;}
+  .step-name{font-size:13px;}
+  .map-btn{font-size:10px;padding:5px 8px;}
+}
+/* Mode paysage mobile */
+@media(max-width:900px) and (orientation:landscape){
+  #app{flex-direction:row;}
+  #sidebar{width:340px;min-width:340px;height:100vh;}
+  #map-container{height:100vh;}
+}
 </style>
 </head>
 <body>
@@ -1552,76 +1596,16 @@ function loadStationsFromStatic(city){
 
 function loadKonbini(city){
   if(konbiniLoaded[city]) return Promise.resolve();
-  const b=CITY_BOUNDS[city];
-  const bbox=`${b.s},${b.w},${b.n},${b.e}`;
-  const query=`[out:json][timeout:60];(node["brand:wikidata"="Q259340"](${bbox});node["brand:wikidata"="Q1264822"](${bbox});node["brand:wikidata"="Q1557223"](${bbox});way["brand:wikidata"="Q259340"](${bbox});way["brand:wikidata"="Q1264822"](${bbox});way["brand:wikidata"="Q1557223"](${bbox}););out center;`;
-  const url=`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-  document.getElementById('btn-konbini').textContent='⏳ Chargement...';
-  const ctrl = new AbortController();
-  setTimeout(()=>ctrl.abort(), 65000);
-  return fetch(url, {signal: ctrl.signal})
-    .then(r=>r.json())
-    .then(data=>{
-      let count=0;
-      data.elements.forEach(el=>{
-        const lat=el.lat||(el.center&&el.center.lat);
-        const lon=el.lon||(el.center&&el.center.lon);
-        if(!lat||!lon) return;
-        const wd=el.tags['brand:wikidata']||'';
-        let type='other';
-        if(wd==='Q259340') type='7-eleven';
-        else if(wd==='Q1264822') type='familymart';
-        else if(wd==='Q1557223') type='lawson';
-        if(type==='other') return;
-        const brand=type==='7-eleven'?'7-Eleven':type==='familymart'?'FamilyMart':'Lawson';
-        const displayName=el.tags['name:en']||el.tags.name||brand;
-        L.marker([lat,lon],{icon:mkKonbiniIcon(type)})
-          .bindPopup(`<div class="popup-name">🏪 ${brand}</div><div class="popup-addr">${displayName}</div><div class="popup-desc">Ouvert 24h/24 · ATM · Wi-Fi gratuit</div>`)
-          .addTo(konbiniLayer);
-        count++;
-      });
-      // Si Overpass renvoie moins de 10 résultats, compléter avec le statique
-      if(count < 10) loadKonbiniFromStatic(city);
-      konbiniLoaded[city]=true;
-    })
-    .catch(()=>{
-      loadKonbiniFromStatic(city);
-      konbiniLoaded[city]=true;
-    });
+  loadKonbiniFromStatic(city);
+  konbiniLoaded[city]=true;
+  return Promise.resolve();
 }
 
 function loadStations(city){
   if(stationsLoaded[city]) return Promise.resolve();
-  const b=CITY_BOUNDS[city];
-  const bbox=`${b.s},${b.w},${b.n},${b.e}`;
-  const query=`[out:json][timeout:60];(node["railway"="station"]["name"](${bbox});node["station"="subway"]["name"](${bbox}););out body;`;
-  const url=`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-  document.getElementById('btn-stations').textContent='⏳ Chargement...';
-  const ctrl = new AbortController();
-  setTimeout(()=>ctrl.abort(), 65000);
-  return fetch(url, {signal: ctrl.signal})
-    .then(r=>r.json())
-    .then(data=>{
-      const seen=new Set();
-      let count=0;
-      data.elements.forEach(el=>{
-        const name=el.tags['name:en']||el.tags.name||'Station';
-        const key=name.toLowerCase().replace(/\s/g,'').substring(0,10);
-        if(seen.has(key)) return;
-        seen.add(key);
-        const isSubway=(el.tags.station==='subway')||(el.tags.network||'').toLowerCase().includes('metro');
-        L.marker([el.lat,el.lon],{icon:mkStationIcon(isSubway?'subway':'rail')})
-          .bindPopup(`<div class="popup-name">${isSubway?'🚇':'🚂'} ${name}</div><div class="popup-desc">${el.tags['name:en']||el.tags.network||''}</div>`)
-          .addTo(stationsLayer);
-        count++;
-      });
-      if(count < 5) loadStationsFromStatic(city);
-      stationsLoaded[city]=true;
-    })
-    .catch(()=>{
-      loadStationsFromStatic(city);
-      stationsLoaded[city]=true;
-    });
+  loadStationsFromStatic(city);
+  stationsLoaded[city]=true;
+  return Promise.resolve();
 }
 
 function toggleKonbini(){
