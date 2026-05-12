@@ -128,9 +128,10 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 .step-type{font-size:11px;color:var(--muted);margin-top:1px;}
 .step-addr{font-size:10px;color:rgba(212,175,55,0.6);margin-top:2px;}
 .step-emoji{font-size:20px;flex-shrink:0;}
-.step-img{width:100%;height:120px;object-fit:cover;display:block;border-top:1px solid var(--border);cursor:zoom-in;background:var(--surface2);transition:opacity 0.3s;}
-.step-img.lazy{opacity:0;}
-.step-img:not(.lazy){opacity:1;}
+.step-img{width:100%;height:120px;object-fit:cover;display:block;border-top:1px solid var(--border);cursor:zoom-in;transition:opacity 0.4s;}
+.step-img.lazy{opacity:0;background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;}
+.step-img:not(.lazy){opacity:1;background:none;animation:none;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .step-body{padding:10px 14px 12px;font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid rgba(212,175,55,0.1);}
 .step-tags{display:flex;gap:4px;flex-wrap:wrap;padding:0 14px 12px;}
 .step-tag{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:999px;}
@@ -1315,6 +1316,25 @@ function openCity(ck) {
     list.appendChild(row);
   });
   showScreen('city');
+  
+  // Précharger silencieusement la 1ère image de chaque journée
+  requestIdleCallback ? requestIdleCallback(() => prefetchDayImages(ck)) : setTimeout(() => prefetchDayImages(ck), 500);
+}
+
+function prefetchDayImages(ck) {
+  const city = CITIES[ck];
+  city.dayKeys.forEach(dk => {
+    const day = city.days[dk];
+    day.steps.forEach(step => {
+      if(step.img && !step.isTransit) {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.as = 'image';
+        link.href = step.img + '?auto=compress&cs=tinysrgb&w=300&fit=crop';
+        document.head.appendChild(link);
+      }
+    });
+  });
 }
 
 // ── ÉCRAN JOURNÉE ──
@@ -1362,7 +1382,7 @@ function openDay(ck, dk) {
     const numStyle = (n !== null && n !== undefined && !step.isAirport) 
       ? `background:${color}33;color:${color};border:2px solid ${color};` : 'font-size:18px;';
     
-    const imgHtml = step.img ? '<img class="step-img lazy" data-src="' + step.img + '?auto=compress&cs=tinysrgb&w=400" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" decoding="async" onclick="openLightboxStep(\'' + step.id + '\',\'' + ck + '\',\'' + dk + '\')">' : '';
+    const imgHtml = step.img ? '<img class="step-img lazy" data-src="' + step.img + '?auto=compress&cs=tinysrgb&w=300&fit=crop" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" decoding="async" onclick="openLightboxStep(\'' + step.id + '\',\'' + ck + '\',\'' + dk + '\')">' : '';
     
     const tagsHtml = (step.tags||[]).map(t => {
       const L={gratuit:'Gratuit',payant:'Payant',incontournable:'⭐ Incontournable',kids:'👶 Kids',repas:'🍜 Repas',shopping:'🛍️ Shopping',excursion:'🚅 Excursion'};
@@ -1403,20 +1423,30 @@ function openDay(ck, dk) {
   // Charger les images au fur et à mesure qu'elles entrent dans le viewport
   requestAnimationFrame(() => {
     const lazyImgs = scroll.querySelectorAll('img.lazy');
+    
+    // Charger immédiatement les 3 premières images (visibles dès l'ouverture)
+    Array.from(lazyImgs).slice(0, 3).forEach(img => {
+      img.src = img.dataset.src;
+      img.classList.remove('lazy');
+    });
+    
+    // IntersectionObserver pour les suivantes
     if('IntersectionObserver' in window) {
       const obs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
           if(e.isIntersecting) {
             const img = e.target;
-            img.src = img.dataset.src;
-            img.classList.remove('lazy');
+            if(img.dataset.src) {
+              img.src = img.dataset.src;
+              img.classList.remove('lazy');
+            }
             obs.unobserve(img);
           }
         });
-      }, {root: scroll, rootMargin: '200px'});
-      lazyImgs.forEach(img => obs.observe(img));
+      }, {root: scroll, rootMargin: '400px'});
+      // Observer seulement les images pas encore chargées
+      Array.from(lazyImgs).slice(3).forEach(img => obs.observe(img));
     } else {
-      // Fallback: charger toutes les images directement
       lazyImgs.forEach(img => { img.src = img.dataset.src; });
     }
   });
@@ -1516,7 +1546,7 @@ function initMap() {
           : L.divIcon({html:`<div style="background:${color};border:3px solid rgba(255,255,255,0.9);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:white;font-family:serif;box-shadow:0 2px 10px rgba(0,0,0,0.6)">${step.num||'•'}</div>`,className:'',iconSize:[32,32],iconAnchor:[16,16]});
         const m = L.marker([step.lat,step.lng],{icon}).addTo(dayLayers[dk]);
         stepMarkers[step.id] = m;
-        const imgH=step.img?'<img src="'+step.img+'?auto=compress&cs=tinysrgb&w=400" class="popup-img" onclick="openLightboxStep(\''+step.id+'\',\''+ck+'\',\''+dk+'\')">':'';
+        const imgH=step.img?'<img src="'+step.img+'?auto=compress&cs=tinysrgb&w=300&fit=crop" class="popup-img" onclick="openLightboxStep(\''+step.id+'\',\''+ck+'\',\''+dk+'\')">':'';
         m.bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">${step.emoji} ${step.name}</div><div class="popup-addr">📍 ${step.address||''}</div><div class="popup-desc">${(step.desc||'').substring(0,100)}...</div>${step.img?`<div class="popup-zoom" onclick="openLightboxStep('${step.id}','${ck}','${dk}')">🔍 Voir en grand</div>`:''}</div>`,{maxWidth:250});
       });
       // J1 special KIX lines
