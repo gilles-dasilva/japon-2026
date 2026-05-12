@@ -1244,16 +1244,16 @@ function openDay(ck, dk) {
 
   // Bouton carte
   const nSteps = day.steps.filter(s=>s.num&&!s.isTransit).length;
-  html += `<div class="map-cta" onclick="openMap('${ck}','${dk}')">
-    <div class="map-cta-left">
-      <span class="map-cta-icon">🗺️</span>
-      <div>
-        <div class="map-cta-text">Voir sur la carte</div>
-        <div class="map-cta-sub">${nSteps} lieux · Transports · Toilettes · Konbini</div>
-      </div>
-    </div>
-    <span class="map-cta-arrow">›</span>
-  </div>`;
+  html += '<div class="map-cta" onclick="openMap(\'' + ck + '\',\'' + dk + '\')">' +
+    '<div class="map-cta-left">' +
+      '<span class="map-cta-icon">🗺️</span>' +
+      '<div>' +
+        '<div class="map-cta-text">Voir sur la carte</div>' +
+        '<div class="map-cta-sub">' + nSteps + ' lieux · Transports · Toilettes · Konbini</div>' +
+      '</div>' +
+    '</div>' +
+    '<span class="map-cta-arrow">›</span>' +
+  '</div>';
 
   // Étapes
   let stepNum = 0;
@@ -1270,7 +1270,7 @@ function openDay(ck, dk) {
     const numStyle = (n !== null && n !== undefined && !step.isAirport) 
       ? `background:${color}33;color:${color};border:2px solid ${color};` : 'font-size:18px;';
     
-    const imgHtml = step.img ? `<img class="step-img" src="${step.img}?auto=compress&cs=tinysrgb&w=600" loading="lazy" onclick="openLightboxStep('${step.id}','${ck}','${dk}')" onerror="this.style.display='none'">` : '';
+    const imgHtml = step.img ? '<img class="step-img" src="' + step.img + '?auto=compress&cs=tinysrgb&w=400" loading="lazy" decoding="async" onclick="openLightboxStep(\'' + step.id + '\',\'' + ck + '\',\'' + dk + '\')">' : '';
     
     const tagsHtml = (step.tags||[]).map(t => {
       const L={gratuit:'Gratuit',payant:'Payant',incontournable:'⭐ Incontournable',kids:'👶 Kids',repas:'🍜 Repas',shopping:'🛍️ Shopping',excursion:'🚅 Excursion'};
@@ -1278,22 +1278,22 @@ function openDay(ck, dk) {
       return `<span class="step-tag tag-${C[t]||t}">${L[t]||t}</span>`;
     }).join('');
 
-    html += `<div class="step-card">
-      <div class="step-header" onclick="openLightboxStep('${step.id}','${ck}','${dk}')">
-        <div class="step-num-badge" style="${numStyle}">${numDisplay}</div>
-        <div class="step-info">
-          <div class="step-time">${step.time}</div>
-          <div class="step-name">${step.name}</div>
-          <div class="step-type">${step.type}</div>
-          ${step.address?`<div class="step-addr">📍 ${step.address}</div>`:''}
-        </div>
-        <span class="step-emoji">${step.emoji}</span>
-      </div>
-      ${imgHtml}
-      ${step.desc?`<div class="step-body">${step.desc}</div>`:''}
-      ${step.wc?`<div class="wc-badge">🚻 ${step.wc}</div>`:''}
-      ${tagsHtml?`<div class="step-tags">${tagsHtml}</div>`:''}
-    </div>`;
+    html += '<div class="step-card">' +
+      '<div class="step-header" onclick="openLightboxStep(\'' + step.id + '\',\'' + ck + '\',\'' + dk + '\')">' +
+        '<div class="step-num-badge" style="' + numStyle + '">' + numDisplay + '</div>' +
+        '<div class="step-info">' +
+          '<div class="step-time">' + step.time + '</div>' +
+          '<div class="step-name">' + step.name + '</div>' +
+          '<div class="step-type">' + step.type + '</div>' +
+          (step.address ? '<div class="step-addr">📍 ' + step.address + '</div>' : '') +
+        '</div>' +
+        '<span class="step-emoji">' + step.emoji + '</span>' +
+      '</div>' +
+      imgHtml +
+      (step.desc ? '<div class="step-body">' + step.desc + '</div>' : '') +
+      (step.wc ? '<div class="wc-badge">🚻 ' + step.wc + '</div>' : '') +
+      (tagsHtml ? '<div class="step-tags">' + tagsHtml + '</div>' : '') +
+    '</div>';
 
     if(step.transport && !step.isTransit && !step.isHotel) {
       const t = step.transport;
@@ -1402,7 +1402,7 @@ function initMap() {
           : L.divIcon({html:`<div style="background:${color};border:3px solid rgba(255,255,255,0.9);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:white;font-family:serif;box-shadow:0 2px 10px rgba(0,0,0,0.6)">${step.num||'•'}</div>`,className:'',iconSize:[32,32],iconAnchor:[16,16]});
         const m = L.marker([step.lat,step.lng],{icon}).addTo(dayLayers[dk]);
         stepMarkers[step.id] = m;
-        const imgH=step.img?`<img src="${step.img}?auto=compress&cs=tinysrgb&w=400" class="popup-img" onclick="openLightboxStep('${step.id}','${ck}','${dk}')" onerror="this.style.display='none'">`:'' ;
+        const imgH=step.img?'<img src="'+step.img+'?auto=compress&cs=tinysrgb&w=400" class="popup-img" onclick="openLightboxStep(\''+step.id+'\',\''+ck+'\',\''+dk+'\')">':'';
         m.bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">${step.emoji} ${step.name}</div><div class="popup-addr">📍 ${step.address||''}</div><div class="popup-desc">${(step.desc||'').substring(0,100)}...</div>${step.img?`<div class="popup-zoom" onclick="openLightboxStep('${step.id}','${ck}','${dk}')">🔍 Voir en grand</div>`:''}</div>`,{maxWidth:250});
       });
       // J1 special KIX lines
