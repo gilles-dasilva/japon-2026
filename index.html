@@ -1373,6 +1373,8 @@ let currentDayKey = null;
 let screenStack = ['home'];
 
 function showScreen(id) {
+  // Pousser un état pour capturer le bouton retour Android
+  if(id !== 'home') history.pushState({screen:id}, '', location.href);
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.remove('active','back');
   });
@@ -2271,6 +2273,69 @@ try {
     '<pre style="font-size:10px;color:#fbbf24;overflow:auto">' + err.stack + '</pre>' +
     '</div>';
 }
+</script>
+
+<script>
+// ============================================================
+// SWIPE NAVIGATION — Retour arrière par glissement gauche→droite
+// ============================================================
+(function(){
+  const SCREEN_ORDER = ['home','city','day','map','resa','comments'];
+  const BACK_MAP = {city:'home', day:'city', map:'day', resa:'home', comments:'home'};
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, {passive: true});
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+
+    // Swipe droite → gauche OU gauche → droite
+    // On intercepte seulement gauche→droite (retour) 
+    // dx > 60 = swipe vers la droite (retour)
+    // dt < 400ms = geste rapide
+    // |dy| < |dx| = plus horizontal que vertical (pas un scroll)
+    if(dx > 60 && dt < 400 && Math.abs(dy) < Math.abs(dx) * 0.8) {
+      // Trouver l'écran actif
+      const active = document.querySelector('.screen.active');
+      if(!active) return;
+      const id = active.id.replace('screen-','');
+      const backTo = BACK_MAP[id];
+      if(backTo) {
+        // Appeler goBack
+        if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
+        window.goBack && window.goBack(backTo);
+      }
+    }
+  }, {passive: true});
+
+  // Empêcher le geste "précédent" du navigateur (history.back)
+  // en pushant un état dans l'historique à chaque changement d'écran
+  const origShowScreen = window.showScreen;
+  window.addEventListener('popstate', e => {
+    // Intercepter le bouton retour physique Android
+    const active = document.querySelector('.screen.active');
+    if(!active) return;
+    const id = active.id.replace('screen-','');
+    const backTo = BACK_MAP[id];
+    if(backTo) {
+      history.pushState(null, '', location.href);
+      if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
+      window.goBack && window.goBack(backTo);
+    }
+  });
+
+  // Pousser un état initial pour capturer le popstate
+  history.pushState(null, '', location.href);
+})();
 </script>
 
 <script>
