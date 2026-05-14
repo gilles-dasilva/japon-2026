@@ -1113,7 +1113,7 @@ const TOKYO_DAYS = {
        fromLat:35.7148,fromLng:139.7967,toLat:35.6267,toLng:139.7750},
       {id:"feux-j10",num:5,time:"19:00",name:"🎆 Tokyo Bay Grand Fireworks Festival",type:"ÉVÉNEMENT SPÉCIAL",emoji:"🎆",
        address:"Tokyo Bay — Harumi Wharf, Chuo Ward, Tokyo",lat:35.6450,lng:139.7820,
-       img:"https://images.pexels.com/photos/30972483/pexels-photo-30972483.jpeg?auto=compress&cs=tinysrgb&w=600",
+       img:"https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"12 200 feux d'artifice lancés depuis des barges sur la baie de Tokyo. Rainbow Bridge et les gratte-ciels en fond. Première édition depuis 11 ans ! Durée ~1h. Prévoyez chaud.",
        tags:["kids","incontournable"],wc:"Toilettes sur site",
        transport:{icon:"🚇",text:"Retour : Yurikamome bondée — prévoir 30-40 min d'attente",detail:"Alternative : Rinkai Line depuis Shinonome, ou taxi"}}
@@ -1298,10 +1298,10 @@ const TOKYO_DAYS = {
 
 const CITIES = {
   osaka:{ hotel:OSAKA_HOTEL, optional:OSAKA_OPTIONAL, toilettes:OSAKA_TOILETTES, days:OSAKA_DAYS,
-    dayKeys:['j1','j2','j3'], center:[34.665,135.503], zoom:13,
+    dayKeys:['j1','j2','j3','j4_osaka'], center:[34.665,135.503], zoom:13,
     label:'Osaka', emoji:'🏯', dates:'15 — 18 oct. 2026 · 3 nuits' },
   kyoto:{ hotel:KYOTO_HOTEL, optional:KYOTO_OPTIONAL, toilettes:KYOTO_TOILETTES, days:KYOTO_DAYS,
-    dayKeys:['j4','j5','j6','j7'], center:[35.0116,135.7681], zoom:13,
+    dayKeys:['j4','j5','j6','j7','j8_kyoto'], center:[35.0116,135.7681], zoom:13,
     label:'Kyoto', emoji:'⛩️', dates:'18 — 22 oct. 2026 · 4 nuits' },
   tokyo:{
     hotel:TOKYO_HOTEL, optional:TOKYO_OPTIONAL, toilettes:TOKYO_TOILETTES,
@@ -2207,13 +2207,42 @@ window.toggleAdmin = toggleAdmin;
 
 let lastCommentsData = null;
 
+let _lastCommentCount = 0;
 function renderCommentsList(data){
   lastCommentsData = data;
   const list = document.getElementById('comments-list');
   if(!list) return;
   const arr = Object.entries(data||{}).sort((a,b)=>a[1].ts-b[1].ts);
+  const newCount = arr.length;
+  
+  // Notifier si nouveau message et pas sur l'écran commentaires
+  const onCommentsScreen = document.getElementById('screen-comments').classList.contains('active');
+  if(_lastCommentCount > 0 && newCount > _lastCommentCount && !onCommentsScreen) {
+    // Badge rouge sur le bouton commentaires
+    const sub = document.getElementById('comments-count');
+    if(sub) {
+      sub.textContent = '🔴 ' + newCount + ' message' + (newCount>1?'s':'') + ' !';
+      sub.style.color = '#f87171';
+    }
+    // Notification navigateur si permission accordée
+    if(Notification && Notification.permission === 'granted' && arr.length > 0) {
+      const last = arr[arr.length-1][1];
+      new Notification('Japon 2026 🗾', {
+        body: last.author + ' : ' + last.text.substring(0,60),
+        icon: 'icon-192.png',
+        badge: 'icon-192.png'
+      });
+    }
+    // Vibration courte (mobiles)
+    if(navigator.vibrate) navigator.vibrate([100,50,100]);
+  } else if(!onCommentsScreen) {
+    const el = document.getElementById('comments-count');
+    if(el) { el.textContent = newCount > 0 ? newCount + ' commentaire' + (newCount>1?'s':'') : 'Groupe · Questions'; el.style.color=''; }
+  }
+  _lastCommentCount = newCount;
+  
   const el = document.getElementById('comments-count');
-  if(el) el.textContent = arr.length > 0 ? arr.length + ' commentaire' + (arr.length>1?'s':'') : 'Groupe · Questions';
+  if(el && onCommentsScreen) { el.textContent = newCount > 0 ? newCount + ' commentaire' + (newCount>1?'s':'') : 'Groupe · Questions'; el.style.color=''; }
   if(arr.length === 0){
     list.innerHTML = '<div class="no-comments">Aucun commentaire encore.<br>Sois le premier ! 💬</div>';
     return;
@@ -2249,6 +2278,13 @@ function postComment(){
 
 function openComments(){
   if(!initFirebase()){ alert('Connexion Firebase impossible.'); return; }
+  // Demander permission notifications si pas encore accordée
+  if(Notification && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+  // Réinitialiser le badge
+  const sub = document.getElementById('comments-count');
+  if(sub) sub.style.color = '';
   showScreen('comments');
   const list = document.getElementById('comments-list');
   if(list) list.innerHTML = '<div class="no-comments">Chargement... ⏳</div>';
