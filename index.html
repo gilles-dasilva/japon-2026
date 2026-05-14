@@ -15,6 +15,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 :root{
   --gold:#d4af37;--gold-light:rgba(212,175,55,0.15);
@@ -201,6 +204,57 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 #lb-desc{font-size:12px;color:rgba(248,241,229,0.8);line-height:1.5;}
 .lb-close{position:absolute;top:calc(16px + var(--safe-top));right:16px;color:#fff;font-size:26px;cursor:pointer;background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;}
 
+.cal-wrap{margin-bottom:24px;}
+.cal-title{font-family:"Playfair Display",serif;font-size:17px;color:var(--gold);margin-bottom:4px;}
+.cal-subtitle{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.cal-card{display:flex;gap:12px;padding:12px 14px;border-radius:14px;margin-bottom:8px;border:1px solid var(--border);cursor:pointer;transition:transform 0.15s;}
+.cal-card:active{transform:scale(0.98);}
+.cal-card-today{background:rgba(239,68,68,0.15);border-color:#ef4444;animation:pulse-border 1.5s infinite;}
+.cal-card-urgent{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.5);}
+.cal-card-soon{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.4);}
+.cal-card-future{background:var(--surface2);}
+.cal-card-done{background:rgba(5,150,105,0.08);border-color:rgba(5,150,105,0.3);}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4);}50%{box-shadow:0 0 0 6px rgba(239,68,68,0);}}
+.cal-icon{font-size:24px;padding-top:2px;}
+.cal-card-body{flex:1;min-width:0;}
+.cal-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;gap:8px;}
+.cal-name{font-size:13px;font-weight:700;color:var(--text);}
+.cal-status{font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.cal-date{font-size:11px;color:var(--gold);margin-bottom:3px;}
+.cal-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+.resa-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px calc(16px + var(--safe-bottom));}
+.resa-cat{margin-bottom:22px;}
+.resa-cat-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:10px;padding-left:4px;display:flex;align-items:center;gap:8px;}
+.resa-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.resa-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.resa-name{font-family:"Playfair Display",serif;font-size:15px;color:var(--text);line-height:1.3;}
+.resa-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0;margin-left:8px;margin-top:2px;}
+.badge-urgent{background:rgba(239,68,68,0.2);color:#f87171;}
+.badge-ok{background:rgba(5,150,105,0.2);color:#34d399;}
+.badge-info{background:rgba(59,130,246,0.2);color:#60a5fa;}
+.badge-warn{background:rgba(245,158,11,0.2);color:#fbbf24;}
+.resa-row{display:flex;gap:6px;margin-bottom:4px;font-size:12px;color:var(--muted);line-height:1.4;}
+.resa-label{color:var(--gold);font-weight:700;flex-shrink:0;min-width:80px;}
+.resa-link{color:#60a5fa;text-decoration:underline;cursor:pointer;font-size:12px;margin-top:6px;display:inline-block;}
+.resa-warn{margin-top:8px;padding:8px 10px;background:rgba(245,158,11,0.1);border-left:3px solid #f59e0b;border-radius:0 6px 6px 0;font-size:11px;color:#fbbf24;line-height:1.5;}
+.resa-note{margin-top:8px;padding:8px 10px;background:rgba(59,130,246,0.08);border-left:3px solid #3b82f6;border-radius:0 6px 6px 0;font-size:11px;color:#93c5fd;line-height:1.5;}
+.comments-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.comment-bubble{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;}
+.comment-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.comment-author{font-size:13px;font-weight:700;color:var(--gold);}
+.comment-date{font-size:10px;color:var(--muted);}
+.comment-text{font-size:13px;color:var(--text);line-height:1.5;}
+.comment-form{padding:12px 16px calc(12px + var(--safe-bottom));border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.comment-form-top{display:flex;gap:8px;margin-bottom:8px;}
+.comment-form-top input{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:13px;font-family:"Lora",serif;outline:none;}
+.comment-form-top input:focus{border-color:var(--gold);}
+.comment-submit{width:100%;padding:12px;background:rgba(212,175,55,0.15);border:1px solid var(--gold);border-radius:10px;color:var(--gold);font-size:14px;font-weight:700;cursor:pointer;font-family:"Lora",serif;}
+.home-action-btns{display:flex;gap:10px;padding:0 16px 16px;}
+.home-action-btn{flex:1;padding:14px 10px;border-radius:14px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:transform 0.15s;}
+.home-action-btn:active{transform:scale(0.97);}
+.home-action-icon{font-size:22px;display:block;margin-bottom:4px;}
+.home-action-label{font-size:12px;font-weight:700;color:var(--text);}
+.home-action-sub{font-size:10px;color:var(--muted);margin-top:2px;}
 /* ANIM DOT */
 .anim-dot{width:16px;height:16px;border-radius:50%;background:#ef4444;border:3px solid #fff;animation:ping 1.2s ease-in-out infinite;}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(239,68,68,0.6);}70%{box-shadow:0 0 0 10px rgba(239,68,68,0);}100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}}
@@ -287,6 +341,33 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
     <button class="tool-btn" id="btn-konbini" onclick="toggleKonbini()">🏪 Konbini</button>
     <button class="tool-btn" id="btn-stations" onclick="toggleStations()">🚇 Stations</button>
     <button class="tool-btn" id="btn-anim" onclick="toggleAnimation()">▶ Animer</button>
+  </div>
+</div>
+
+<!-- ÉCRAN RÉSERVATIONS -->
+<div class="screen" id="screen-resa">
+  <div class="app-header">
+    <button class="btn-back" onclick="goBack('home')">← Accueil</button>
+    <div><div class="header-title">📋 Réservations</div></div>
+  </div>
+  <div class="resa-scroll" id="resa-content"></div>
+</div>
+
+<!-- ÉCRAN COMMENTAIRES -->
+<div class="screen" id="screen-comments">
+  <div class="app-header">
+    <button class="btn-back" onclick="goBack('home')">← Accueil</button>
+    <div><div class="header-title">💬 Commentaires du groupe</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+    <div class="comments-list" id="comments-list"></div>
+    <div class="comment-form">
+      <div class="comment-form-top">
+        <input type="text" id="comment-name" placeholder="Prénom" maxlength="20" style="width:110px;flex-shrink:0;">
+        <input type="text" id="comment-text" placeholder="Ton commentaire..." maxlength="500" style="flex:1;">
+      </div>
+      <button class="comment-submit" onclick="postComment()">Envoyer 📤</button>
+    </div>
   </div>
 </div>
 
@@ -459,7 +540,7 @@ const OSAKA_DAYS = {
        address:"2 Katsuo-ji, Minoh, Osaka 562-0002",lat:34.8457,lng:135.4705,
        img:"https://images.pexels.com/photos/34065646/pexels-photo-34065646.jpeg?auto=compresshttps://images.pexels.com/photos/5598520/pexels-photo-5598520.jpeg?auto=compress&cs=tinysrgb&w=600cs=tinysrgbhttps://images.pexels.com/photos/5598520/pexels-photo-5598520.jpeg?auto=compress&cs=tinysrgb&w=600w=600",
        desc:"Temple du VIIIe siècle dans la forêt de Minoh. Milliers de daruma rouges partout ! Lac, cascade, pagode. Les enfants achètent un daruma et colorient un œil pour leur vœu. 500¥ adulte.",
-       tags:["payant","kids","incontournable"],wc:"Toilettes à l'entrée",transport:null},
+       tags:["payant","kids","incontournable"],wc:"Toilettes à l\'entrée",transport:null},
       {id:"tr-katsuo-osaka",num:null,time:"11:30",name:"Retour Katsuō-ji → Osaka",type:"Transit",emoji:"🚌",isTransit:true,
        address:"Katsuō-ji → Minoh-Kayano → Ebisucho",lat:34.83,lng:135.49,
        transport:{icon:"🚌",from:"Katsuō-ji bus stop",to:"Minoh-Kayano puis Ebisucho",line:"Bus Hankyu retour → Métro Midosuji → Sakaisuji",duration:"1h au total",price:"~1 160¥ retour",note:"Bus toutes les 30-40 min depuis le temple"},
@@ -497,7 +578,7 @@ const KYOTO_OPTIONAL = [
   {id:'ko-ginkaku',name:"Ginkaku-ji (Pavillon d'Argent)",emoji:'🥈',votes:3,address:'2 Ginkakujicho, Sakyo Ward, Kyoto 606-8402',lat:35.0270,lng:135.7982,img:'https://images.pexels.com/photos/161247/ginkaku-ji-temple-kyoto-japan-161247.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Au bout du Chemin de la Philosophie. Jardin de sable. 500¥."},
   {id:'ko-kamoriver',name:'Kamo-gawa (rivière)',emoji:'🌊',votes:1,address:'Kamo River, Nakagyo Ward, Kyoto',lat:35.0116,lng:135.7729,img:'https://images.pexels.com/photos/18848766/pexels-photo-18848766.jpeg?auto=compress&cs=tinysrgb&w=600',desc:'Balade à vélo ou pique-nique sur les berges. Gratuit. Agréable en soirée.'},
   {id:'ko-kitano',name:'Kitano Tenman-gū',emoji:'🐮',votes:3,address:'Bakurocho, Kamigyo Ward, Kyoto 602-8386',lat:35.0357,lng:135.7356,img:'https://images.pexels.com/photos/31162239/pexels-photo-31162239.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Sanctuaire pour les études. Marché aux puces le 25 du mois."},
-  {id:'ko-philosopher',name:"Chemin de la Philosophie",emoji:'🌸',votes:4,address:'Tetsugaku-no-michi, Sakyo Ward, Kyoto',lat:35.0175,lng:135.7945,img:'https://images.pexels.com/photos/37184733/pexels-photo-37184733.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Promenade 2km le long d'un canal entre Ginkaku-ji et Nanzen-ji. Gratuit."},
+  {id:'ko-philosopher',name:"Chemin de la Philosophie",emoji:'🌸',votes:4,address:'Tetsugaku-no-michi, Sakyo Ward, Kyoto',lat:35.0175,lng:135.7945,img:'https://images.pexels.com/photos/37184733/pexels-photo-37184733.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Promenade 2km le long d\'un canal entre Ginkaku-ji et Nanzen-ji. Gratuit."},
   {id:'ko-theiere',name:'Cérémonie du thé',emoji:'🍵',votes:3,address:'Gion, Higashiyama Ward, Kyoto',lat:35.0027,lng:135.7754,img:'https://images.pexels.com/photos/8952612/pexels-photo-8952612.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Chado traditionnel dans une maison de thé. De 1500¥ à 5000¥."},
   {id:'ko-kameyama',name:'Parc Kameyama & Berges',emoji:'🛶',votes:2,address:'Sagakameyama, Ukyo Ward, Kyoto',lat:35.0182,lng:135.6730,img:'https://images.pexels.com/photos/34247027/pexels-photo-34247027.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Partie haute d'Arashiyama, vue sur la rivière Hozu, loin de la foule. Gratuit."},
   {id:'ko-iwatayama',name:'Iwatayama (Parc des Singes)',emoji:'🐒',votes:4,address:'Nakaoshitacho, Ukyo Ward, Kyoto',lat:35.0104,lng:135.6727,img:'https://images.pexels.com/photos/20259602/pexels-photo-20259602.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Macaques en liberté sur la montagne. Vue sur Kyoto. 550¥ adulte, 250¥ enfant."},
@@ -556,7 +637,7 @@ const KYOTO_DAYS = {
        address:"1-294 Kiyomizu, Higashiyama Ward, Kyoto 605-0862",lat:34.9948,lng:135.7850,
        img:"https://images.pexels.com/photos/16226405/pexels-photo-16226405.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Temple iconique sur pilotis avec vue panoramique sur Kyoto. Érables qui commencent à rougir en octobre. 500¥ adulte, 200¥ enfant. Ouvert 6h-18h.",
-       tags:["payant","kids","incontournable"],wc:"Toilettes à l'entrée",
+       tags:["payant","kids","incontournable"],wc:"Toilettes à l\'entrée",
        transport:{icon:"🚶",text:"15 min à pied depuis Ninen-zaka en montant",detail:"Suivre les panneaux Kiyomizu-dera"}},
       {id:"gion-j4",num:3,time:"17:00",name:"Gion & Hanamikoji au crépuscule",type:"Quartier historique · Geishas",emoji:"👘",
        address:"Gion, Higashiyama Ward, Kyoto 605-0073",lat:35.0038,lng:135.7756,
@@ -595,7 +676,7 @@ const KYOTO_DAYS = {
        address:"68 Fukakusa Yabunouchicho, Fushimi Ward, Kyoto 612-0882",lat:34.9671,lng:135.7727,
        img:"https://images.pexels.com/photos/36940470/pexels-photo-36940470.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Milliers de torii orange formant des tunnels sur la montagne sacrée. Ouvert 24h/24, GRATUIT ! Avec des enfants, montez jusqu'au premier plateau (Yotsutsuji, ~45 min) pour une belle vue. Les petites chapelles et renards en pierre fascinent !",
-       tags:["gratuit","kids","incontournable"],wc:"Toilettes à l'entrée et en chemin",transport:null},
+       tags:["gratuit","kids","incontournable"],wc:"Toilettes à l\'entrée et en chemin",transport:null},
       {id:"tr-inari-hotel",num:null,time:"16:30",name:"Fushimi Inari → Hôtel",type:"Transit",emoji:"🚇",isTransit:true,
        address:"Inari Station → Higashiyama",lat:34.967,lng:135.773,
        transport:{icon:"🚂",from:"Inari Station",to:"Higashiyama T10",line:"JR Nara Line → Kyoto Station → Métro Tozai",duration:"30 min",price:"~560¥",note:""},
@@ -635,7 +716,7 @@ const KYOTO_DAYS = {
       {id:"mousse-j6",num:3,time:"13:30",name:"Temples de Mousse (Giō-ji & Jōjakkō-ji)",type:"Temples secrets · Nature",emoji:"🌿",
        address:"Sagagioji, Ukyo Ward, Kyoto 616-8435",lat:35.0285,lng:135.6740,
        img:"https://images.pexels.com/photos/31418368/pexels-photo-31418368.jpeg?auto=compress&cs=tinysrgb&w=600",
-       desc:"Deux petits temples secrets dans la forêt d'Arashiyama — tapis de mousse d'un vert intense et mystérieux. Parmi les lieux les plus apaisants de tout Kyoto. Giō-ji : 300¥ · Jōjakkō-ji : 500¥. 15 min à pied entre les deux.",
+       desc:"Deux petits temples secrets dans la forêt d'Arashiyama — tapis de mousse d\'un vert intense et mystérieux. Parmi les lieux les plus apaisants de tout Kyoto. Giō-ji : 300¥ · Jōjakkō-ji : 500¥. 15 min à pied entre les deux.",
        tags:["payant","kids"],wc:"Boutiques alentour",
        transport:{icon:"🚶",text:"20 min à pied depuis le pont, dans la forêt vers le nord",detail:"Suivre les panneaux Giō-ji depuis la rue principale d'Arashiyama"}},
       {id:"nijo-j6",num:4,time:"15:30",name:"Nijo-jo — Château du shogun",type:"Château · Histoire",emoji:"🏰",
@@ -656,7 +737,7 @@ const KYOTO_DAYS = {
   j7:{label:"J7 — Est de Kyoto & Adieux",date:"Mercredi 21 oct.",color:"#ef4444",
     intro:"La journée est & zen 🕊️",
     introSub:"Tout le secteur est de Kyoto : Nanzen-ji + aqueduc le matin, Sanjusangen-do + Manga Museum en début d'après-midi, souvenirs Higashiyama et dernière soirée. Tout à pied ou presque !",
-    tip:"💡 <strong>Conseil :</strong> Nanzen-ji, Sanjusangen-do et Higashiyama sont tous dans le même secteur est, à 15-20 min à pied l'un de l'autre. C'est la journée la plus reposante — profitez-en pour flâner.",
+    tip:"💡 <strong>Conseil :</strong> Nanzen-ji, Sanjusangen-do et Higashiyama sont tous dans le même secteur est, à 15-20 min à pied l'un de l\'autre. C'est la journée la plus reposante — profitez-en pour flâner.",
     steps:[
       {id:"depart-j7",num:null,time:"09:30",name:"Départ de l'hôtel",type:"Point de départ",emoji:"🏨",isHotel:true,
        address:"507 Tsutsumicho, Higashiyama Ward, Kyoto",lat:35.0036,lng:135.7783,
@@ -719,7 +800,7 @@ const TOKYO_OPTIONAL = [
   {id:'to-ghibli',name:'Musée Ghibli',emoji:'🤖',votes:4,
    address:'1-1-83 Shimorenjaku, Mitaka, Tokyo 181-0013',lat:35.6963,lng:139.5706,
    img:'https://images.pexels.com/photos/32788579/pexels-photo-32788579.jpeg?auto=compress&cs=tinysrgb&w=600',
-   desc:"L'univers enchanté de Miyazaki à Mitaka. Réservation OBLIGATOIRE des mois à l'avance depuis le site officiel. 1000¥ adulte, 100¥ enfant."},
+   desc:"L'univers enchanté de Miyazaki à Mitaka. Réservation OBLIGATOIRE des mois à l\'avance depuis le site officiel. 1000¥ adulte, 100¥ enfant."},
   {id:'to-odaiba',name:'Odaiba & Baie de Tokyo',emoji:'🌉',votes:0,
    address:'Odaiba, Minato Ward, Tokyo',lat:35.6267,lng:139.7750,
    img:'https://images.pexels.com/photos/32008338/pexels-photo-32008338.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -930,13 +1011,13 @@ const TOKYO_DAYS = {
     label:"J9 — Harajuku, Shibuya & Meiji", date:"Vendredi 23 oct.", color:"#ec4899",
     intro:"Le Tokyo pop, fashion & nature 🎀🌿",
     introSub:"La journée des incontournables visuels : Meiji Jingu dans sa forêt, Harajuku kawaii, Omotesando architecture, Shibuya Crossing et Nintendo Tokyo. Tout à pied — ces quartiers sont adjacents.",
-    tip:"💡 <strong>Conseil :</strong> Commencez par Meiji Jingu le matin (calme, beau). Puis descendre vers Harajuku/Takeshita St pour le côté fun. Shibuya Sky : réservez en ligne à l'avance, les créneaux du coucher de soleil partent vite !",
+    tip:"💡 <strong>Conseil :</strong> Commencez par Meiji Jingu le matin (calme, beau). Puis descendre vers Harajuku/Takeshita St pour le côté fun. Shibuya Sky : réservez en ligne à l\'avance, les créneaux du coucher de soleil partent vite !",
     steps:[
       {id:"meiji-j9",num:1,time:"09:00",name:"Meiji Jingu — Forêt sacrée",type:"Sanctuaire · Nature · Incontournable",emoji:"🌿",
        address:"1-1 Yoyogikamizonocho, Shibuya Ward, Tokyo 151-8557",lat:35.6763,lng:139.6993,
        img:"https://images.pexels.com/photos/27573830/pexels-photo-27573830.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Grand sanctuaire shinto dans une forêt de 70 000 arbres au cœur de Tokyo. Sérénité absolue, contraste saisissant avec l'agitation de la ville. Gratuit. Belles torii en bois, tonneau de saké géants offerts par des vignerons français. 30-45 min de promenade apaisante.",
-       tags:["gratuit","kids","incontournable"],wc:"Toilettes à l'entrée du sanctuaire",transport:null},
+       tags:["gratuit","kids","incontournable"],wc:"Toilettes à l\'entrée du sanctuaire",transport:null},
       {id:"harajuku-j9",num:2,time:"10:30",name:"Harajuku — Takeshita Street",type:"Culture · Quartier kawaii",emoji:"🎀",
        address:"1-18-13 Jingumae, Shibuya Ward, Tokyo 150-0001",lat:35.6707,lng:139.7026,
        img:"https://images.pexels.com/photos/30961867/pexels-photo-30961867.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1081,7 +1162,7 @@ const TOKYO_DAYS = {
       {id:"zojoji-j12",num:4,time:"16:30",name:"Zojo-ji & Tokyo Tower",type:"Culture · Photo Iconique",emoji:"🗼",
        address:"4-7-35 Shibakoen, Minato Ward, Tokyo 105-0011",lat:35.6585,lng:139.7454,
        img:"https://images.pexels.com/photos/30972483/pexels-photo-30972483.jpeg?auto=compress&cs=tinysrgb&w=600",
-       desc:"Temple ancestral avec la Tokyo Tower rouge en fond — une des photos les plus iconiques du Japon ! Milliers de statues Jizo avec bonnets et pinwheels colorés. Gratuit. À l'heure dorée (17h) c'est parfait pour les photos.",
+       desc:"Temple ancestral avec la Tokyo Tower rouge en fond — une des photos les plus iconiques du Japon ! Milliers de statues Jizo avec bonnets et pinwheels colorés. Gratuit. À l\'heure dorée (17h) c\'est parfait pour les photos.",
        tags:["gratuit","kids","incontournable"],wc:"Dans le temple",
        transport:{icon:"🚇",text:"Asakusa Line → Daimon Station · 10 min depuis Tokyo Station",detail:"Puis 5 min à pied"},
        fromLat:35.6852,fromLng:139.7528,toLat:35.6585,toLng:139.7454},
@@ -1125,7 +1206,7 @@ const TOKYO_DAYS = {
       {id:"diner-j13",num:5,time:"19:00",name:"Grand dîner d'adieu",type:"Gastronomie · Soirée spéciale",emoji:"🌟",
        address:"Roppongi / Ginza, Tokyo",lat:35.6628,lng:139.7308,
        img:"https://images.pexels.com/photos/29531016/pexels-photo-29531016.jpeg?auto=compress&cs=tinysrgb&w=600",
-       desc:"Le grand dîner final du voyage ! Restaurant avec vue sur Tokyo si possible. Célébrez deux semaines au Japon autour d'un bon repas.",
+       desc:"Le grand dîner final du voyage ! Restaurant avec vue sur Tokyo si possible. Célébrez deux semaines au Japon autour d\'un bon repas.",
        tags:["repas","incontournable"],wc:"Dans le restaurant",transport:null}
     ]
   },
@@ -1133,7 +1214,7 @@ const TOKYO_DAYS = {
     label:"J14 — Départ · Sayonara Japan 🛫", date:"Mercredi 28 oct.", color:"#ef4444",
     intro:"Sayonara Japan ! 🛫",
     introSub:"Journée départ. Check-out de l'hôtel le matin, puis transfert à 13h35 vers Haneda (HND). Vol 16h35 via Hanoï → CDG.",
-    tip:"💡 <strong>Conseils départ :</strong> Check-out à 11h. Consigne à la gare si besoin. Prévoir 1h30 pour rejoindre HND. Derniers yens au 7-Eleven de l'hôtel. Profitez de la vue depuis le taxi ou le train — c'est votre dernier regard sur Tokyo !",
+    tip:"💡 <strong>Conseils départ :</strong> Check-out à 11h. Consigne à la gare si besoin. Prévoir 1h30 pour rejoindre HND. Derniers yens au 7-Eleven de l'hôtel. Profitez de la vue depuis le taxi ou le train — c\'est votre dernier regard sur Tokyo !",
     steps:[
       {id:"transfert-j14",num:1,time:"13:35",name:"Transfert vers Haneda (HND)",type:"Transit · Aéroport",emoji:"🚃",
        address:"Haneda Airport, Ota Ward, Tokyo 144-0041",lat:35.5494,lng:139.7798,
@@ -1232,9 +1313,8 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.remove('active','back');
   });
-  // Mettre les écrans précédents en back
-  const screens = ['screen-home','screen-city','screen-day','screen-map'];
-  const order = {home:0,city:1,day:2,map:3};
+  const screens = ['screen-home','screen-city','screen-day','screen-map','screen-resa','screen-comments'];
+  const order = {home:0,city:1,day:2,map:3,resa:1,comments:1};
   const cur = order[id] ?? 0;
   screens.forEach((sid,i) => {
     const el = document.getElementById(sid);
@@ -1247,6 +1327,8 @@ function goBack(to) {
   if(to === 'home') showScreen('home');
   else if(to === 'city') showScreen('city');
   else if(to === 'day') { stopAnimation(); showScreen('day'); }
+  else if(to === 'resa') showScreen('resa');
+  else if(to === 'comments') showScreen('comments');
 }
 window.goBack = goBack;
 
@@ -1254,6 +1336,23 @@ window.goBack = goBack;
 function renderHome() {
   const list = document.getElementById('cities-list');
   list.innerHTML = '';
+  // Boutons Réservations et Commentaires
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'home-action-btns';
+  btnWrap.innerHTML = [
+    '<div class="home-action-btn" onclick="showScreen(\'resa\')">',
+      '<span class="home-action-icon">📋</span>',
+      '<div class="home-action-label">Réservations</div>',
+      '<div class="home-action-sub">Transports · Activités · Restos</div>',
+    '</div>',
+    '<div class="home-action-btn" onclick="openComments()">',
+      '<span class="home-action-icon">💬</span>',
+      '<div class="home-action-label">Commentaires</div>',
+      '<div class="home-action-sub" id="comments-count">Groupe · Questions</div>',
+    '</div>',
+  ].join('');
+  list.parentElement.insertBefore(btnWrap, list);
+
   Object.keys(CITIES).forEach(ck => {
     const city = CITIES[ck];
     const nDays = city.dayKeys.length;
@@ -1701,9 +1800,357 @@ window.openLightboxStep=openLightboxStep;window.showLightbox=showLightbox;window
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
 
+// ============================================================
+// RÉSERVATIONS
+// ============================================================
+const TAUX = 160; // 1€ ≈ 160¥ (oct. 2026 estimé)
+function yenEur(yen){ return Math.round(yen/TAUX); }
+
+const RESERVATIONS = {
+  transport:[
+    {
+      id:'r-osaka-kyoto',
+      name:'Shinkansen Osaka → Kyoto',
+      jour:'J4 — Dimanche 18 octobre (matin)',
+      badge:'ok',
+      badge_label:'Simple à faire',
+      rows:[
+        {label:'Trajet',val:'Osaka Station → Kyoto Station'},
+        {label:'Train',val:'JR Special Rapid (pas Shinkansen — plus économique !)'},
+        {label:'Durée',val:'29 min'},
+        {label:'Prix adulte',val:'580¥ (~'+yenEur(580)+'€) · Enfant 290¥ (~'+yenEur(290)+'€)'},
+        {label:'Réservation',val:'Aucune nécessaire — trains toutes les 15 min'},
+        {label:'Alternative',val:'JR Shinkansen Hikari : 1 420¥ (~'+yenEur(1420)+'€) · 15 min · Réservation possible sur place'},
+      ],
+      warn:'💡 Le JR Special Rapid est LARGEMENT suffisant (29 min, 580¥ ~3,60€). Inutile de prendre le Shinkansen pour Osaka→Kyoto. Achetez le billet au guichet ou distributeur le matin même.',
+      note:'Pas de réservation nécessaire. Payez avec votre carte bancaire aux bornes automatiques en gare d\'Osaka (interface en anglais disponible).'
+    },
+    {
+      id:'r-kyoto-tokyo',
+      name:'Shinkansen Kyoto → Tokyo',
+      jour:'J8 — Jeudi 22 octobre (matin)',
+      badge:'urgent',
+      badge_label:'À réserver',
+      rows:[
+        {label:'Trajet',val:'Kyoto Station → Tokyo Station (Hikari ou Nozomi)'},
+        {label:'Durée',val:'2h15 (Nozomi) · 2h40 (Hikari)'},
+        {label:'Prix adulte',val:'13 850¥ (~'+yenEur(13850)+'€) · Enfant 6 930¥ (~'+yenEur(6930)+'€)'},
+        {label:'Ouverture',val:'1 mois avant = 22 septembre 2026'},
+        {label:'Réserver sur',val:'hyperlink:https://global.jr-central.co.jp/en/:SmartEX (JR Central) — carte bancaire étrangère acceptée'},
+        {label:'Alternative',val:'hyperlink:https://www.japan-bullettrain.com/fr:japan-bullettrain.com — réservation en ligne en français'},
+      ],
+      warn:'⚠️ Réservez DÈS LE 22 SEPTEMBRE ! Les trains du jeudi matin sont chargés. Prenez un créneau 8h-10h depuis Kyoto.',
+      note:'Le Nozomi est plus rapide (2h15) et identique en prix. Pas de restriction sans JR Pass — vous pouvez prendre n\'importe quel train. Siège réservé recommandé avec 4 enfants et bagages.'
+    },
+    {
+      id:'r-fuji-bus',
+      name:'Bus Tokyo → Mont Fuji (Kawaguchiko)',
+      jour:'J11 — Dimanche 25 octobre',
+      badge:'warn',
+      badge_label:'Conseillé',
+      rows:[
+        {label:'Trajet',val:'Shinjuku (Busta Shinjuku) → Kawaguchiko'},
+        {label:'Durée',val:'1h45 en bus express'},
+        {label:'Prix adulte',val:'2 150¥ (~'+yenEur(2150)+'€) aller · 4 300¥ (~'+yenEur(4300)+'€) A/R'},
+        {label:'Ouverture',val:'1 mois avant (25 sept. 2026) — réservation recommandée le week-end'},
+        {label:'Réserver sur',val:'hyperlink:https://highway-buses.jp:highway-buses.jp ou highwaybus.com'},
+      ],
+      warn:'Bus souvent complet le dimanche. Réservez en ligne dès que possible.',
+      note:'Départ depuis Busta Shinjuku (8e étage de la gare de Shinjuku). Accepte les cartes bancaires étrangères en ligne.'
+    },
+    {
+      id:'r-nara-train',
+      name:'Train Kyoto → Nara (excursion J5)',
+      jour:'J5 — Lundi 19 octobre',
+      badge:'ok',
+      badge_label:'Pas nécessaire',
+      rows:[
+        {label:'Trajet',val:'Kyoto Station → Nara Station (JR Nara Line)'},
+        {label:'Durée',val:'45 min'},
+        {label:'Prix adulte',val:'720¥ (~'+yenEur(720)+'€) · Couvert par JR Pass'},
+        {label:'Réservation',val:'Aucune nécessaire — trains fréquents toutes les 20 min'},
+      ],
+      note:'Pas besoin de réserver à l\'avance. Achetez au guichet ou utilisez votre JR Pass le matin même.'
+    },
+  ],
+  activites:[
+    {
+      id:'r-teamlab',
+      name:'TeamLab Planets — Tokyo',
+      jour:'J12 — Lundi 26 octobre (matin)',
+      badge:'urgent',
+      badge_label:'⚠️ OBLIGATOIRE',
+      rows:[
+        {label:'Prix adulte',val:'3 800¥ (~'+yenEur(3800)+'€) semaine · 4 200¥ (~'+yenEur(4200)+'€) week-end'},
+        {label:'Prix enfant',val:'1 500¥ (~'+yenEur(1500)+'€) (4-12 ans) · Gratuit -4 ans'},
+        {label:'Ouverture',val:'Le 1er de chaque mois pour 2 mois à l\'avance — dispo dès le 1er sept. 2026'},
+        {label:'Réserver sur',val:'hyperlink:https://teamlabplanets.dmm.com:teamlabplanets.dmm.com (boutique officielle)'},
+        {label:'Créneau',val:'9h00 (premier créneau — moins de monde)'},
+      ],
+      warn:'⚠️ PAS de billetterie sur place ! Réservation 100% en ligne obligatoire. Les créneaux du week-end et vacances scolaires sont épuisés en quelques heures.',
+      note:'Prenez le créneau 9h00 le lundi — c\'est le plus calme. Un seul QR code pour tout le groupe. Non remboursable après achat.'
+    },
+    {
+      id:'r-shibuyasky',
+      name:'Shibuya Sky — Observatoire',
+      jour:'J9 — Vendredi 23 octobre (coucher de soleil)',
+      badge:'urgent',
+      badge_label:'Recommandé',
+      rows:[
+        {label:'Prix adulte',val:'2 700¥ (~'+yenEur(2700)+'€) avant 15h · 3 400¥ (~'+yenEur(3400)+'€) après 15h'},
+        {label:'Prix adulte soir',val:'3 700¥ (~'+yenEur(3700)+'€) week-end après 15h'},
+        {label:'Prix enfant',val:'Au guichet uniquement le jour J (gratuit -6 ans)'},
+        {label:'Ouverture',val:'Billets dispo 4 semaines avant (25 sept. 2026)'},
+        {label:'Réserver sur',val:'hyperlink:https://www.shibuya-scramble-square.com/sky/ticket/:shibuya-scramble-square.com ou Klook'},
+      ],
+      warn:'Les créneaux coucher de soleil (17h-18h30) partent très vite. Réservez dès le 25 septembre !',
+      note:'Billets pour enfants vendus uniquement au guichet le jour J (14e étage). Réservation non annulable.'
+    },
+    {
+      id:'r-sumo',
+      name:'Sumo — Visite dojo / Morning Practice',
+      jour:'J10 — Samedi 24 octobre (matin)',
+      badge:'warn',
+      badge_label:'Pas de tournoi',
+      rows:[
+        {label:'Situation',val:'Aucun tournoi officiel en octobre à Tokyo (suivant : nov. à Fukuoka)'},
+        {label:'Alternative 1',val:'Morning practice dans un dojo à Ryogoku — 5 000-8 000¥/pers (~'+yenEur(6000)+'€)'},
+        {label:'Alternative 2',val:'Visite guidée Sumo + musée via Klook (14 500¥/pers ~'+yenEur(14500)+'€)'},
+        {label:'Réserver sur',val:'hyperlink:https://www.klook.com/fr/search/?query=sumo+tokyo:Klook — "Tokyo Sumo Morning Practice"'},
+        {label:'Ouverture',val:'Réservation possible dès maintenant'},
+      ],
+      warn:'⚠️ Il n\'y a pas de grand tournoi de sumo en octobre à Tokyo (tournoi sept. 13-27, suivant à Fukuoka en nov.). Optez pour une visite de pratique matinale dans les dojos de Ryogoku.',
+      note:'Les visites morning practice se font entre 6h et 9h. Spectacle authentique et unique. Réservez plusieurs semaines à l\'avance.'
+    },
+    {
+      id:'r-katsuoji',
+      name:'Bus Hankyu — Katsuō-ji (Temple Daruma)',
+      jour:'J3 — Samedi 17 octobre (matin)',
+      badge:'warn',
+      badge_label:'À anticiper',
+      rows:[
+        {label:'Trajet',val:'Minoh-Kayano (arrêt n°8) → Katsuō-ji'},
+        {label:'Prix',val:'800¥ (~'+yenEur(800)+'€) adulte · 400¥ (~'+yenEur(400)+'€) enfant scolarisé'},
+        {label:'Réservation',val:'Pas de réservation possible — bus public'},
+        {label:'Conseil',val:'Arriver 15-20 min avant au stop le samedi (très bondé)'},
+      ],
+      note:'Pas de réservation nécessaire mais partez tôt ! Dernier bus retour vers 17h-18h selon saison.'
+    },
+  ],
+  restaurants:[
+    {
+      id:'r-resto-pontocho',
+      name:'Restaurant Pontocho — Kyoto',
+      jour:'J4 ou J6 — Soir',
+      badge:'info',
+      badge_label:'À planifier',
+      rows:[
+        {label:'Style',val:'Kaiseki ou restaurant avec terrasse Kawayuka sur la rivière'},
+        {label:'Prix moyen',val:'5 000-15 000¥/pers (~'+yenEur(8000)+'€) selon restaurant'},
+        {label:'Réservation',val:'Obligatoire pour les restaurants avec terrasse rivière'},
+        {label:'Réserver sur',val:'hyperlink:https://www.tablecheck.com/fr/japan/reserve/:TableCheck.com ou Tableall.com'},
+        {label:'À faire',val:'Dès que les dates sont confirmées — 1-2 mois à l\'avance'},
+      ],
+      warn:'Les tables kawayuka (terrasse sur la rivière) se réservent très tôt. Incontournable pour l\'expérience Pontocho complète.',
+      note:'Section à compléter avec le restaurant choisi. Nous pourrons affiner ensemble.'
+    },
+    {
+      id:'r-asakusa-sumo',
+      name:'Asakusa Sumo Club — Dîner + Combat',
+      jour:'J10 — Samedi 24 octobre (soirée avant les feux)',
+      badge:'urgent',
+      badge_label:'⚠️ Réserver tôt',
+      rows:[
+        {label:'Lieu',val:'Rokku Broadway, Asakusa (10 min à pied d\'Asakusa Station)'},
+        {label:'Séances',val:'11h30 · 14h30 · 17h30 · 20h30 — durée 2h'},
+        {label:'Séance J10',val:'17h30 recommandée (avant les feux à 19h)'},
+        {label:'Prix standard',val:'16 000¥/adulte (~'+yenEur(16000)+'€) · 13 000¥ enfant -12 ans (~'+yenEur(13000)+'€)'},
+        {label:'Prix VIP',val:'20 000¥/adulte (~'+yenEur(20000)+'€) — siège côté ring'},
+        {label:'Inclus',val:'Chanko-nabe (soupe sumos) · Poulet karaage · Sushi inari · Dessert · 1 boisson'},
+        {label:'Show inclus',val:'Danse geisha · Démonstration rikishi · Combat en 3 rounds · Photo souvenir'},
+        {label:'Bonus',val:'Possibilité de défier un lutteur en costume sumo !'},
+        {label:'Réserver sur',val:'hyperlink:https://www.klook.com/fr/search/?query=asakusa+sumo+club:Klook — "Asakusa Sumo Club"'},
+      ],
+      warn:'⚠️ Très populaire — souvent complet le week-end. Réservez plusieurs semaines à l\'avance. Note : séance 17h30 parfaite avant les feux d\'artifice (feux à 19h, 30 min de trajet vers Odaiba).',
+      note:'Annulation gratuite jusqu\'à 24h avant. Options végétariennes disponibles (précisez à la réservation). Adapté aux enfants — format familial et interactif.'
+    },
+    {
+      id:'r-resto-tsukiji',
+      name:'Sushis Tsukiji — Tokyo',
+      jour:'J13 — Mardi 27 octobre (matin)',
+      badge:'ok',
+      badge_label:'Sans réservation',
+      rows:[
+        {label:'Style',val:'Sushis ultra-frais au marché extérieur de Tsukiji'},
+        {label:'Prix moyen',val:'1 500-3 000¥/pers (~'+yenEur(2000)+'€)'},
+        {label:'Réservation',val:'Aucune nécessaire — arriver avant 9h pour éviter les files'},
+      ],
+      note:'Pas de réservation. Daidaiya, Sushizanmai et Tsukiji Itadori sont parmi les meilleures adresses.'
+    },
+  ]
+};
+
+function renderResa(){
+  const container = document.getElementById('resa-content');
+  if(!container) return;
+  // ── CALENDRIER DES OUVERTURES ──
+  const today = new Date();
+  const ALERTS = [
+    {date:'2026-09-01', label:'TeamLab Planets', icon:'🌊', desc:'Ouverture billetterie — réserver créneau 9h J12 (26 oct)', url:'https://teamlabplanets.dmm.com', urgence:'high'},
+    {date:'2026-09-18', label:'Shinkansen Osaka → Kyoto', icon:'🚅', desc:'Billets dispo 1 mois avant le J4 (18 oct) — guichet ou borne', url:'', urgence:'medium'},
+    {date:'2026-09-22', label:'Shinkansen Kyoto → Tokyo', icon:'🚅', desc:'Réserver dès ce jour sur SmartEX ou japan-bullettrain.com — J8 (22 oct)', url:'https://www.japan-bullettrain.com/fr', urgence:'high'},
+    {date:'2026-09-25', label:'Shibuya Sky', icon:'🏙️', desc:'Ouverture billetterie 4 semaines avant — créneau coucher de soleil J9 (23 oct)', url:'https://www.shibuya-scramble-square.com/sky/ticket/', urgence:'high'},
+    {date:'2026-09-25', label:'Bus Mont Fuji (Kawaguchiko)', icon:'🗻', desc:'Réserver le bus Shinjuku→Kawaguchiko — J11 dimanche (bondé)', url:'https://highway-buses.jp', urgence:'medium'},
+    {date:'2026-10-01', label:'Asakusa Sumo Club', icon:'🤼', desc:'Réserver séance 17h30 J10 (24 oct) sur Klook — se remplit vite', url:'https://www.klook.com/fr/search/?query=asakusa+sumo+club', urgence:'medium'},
+  ];
+
+  const STATUS = {high:'🔴',medium:'🟡',done:'🟢'};
+
+  let calHtml = '<div class="cal-wrap">';
+  calHtml += '<div class="cal-title">📅 Calendrier des ouvertures</div>';
+  calHtml += '<div class="cal-subtitle">Dates auxquelles vous pourrez réserver — envoyez un rappel WhatsApp au groupe !</div>';
+
+  ALERTS.forEach(a => {
+    const alertDate = new Date(a.date);
+    const diffDays = Math.ceil((alertDate - today) / 86400000);
+    let status, statusLabel, cardClass;
+    if(diffDays < 0) {
+      status = '🟢'; statusLabel = 'Ouvert'; cardClass = 'cal-card-done';
+    } else if(diffDays === 0) {
+      status = '🔴'; statusLabel = "AUJOURD'HUI !"; cardClass = 'cal-card-today';
+    } else if(diffDays <= 7) {
+      status = '🔴'; statusLabel = 'Dans ' + diffDays + ' j'; cardClass = 'cal-card-urgent';
+    } else if(diffDays <= 30) {
+      status = '🟡'; statusLabel = 'Dans ' + diffDays + ' j'; cardClass = 'cal-card-soon';
+    } else {
+      status = '⚪'; statusLabel = 'Dans ' + diffDays + ' j'; cardClass = 'cal-card-future';
+    }
+
+    const dateStr = alertDate.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+    calHtml += '<div class="cal-card ' + cardClass + '">';
+    calHtml += '<div class="cal-card-left">';
+    calHtml += '<div class="cal-icon">' + a.icon + '</div>';
+    calHtml += '</div>';
+    calHtml += '<div class="cal-card-body">';
+    calHtml += '<div class="cal-card-top"><span class="cal-name">' + a.label + '</span><span class="cal-status">' + status + ' ' + statusLabel + '</span></div>';
+    calHtml += '<div class="cal-date">📅 ' + dateStr + '</div>';
+    calHtml += '<div class="cal-desc">' + a.desc + '</div>';
+    if(a.url) calHtml += '<a class="resa-link" href="' + a.url + '" onclick="openLink(\'' + a.url + '\');return false;">Réserver ↗</a>';
+    calHtml += '</div></div>';
+  });
+
+  calHtml += '</div>';
+
+  const catNames = {transport:'🚅 Transport',activites:'🎫 Activités',restaurants:'🍽️ Restaurants'};
+  let html = calHtml;
+  Object.keys(RESERVATIONS).forEach(cat => {
+    const items = RESERVATIONS[cat];
+    html += '<div class="resa-cat"><div class="resa-cat-title">' + catNames[cat] + '</div>';
+    items.forEach(item => {
+      const badgeClass = 'badge-' + (item.badge==='urgent'?'urgent':item.badge==='ok'?'ok':item.badge==='warn'?'warn':'info');
+      html += '<div class="resa-card">';
+      html += '<div class="resa-card-top"><div class="resa-name">' + item.name + '</div><span class="resa-badge ' + badgeClass + '">' + item.badge_label + '</span></div>';
+      html += '<div class="resa-row"><span class="resa-label">Journée</span><span>' + item.jour + '</span></div>';
+      item.rows.forEach(r => {
+        if(r.val.startsWith('hyperlink:')) {
+          const parts = r.val.replace('hyperlink:','').split(':');
+          const url = parts[0], label = parts[1] || parts[0];
+          html += '<div class="resa-row"><span class="resa-label">' + r.label + '</span><a class="resa-link" href="' + url + '" onclick="openLink(\'' + url + '\');return false;">' + label + ' ↗</a></div>';
+        } else {
+          html += '<div class="resa-row"><span class="resa-label">' + r.label + '</span><span>' + r.val + '</span></div>';
+        }
+      });
+      if(item.warn) html += '<div class="resa-warn">' + item.warn + '</div>';
+      if(item.note) html += '<div class="resa-note">ℹ️ ' + item.note + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function openLink(url) {
+  window.open(url, '_blank');
+}
+window.openLink = openLink;
+
+// ============================================================
+// COMMENTAIRES (stockage localStorage)
+// ============================================================
+// ============================================================
+// FIREBASE — Commentaires partagés en temps réel
+// ============================================================
+const FB_CONFIG = {
+  apiKey: "AIzaSyBmGCiwHJfZdRGbHxn6qzCgfh4O3JVRsUI",
+  authDomain: "japon-2026-6039a.firebaseapp.com",
+  databaseURL: "https://japon-2026-6039a-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "japon-2026-6039a"
+};
+let fbApp=null, fbDb=null, commentsRef=null, commentsListener=null;
+
+function initFirebase(){
+  if(fbApp) return true;
+  try{
+    fbApp = firebase.initializeApp(FB_CONFIG);
+    fbDb = firebase.database();
+    commentsRef = fbDb.ref('comments');
+    return true;
+  }catch(e){ console.warn('Firebase:', e); return false; }
+}
+
+function renderCommentsList(data){
+  const list = document.getElementById('comments-list');
+  if(!list) return;
+  const arr = Object.values(data||{}).sort((a,b)=>a.ts-b.ts);
+  const el = document.getElementById('comments-count');
+  if(el) el.textContent = arr.length > 0 ? arr.length + ' commentaire' + (arr.length>1?'s':'') : 'Groupe · Questions';
+  if(arr.length === 0){
+    list.innerHTML = '<div class="no-comments">Aucun commentaire encore.<br>Sois le premier ! 💬</div>';
+    return;
+  }
+  list.innerHTML = arr.reverse().map(cm =>
+    '<div class="comment-bubble">' +
+      '<div class="comment-header">' +
+        '<span class="comment-author">' + escHtml(cm.author) + '</span>' +
+        '<span class="comment-date">' + escHtml(cm.date) + '</span>' +
+      '</div>' +
+      '<div class="comment-text">' + escHtml(cm.text) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function postComment(){
+  const nameEl = document.getElementById('comment-name');
+  const textEl = document.getElementById('comment-text');
+  const name = (nameEl.value||'').trim();
+  const text = (textEl.value||'').trim();
+  if(!name){ alert('Entre ton prénom !'); return; }
+  if(!text){ alert('Écris un commentaire !'); return; }
+  if(!initFirebase()){ alert('Connexion Firebase impossible.'); return; }
+  const now = new Date();
+  const date = now.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}) + ' ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  commentsRef.push({author:name, text:text, date:date, ts:now.getTime()})
+    .then(()=>{ textEl.value = ''; })
+    .catch(()=>{ alert('Erreur — vérifie ta connexion internet.'); });
+}
+
+function openComments(){
+  if(!initFirebase()){ alert('Connexion Firebase impossible.'); return; }
+  showScreen('comments');
+  const list = document.getElementById('comments-list');
+  if(list) list.innerHTML = '<div class="no-comments">Chargement... ⏳</div>';
+  // Supprimer l'ancien listener si existant
+  if(commentsRef && commentsListener) commentsRef.off('value', commentsListener);
+  commentsListener = commentsRef.on('value', snap => renderCommentsList(snap.val()));
+}
+
+window.postComment = postComment;
+window.openComments = openComments;
+
 // ── INIT ──
 try {
   renderHome();
+  renderResa();
 } catch(err) {
   console.error('[INIT ERROR]', err);
   document.getElementById('cities-list').innerHTML = 
