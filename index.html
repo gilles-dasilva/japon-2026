@@ -248,6 +248,10 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 .comment-form-top{display:flex;gap:8px;margin-bottom:8px;}
 .comment-form-top input{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:13px;font-family:"Lora",serif;outline:none;}
 .comment-form-top input:focus{border-color:var(--gold);}
+.emoji-bar{display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+.emoji-bar::-webkit-scrollbar{display:none;}
+.emoji-bar span{font-size:22px;cursor:pointer;flex-shrink:0;padding:2px 4px;border-radius:8px;transition:background 0.15s;}
+.emoji-bar span:active{background:rgba(212,175,55,0.2);}
 .comment-submit{width:100%;padding:12px;background:rgba(212,175,55,0.15);border:1px solid var(--gold);border-radius:10px;color:var(--gold);font-size:14px;font-weight:700;cursor:pointer;font-family:"Lora",serif;}
 .home-action-btns{display:flex;gap:10px;padding:0 16px 16px;}
 .home-action-btn{flex:1;padding:14px 10px;border-radius:14px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:transform 0.15s;}
@@ -366,7 +370,24 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
         <input type="text" id="comment-name" placeholder="Prénom" maxlength="20" style="width:110px;flex-shrink:0;">
         <input type="text" id="comment-text" placeholder="Ton commentaire..." maxlength="500" style="flex:1;">
       </div>
-      <button class="comment-submit" onclick="postComment()">Envoyer 📤</button>
+      <div class="emoji-bar">
+        <span onclick="addEmoji('😊')">😊</span>
+        <span onclick="addEmoji('👍')">👍</span>
+        <span onclick="addEmoji('❤️')">❤️</span>
+        <span onclick="addEmoji('🎌')">🎌</span>
+        <span onclick="addEmoji('🗻')">🗻</span>
+        <span onclick="addEmoji('🍜')">🍜</span>
+        <span onclick="addEmoji('🍣')">🍣</span>
+        <span onclick="addEmoji('🤔')">🤔</span>
+        <span onclick="addEmoji('⚠️')">⚠️</span>
+        <span onclick="addEmoji('✅')">✅</span>
+        <span onclick="addEmoji('🙏')">🙏</span>
+        <span onclick="addEmoji('🎉')">🎉</span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="comment-submit" style="flex:1;" onclick="postComment()">Envoyer 📤</button>
+        <button class="comment-submit" style="flex:0;padding:12px 14px;font-size:12px;opacity:0.7;" onclick="toggleAdmin()" title="Admin">⚙️</button>
+      </div>
     </div>
   </div>
 </div>
@@ -782,9 +803,9 @@ const KYOTO_DAYS = {
 // ============================================================================
 
 const TOKYO_HOTEL = {
-  name:"Hôtel Tokyo — À confirmer",
-  address:"Adresse à renseigner — proche centre Tokyo, <5km, gare à pied",
-  lat:35.6762, lng:139.6503  // Placeholder centre Tokyo — à mettre à jour
+  name:"Float Inn Shin-Okachimachi",
+  address:"Shin-Okachimachi, Taito Ward, Tokyo — Station Shin-Okachimachi (A18)",
+  lat:35.7072, lng:139.7793
 };
 
 const TOKYO_OPTIONAL = [
@@ -2159,6 +2180,52 @@ function renderCommentsList(data){
   ).join('');
 }
 
+const ADMIN_PWD = 'japon2026'; // Mot de passe admin pour supprimer les commentaires
+let isAdmin = false;
+
+function toggleAdmin(){
+  if(isAdmin){ isAdmin=false; renderCommentsList(lastCommentsData); return; }
+  const pwd = prompt('Mot de passe administrateur :');
+  if(pwd === ADMIN_PWD){ isAdmin=true; alert('Mode admin activé ✅'); renderCommentsList(lastCommentsData); }
+  else if(pwd !== null){ alert('Mot de passe incorrect'); }
+}
+
+function deleteComment(key){
+  if(!isAdmin) return;
+  if(!confirm('Supprimer ce commentaire ?')) return;
+  if(commentsRef) commentsRef.child(key).remove();
+}
+
+window.deleteComment = deleteComment;
+window.toggleAdmin = toggleAdmin;
+
+let lastCommentsData = null;
+
+function renderCommentsList(data){
+  lastCommentsData = data;
+  const list = document.getElementById('comments-list');
+  if(!list) return;
+  const arr = Object.entries(data||{}).sort((a,b)=>a[1].ts-b[1].ts);
+  const el = document.getElementById('comments-count');
+  if(el) el.textContent = arr.length > 0 ? arr.length + ' commentaire' + (arr.length>1?'s':'') : 'Groupe · Questions';
+  if(arr.length === 0){
+    list.innerHTML = '<div class="no-comments">Aucun commentaire encore.<br>Sois le premier ! 💬</div>';
+    return;
+  }
+  list.innerHTML = arr.reverse().map(([key, cm]) =>
+    '<div class="comment-bubble">' +
+      '<div class="comment-header">' +
+        '<span class="comment-author">' + escHtml(cm.author) + '</span>' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          '<span class="comment-date">' + escHtml(cm.date) + '</span>' +
+          (isAdmin ? '<button onclick="deleteComment(\'' + key + '\')" style="background:rgba(239,68,68,0.2);border:none;border-radius:6px;color:#f87171;font-size:11px;padding:2px 7px;cursor:pointer;">🗑️</button>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="comment-text">' + escHtml(cm.text) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
 function postComment(){
   const nameEl = document.getElementById('comment-name');
   const textEl = document.getElementById('comment-text');
@@ -2179,12 +2246,13 @@ function openComments(){
   showScreen('comments');
   const list = document.getElementById('comments-list');
   if(list) list.innerHTML = '<div class="no-comments">Chargement... ⏳</div>';
-  // Supprimer l'ancien listener si existant
   if(commentsRef && commentsListener) commentsRef.off('value', commentsListener);
   commentsListener = commentsRef.on('value', snap => renderCommentsList(snap.val()));
 }
 
 window.postComment = postComment;
+function addEmoji(e){ const el=document.getElementById('comment-text'); if(el){ el.value+=e; el.focus(); } }
+window.addEmoji = addEmoji;
 window.openComments = openComments;
 
 // ── INIT ──
