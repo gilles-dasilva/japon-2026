@@ -481,7 +481,7 @@ const OSAKA_DAYS = {
        desc:"Direction station Ebisucho (K18) à 3 min à pied.",tags:[],wc:null,
        transport:{icon:"🚇",text:"Ebisucho K18 → Tanimachi 4-chome · 20 min · ~280¥",detail:"Ligne Sakaisuji (marron) → correspondance Tanimachi (mauve) 2 stations nord"},
        fromLat:34.6543,fromLng:135.5055,toLat:34.6847,toLng:135.5198},
-      {id:"osaka-castle",num:1,time:"09:30",name:"Château d'Osaka & Parc",type:"Monument · Histoire",emoji:"🏯",
+      {id:"osaka-castle",num:1,time:"09:30",name:"Château d'Oden",type:"Monument · Histoire",emoji:"🏯",
        address:"1-1 Osakajo, Chuo Ward, Osaka 540-0002",lat:34.6864797,lng:135.5262114,
        img:"https://images.pexels.com/photos/30813051/pexels-photo-30813051.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Forteresse du XVIe siècle, douves et jardins. Parc immense pour les enfants. Montée optionnelle : 600¥/adulte, gratuit -15 ans. 1h30-2h.",
@@ -1094,10 +1094,10 @@ const TOKYO_DAYS = {
        fromLat:35.6267,fromLng:139.7750,toLat:35.6963,toLng:139.7930}
     ]
   },
-  j11:{
-    label:"J11 — Mont Fuji", date:"Dimanche 25 oct.", color:"#0ea5e9",
-    intro:"Le Fuji en majesté 🗻",
-    introSub:"Journée excursion complète au Mont Fuji. 2h depuis Tokyo. Lac Kawaguchiko pour les familles, 5e station pour les aventuriers.",
+  j12:{
+    label:"J12 — Mont Fuji & Kawaguchiko", date:"Lundi 26 oct.", color:"#0ea5e9",
+    intro:"Mont Fuji 🗻 — Lundi, bien moins de monde !",
+    introSub:"Excursion Mont Fuji un lundi — beaucoup moins bondé que le week-end ! 2h de bus depuis Shinjuku. Lac Kawaguchiko pour les familles, 5e station pour les aventuriers.",
     tip:"💡 <strong>Conseil :</strong> En octobre la 5e station peut être fermée selon la météo — vérifiez la veille. Pour les enfants, le lac Kawaguchiko suffit amplement. Le musée Iyashi-no-Sato (village reconstruit) est très bien pour les enfants.",
     steps:[
       {id:"depart-fuji-j11",num:null,time:"07:30",name:"Départ tôt pour le Fuji",type:"Point de départ",emoji:"🏨",isHotel:true,
@@ -1133,8 +1133,46 @@ const TOKYO_DAYS = {
     ]
   },
   j12:{
-    label:"J12 — Akihabara, Palais & Zojo-ji", date:"Lundi 26 oct.", color:"#10b981",
-    intro:"Le Tokyo historique & geek 🎌",
+    label:"J12 — Mont Fuji & Kawaguchiko", date:"Lundi 26 oct.", color:"#0ea5e9",
+    intro:"Mont Fuji 🗻 — Lundi, bien moins de monde !",
+    introSub:"Excursion Mont Fuji un lundi — beaucoup moins bondé que le week-end ! 2h de bus depuis Shinjuku. Lac Kawaguchiko pour les familles, 5e station pour les aventuriers.",
+    tip:"💡 <strong>Conseil :</strong> En octobre la 5e station peut être fermée selon la météo — vérifiez la veille. Pour les enfants, le lac Kawaguchiko suffit amplement. Le musée Iyashi-no-Sato (village reconstruit) est très bien pour les enfants.",
+    steps:[
+      {id:"depart-fuji-j11",num:null,time:"07:30",name:"Départ tôt pour le Fuji",type:"Point de départ",emoji:"🏨",isHotel:true,
+       address:"Hôtel Tokyo (à confirmer)",lat:35.6762,lng:139.6503,
+       desc:"Départ matinal pour profiter du Fuji avant l'arrivée des cars de touristes.",tags:[],wc:null,
+       transport:{icon:"🚌",text:"Bus direct Shinjuku Bus Terminal → Kawaguchiko · 1h45 · ~1800¥",detail:"Bus Keio ou Fuji Express depuis Busta Shinjuku (8e étage gare) — réservation recommandée"},
+       fromLat:35.6896,fromLng:139.7006,toLat:35.5022,toLng:138.7529},
+      {id:"kawaguchiko-j11",num:1,time:"09:30",name:"Lac Kawaguchiko & Vue Fuji",type:"Nature · Incontournable",emoji:"🗻",
+       address:"Kawaguchiko, Fujikawaguchiko, Yamanashi 401-0301",lat:35.5022,lng:138.7529,
+       img:"https://images.pexels.com/photos/19763424/pexels-photo-19763424.jpeg?auto=compress&cs=tinysrgb&w=600",
+       desc:"La vue la plus belle du Fuji avec le lac en miroir. Balade autour du lac (vélo disponible), onsen avec vue Fuji, Chureito Pagoda à 10 min. En octobre les feuilles d'automne commencent — cadre exceptionnel.",
+       tags:["gratuit","kids","incontournable","excursion"],wc:"Nombreuses toilettes autour du lac",transport:null},
+      {id:"tr-kawaguchi-fuji",num:null,time:"11:30",name:"Kawaguchiko → 5e Station",type:"Transit — Bus Fuji Subaru Line",emoji:"🚌",isTransit:true,
+       address:"Kawaguchiko Station → Fujisan 5th Station",lat:35.5022,lng:138.7529,
+       transport:{icon:"🚌",from:"Kawaguchiko Station (bus stop)",to:"Fuji Subaru Line 5th Station",line:"Bus Fuji Subaru Line (ligne directe)",duration:"60 min",price:"~2000¥/adulte · ~1000¥ enfant",note:"Arrêt automatique si la route est fermée (météo/neige). Vérifiez la veille sur le site Fuji Subaru Line."},
+       fromLat:35.5022,fromLng:138.7529,toLat:35.3606,toLng:138.7274},
+      {id:"fuji-5th-j11",num:2,time:"12:00",name:"5e Station du Mont Fuji (optionnel)",type:"Nature · Altitude",emoji:"⛰️",
+       address:"Kawaguchiko 5th Station, Fujikawaguchiko, Yamanashi",lat:35.3606,lng:138.7274,
+       img:"https://images.pexels.com/photos/30961538/pexels-photo-30961538.jpeg?auto=compress&cs=tinysrgb&w=600",
+       desc:"À 2300m, au-dessus des nuages. Vue vertigineuse si le temps est clair. ⚠️ Fermé si mauvais temps ou neige — vérifiez la veille ! Habillez chaud (5-10°C possible en octobre).",
+       tags:["kids","excursion"],wc:"Toilettes sur place (200¥)",
+       transport:{icon:"🚌",text:"Bus Fuji Subaru Line depuis Kawaguchiko → 5e Station · 60 min · ~2000¥",detail:"Arrêt automatique si route fermée"},
+       fromLat:35.5022,fromLng:138.7529,toLat:35.3606,toLng:138.7274},
+      {id:"retour-tokyo-j11",num:null,time:"16:00",name:"Retour vers Tokyo",type:"Transit",emoji:"🚌",isTransit:true,
+       address:"Kawaguchiko → Shinjuku",lat:35.5022,lng:138.7529,
+       transport:{icon:"🚌",from:"Kawaguchiko Station",to:"Shinjuku Bus Terminal",line:"Bus Keio ou Fuji Express",duration:"1h45-2h",price:"~1800¥",note:"Derniers bus vers 17h-18h — vérifiez les horaires !"},
+       fromLat:35.5022,fromLng:138.7529,toLat:35.6896,toLng:139.7006},
+      {id:"soiree-j11",num:3,time:"19:30",name:"Dîner tranquille après l'excursion",type:"Soirée · Repos",emoji:"🍜",
+       address:"Shinjuku, Tokyo",lat:35.6896,lng:139.7006,
+       img:"https://images.pexels.com/photos/31008545/pexels-photo-31008545.jpeg?auto=compress&cs=tinysrgb&w=600",
+       desc:"Retour à Tokyo. Dîner simple près de l'hôtel ou dans Shinjuku. Soirée tranquille — la journée Fuji est physique !",
+       tags:["repas"],wc:"Dans les restaurants",transport:null}
+    ]
+  },
+  j11:{
+    label:"J11 — TeamLab Planets & Tokyo", date:"Dimanche 25 oct.", color:"#10b981",
+    intro:"TeamLab Planets & Tokyo geek 🌊🎮",
     introSub:"Akihabara le matin (geek paradise), Palais Impérial et jardins l'après-midi, puis Zojo-ji & Tokyo Tower au coucher du soleil. TeamLab Planets si réservé en avance.",
     tip:"💡 <strong>Conseil :</strong> Akihabara est meilleur le matin. Le Palais Impérial et Zojo-ji sont géographiquement proches (20 min en métro). La vue Zojo-ji + Tokyo Tower en fond est la photo la plus iconique de Tokyo — allez-y vers 17h pour la lumière dorée.",
     steps:[
@@ -2080,6 +2118,8 @@ window.openLink = openLink;
 // ============================================================
 // FIREBASE — Commentaires partagés en temps réel
 // ============================================================
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 const FB_CONFIG = {
   apiKey: "AIzaSyBmGCiwHJfZdRGbHxn6qzCgfh4O3JVRsUI",
   authDomain: "japon-2026-6039a.firebaseapp.com",
