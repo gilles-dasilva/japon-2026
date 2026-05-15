@@ -592,7 +592,34 @@ const OSAKA_DAYS = {
 // ============================================================================
 // DONNÉES — KYOTO
 // ============================================================================
-const KYOTO_HOTEL = {name:"Stay SAKURA Kyoto Higashiyama Shirakawa",address:"507 Tsutsumicho, Higashiyama Ward, Kyoto 605-0025",lat:35.0036,lng:135.7783};
+const KYOTO_HOTEL = {name:"Stay SAKURA Kyoto Higashiyama Shirakawa",address:"507 Tsutsumicho, Higashiyama Ward, Kyoto 605-0025",lat:35.0036,lng:135.7783,
+  j4_osaka:{
+    label:"J4 — Départ Osaka",date:"Dimanche 18 oct. (matin)",color:"#e879f9",
+    intro:"Sayonara Osaka ! ⛩️",
+    introSub:"Dernier matin à Osaka. Check-out, puis JR Special Rapid vers Kyoto (29 min, 580¥). La deuxième étape commence !",
+    tip:"💡 <strong>Trajet :</strong> JR Special Rapid depuis Osaka Station. 580¥ (~3,60€) · 29 min · pas de réservation.",
+    steps:[
+      {id:"checkout-j4-osaka",num:null,time:"09:00",name:"Check-out Hôtel Osaka",type:"Logistique",emoji:"🧳",isHotel:true,
+       address:"BON Condominium Namba Ebisu, 3-1-24 Ebisunishi, Naniwa Ward",lat:34.655735,lng:135.5064042,
+       img:"https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Check-out à 11h. Préparez vos bagages la veille. Petit-déjeuner au konbini (7-Eleven à 150m).",
+       tags:[],wc:"Dans l'hôtel",transport:null},
+      {id:"tr-hotel-osaka-gare",num:null,time:"09:30",name:"Hôtel → Osaka Station",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Ebisucho → Osaka Station",lat:34.655735,lng:135.5064042,
+       transport:{icon:"🚇",from:"Ebisucho (K18)",to:"Osaka Station",line:"Sakaisuji Line → Tanimachi 4-chome · 20 min",duration:"20 min",price:"~240¥ (~1,50€)",note:"Ou taxi direct ~1200¥ avec bagages"},
+       fromLat:34.655735,fromLng:135.5064042,toLat:34.7000,toLng:135.4975},
+      {id:"tr-osaka-kyoto-j4",num:null,time:"10:30",name:"Osaka → Kyoto · JR Special Rapid",type:"Transit",emoji:"🚅",isTransit:true,
+       address:"Osaka Station → Kyoto Station",lat:34.7000,lng:135.4975,
+       transport:{icon:"🚅",from:"Osaka Station",to:"Kyoto Station",line:"JR Special Rapid (sans réservation)",duration:"29 min",price:"580¥ (~3,60€) · Enfant 290¥",note:"Toutes les 15 min. Billet au distributeur (interface anglaise)."},
+       fromLat:34.7000,fromLng:135.4975,toLat:34.9858,toLng:135.7588},
+      {id:"arrivee-kyoto-j4",num:1,time:"11:30",name:"Arrivée Kyoto — Dépôt bagages",type:"Logistique",emoji:"⛩️",
+       address:"Kyoto Station, Shimogyo Ward, Kyoto",lat:34.9858,lng:135.7588,
+       img:"https://images.pexels.com/photos/36940470/pexels-photo-36940470.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Arrivée à Kyoto ! Déposez les bagages à l'hôtel ou coin locker gare (500¥). Check-in hôtel à 15h. Direction Ninen-zaka et Kiyomizu-dera !",
+       tags:["gratuit","kids"],wc:"Gare de Kyoto (B1)",transport:null}
+    ]
+  }
+};
 
 const KYOTO_OPTIONAL = [
   {id:'ko-kinkaku',name:"Kinkaku-ji (Pavillon d'Or)",emoji:'🥇',votes:4,address:'1 Kinkakujicho, Kita Ward, Kyoto 603-8361',lat:35.0394,lng:135.7292,img:'https://images.pexels.com/photos/30643058/pexels-photo-30643058.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Temple recouvert de feuilles d'or se reflétant dans l'étang. 500¥. Très touristique."},
@@ -942,6 +969,35 @@ const STATIC_STATIONS = {
     {lat:34.9880,lng:135.7760,name:'Tofukuji (JR/Keihan)',type:'rail',line:'JR Nara / Keihan'},
     {lat:34.9860,lng:135.7580,name:'Kyoto Station (Subway)',type:'subway',line:'Karasuma (K11)'},
   ]
+,
+  j8_kyoto:{
+    label:"J8 — Départ Kyoto",date:"Jeudi 22 oct. (matin)",color:"#6366f1",
+    intro:"Sayonara Kyoto ! 🚅",
+    introSub:"Dernier matin à Kyoto. Check-out et Shinkansen vers Tokyo — la dernière grande étape du voyage !",
+    tip:"💡 <strong>Shinkansen :</strong> Réservez dès le 22 sept. sur SmartEX. Hikari (2h40) · 13 850¥/adulte (~87€). Créneau recommandé : 9h-11h.",
+    steps:[
+      {id:"checkout-j8-kyoto",num:null,time:"08:00",name:"Check-out Hôtel Kyoto",type:"Logistique",emoji:"🧳",isHotel:true,
+       address:"Stay SAKURA Kyoto Higashiyama Shirakawa, 507 Tsutsumicho, Higashiyama Ward",lat:35.0036,lng:135.7783,
+       img:"https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Check-out à 11h. Préparez les bagages la veille. Petit-déjeuner au konbini Higashiyama.",
+       tags:[],wc:"Dans l'hôtel",transport:null},
+      {id:"tr-hotel-kyoto-gare",num:null,time:"08:30",name:"Hôtel → Kyoto Station",type:"Transit",emoji:"🚌",isTransit:true,
+       address:"Higashiyama → Kyoto Station",lat:35.0036,lng:135.7783,
+       transport:{icon:"🚌",from:"Hôtel Higashiyama",to:"Kyoto Station",line:"Bus 202/206 → Kyoto Station · 25 min",duration:"25 min",price:"230¥/pers (~1,45€)",note:"Taxi de groupe recommandé avec bagages : ~1800¥"},
+       fromLat:35.0036,fromLng:135.7783,toLat:34.9858,toLng:135.7588},
+      {id:"tr-kyoto-tokyo-j8",num:null,time:"10:00",name:"Kyoto → Tokyo · Shinkansen",type:"Transit",emoji:"🚅",isTransit:true,
+       address:"Kyoto Station → Tokyo Station",lat:34.9858,lng:135.7588,
+       transport:{icon:"🚅",from:"Kyoto Station",to:"Tokyo Station",line:"Shinkansen Hikari (2h40) ou Nozomi (2h15)",duration:"2h15–2h40",price:"13 850¥/adulte (~87€) · 6 930¥/enfant (~43€)",note:"Réserver dès le 22 sept. Wagon grand gabarit recommandé avec bagages."},
+       fromLat:34.9858,fromLng:135.7588,toLat:35.6812,toLng:139.7671},
+      {id:"arrivee-tokyo-j8",num:1,time:"13:00",name:"Arrivée Tokyo — Float Inn",type:"Hébergement",emoji:"🗼",
+       address:"Float Inn Shin-Okachimachi, Taito Ward, Tokyo",lat:35.7072,lng:139.7793,
+       img:"https://images.pexels.com/photos/19693257/pexels-photo-19693257.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Arrivée à Tokyo ! Check-in au Float Inn Shin-Okachimachi (15h). Si trop tôt, consigne bagages et direction Shinjuku !",
+       tags:["kids"],wc:"Dans l'hôtel",
+       transport:{icon:"🚇",text:"Tokyo Station → Shin-Okachimachi (A18) · Hibiya Line · 15 min · ~200¥",detail:"Sortie A18 — Float Inn à 3 min à pied"},
+       fromLat:35.6812,fromLng:139.7671,toLat:35.7072,toLng:139.7793}
+    ]
+  }
 };
 
 const STATIC_KONBINI_TOKYO = [
@@ -2317,7 +2373,147 @@ try {
 // ============================================================
 (function(){
   const SCREEN_ORDER = ['home','city','day','map','resa','comments'];
-  const BACK_MAP = {city:'home', day:'city', map:'day', resa:'home', comments:'home'};
+  const BACK_MAP = {city:'home', day:'city', map:'day', resa:'home', comments:'home',
+  j4_osaka:{
+    label:"J4 — Départ Osaka",date:"Dimanche 18 oct. (matin)",color:"#e879f9",
+    intro:"Sayonara Osaka ! ⛩️",
+    introSub:"Dernier matin à Osaka. Check-out, puis JR Special Rapid vers Kyoto (29 min, 580¥). La deuxième étape commence !",
+    tip:"💡 <strong>Trajet Osaka→Kyoto :</strong> JR Special Rapid depuis Osaka Station. 580¥ (~3,60€) · 29 min · pas de réservation. Billet au distributeur automatique (interface anglaise).",
+    steps:[
+      {id:"checkout-j4-osaka",num:null,time:"09:00",name:"Check-out Hôtel Osaka",type:"Logistique",emoji:"🧳",isHotel:true,
+       address:"BON Condominium Namba Ebisu, 3-1-24 Ebisunishi, Naniwa Ward",lat:34.655735,lng:135.5064042,
+       img:"https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Check-out à 11h au plus tard. Préparez vos bagages la veille. Petit-déjeuner au konbini (7-Eleven à 150m de l'hôtel).",
+       tags:[],wc:"Dans l'hôtel",transport:null},
+      {id:"tr-hotel-osaka-gare",num:null,time:"09:30",name:"Hôtel → Osaka Station",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Ebisucho → Osaka Station",lat:34.655735,lng:135.5064042,
+       transport:{icon:"🚇",from:"Ebisucho (K18)",to:"Osaka Station (Umeda)",line:"Sakaisuji Line → changer à Tanimachi 4-chome",duration:"20 min",price:"~240¥ (~1,50€)",note:"Ou taxi direct ~1200¥ si beaucoup de bagages"},
+       fromLat:34.655735,fromLng:135.5064042,toLat:34.7000,toLng:135.4975},
+      {id:"tr-osaka-kyoto",num:null,time:"10:30",name:"Osaka → Kyoto · JR Special Rapid",type:"Transit",emoji:"🚅",isTransit:true,
+       address:"Osaka Station → Kyoto Station",lat:34.7000,lng:135.4975,
+       transport:{icon:"🚅",from:"Osaka Station",to:"Kyoto Station",line:"JR Special Rapid (pas de réservation)",duration:"29 min",price:"580¥ (~3,60€) · Enfant 290¥",note:"Trains toutes les 15 min. Billet au distributeur automatique."},
+       fromLat:34.7000,fromLng:135.4975,toLat:34.9858,toLng:135.7588},
+      {id:"arrivee-kyoto-j4",num:1,time:"11:30",name:"Arrivée Kyoto — Dépôt bagages",type:"Logistique",emoji:"⛩️",
+       address:"Kyoto Station, Shimogyo Ward, Kyoto",lat:34.9858,lng:135.7588,
+       img:"https://images.pexels.com/photos/36940470/pexels-photo-36940470.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Arrivée à Kyoto ! Déposez les bagages à l'hôtel ou en coin locker à la gare (500¥). Check-in hôtel à partir de 15h. Direction Ninen-zaka et Kiyomizu-dera pour commencer l'exploration !",
+       tags:["gratuit","kids"],wc:"Gare de Kyoto (B1)",transport:null}
+    ]
+  }
+,
+  j8_kyoto:{
+    label:"J8 — Départ Kyoto",date:"Jeudi 22 oct. (matin)",color:"#6366f1",
+    intro:"Sayonara Kyoto ! 🚅",
+    introSub:"Dernier matin à Kyoto. Check-out et Shinkansen vers Tokyo — la dernière et plus grande étape du voyage !",
+    tip:"💡 <strong>Shinkansen :</strong> Réservez dès le 22 sept. sur SmartEX ou japan-bullettrain.com. Hikari (2h40) ou Nozomi (2h15) · 13 850¥/adulte (~87€). Prenez un créneau 9h-11h.",
+    steps:[
+      {id:"checkout-j8-kyoto",num:null,time:"08:00",name:"Check-out Hôtel Kyoto",type:"Logistique",emoji:"🧳",isHotel:true,
+       address:"Stay SAKURA Kyoto Higashiyama Shirakawa, 507 Tsutsumicho, Higashiyama Ward",lat:35.0036,lng:135.7783,
+       img:"https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Check-out à 11h. Préparez les bagages la veille — le trajet jusqu'à la gare avec 11 personnes prend du temps. Petit-déjeuner au konbini Higashiyama.",
+       tags:[],wc:"Dans l'hôtel",transport:null},
+      {id:"tr-hotel-kyoto-gare",num:null,time:"08:30",name:"Hôtel → Kyoto Station",type:"Transit",emoji:"🚌",isTransit:true,
+       address:"Higashiyama → Kyoto Station",lat:35.0036,lng:135.7783,
+       transport:{icon:"🚌",from:"Hôtel Higashiyama",to:"Kyoto Station",line:"Bus 202/206 · arrêt Higashiyama Sanjo → Kyoto Station",duration:"25 min",price:"230¥/pers (~1,45€)",note:"Taxi de groupe recommandé avec bagages : ~1800¥"},
+       fromLat:35.0036,fromLng:135.7783,toLat:34.9858,toLng:135.7588},
+      {id:"tr-kyoto-tokyo",num:null,time:"10:00",name:"Kyoto → Tokyo · Shinkansen",type:"Transit",emoji:"🚅",isTransit:true,
+       address:"Kyoto Station → Tokyo Station",lat:34.9858,lng:135.7588,
+       transport:{icon:"🚅",from:"Kyoto Station",to:"Tokyo Station",line:"Shinkansen Hikari (2h40) ou Nozomi (2h15)",duration:"2h15–2h40",price:"13 850¥/adulte (~87€) · 6 930¥/enfant (~43€)",note:"Réserver dès le 22 sept. Wagon grand gabarit recommandé avec 4 enfants et bagages."},
+       fromLat:34.9858,fromLng:135.7588,toLat:35.6812,toLng:139.7671},
+      {id:"arrivee-tokyo-j8",num:1,time:"13:00",name:"Arrivée Tokyo — Float Inn",type:"Hébergement",emoji:"🗼",
+       address:"Float Inn Shin-Okachimachi, Taito Ward, Tokyo",lat:35.7072,lng:139.7793,
+       img:"https://images.pexels.com/photos/19693257/pexels-photo-19693257.jpeg?auto=compress&cs=tinysrgb&w=300&fit=crop",
+       desc:"Arrivée à Tokyo ! Check-in au Float Inn Shin-Okachimachi (check-in 15h). Si trop tôt, consigne bagages et direction Shinjuku pour la première immersion tokyoïte !",
+       tags:["kids"],wc:"Dans l'hôtel",
+       transport:{icon:"🚇",text:"Tokyo Station → Shin-Okachimachi (A18) · Hibiya Line · 15 min · ~200¥",detail:"Sortie A18 — Float Inn à 3 min à pied"},
+       fromLat:35.6812,fromLng:139.7671,toLat:35.7072,toLng:139.7793}
+    ]
+  }
+};
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, {passive: true});
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+
+    // Swipe droite → gauche OU gauche → droite
+    // On intercepte seulement gauche→droite (retour) 
+    // dx > 60 = swipe vers la droite (retour)
+    // dt < 400ms = geste rapide
+    // |dy| < |dx| = plus horizontal que vertical (pas un scroll)
+    if(dx > 60 && dt < 400 && Math.abs(dy) < Math.abs(dx) * 0.8) {
+      // Trouver l'écran actif
+      const active = document.querySelector('.screen.active');
+      if(!active) return;
+      const id = active.id.replace('screen-','');
+      const backTo = BACK_MAP[id];
+      if(backTo) {
+        // Appeler goBack
+        if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
+        window.goBack && window.goBack(backTo);
+      }
+    }
+  }, {passive: true});
+
+  // Empêcher le geste "précédent" du navigateur (history.back)
+  // en pushant un état dans l'historique à chaque changement d'écran
+  const origShowScreen = window.showScreen;
+  window.addEventListener('popstate', e => {
+    // Intercepter le bouton retour physique Android
+    const active = document.querySelector('.screen.active');
+    if(!active) return;
+    const id = active.id.replace('screen-','');
+    const backTo = BACK_MAP[id];
+    if(backTo) {
+      history.pushState(null, '', location.href);
+      if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
+      window.goBack && window.goBack(backTo);
+    }
+  });
+
+  // Pousser un état initial pour capturer le popstate
+  history.pushState(null, '', location.href);
+})();
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('sw.js');
+      // Quand un nouveau SW est installé, recharger la page automatiquement
+      reg.addEventListener('updatefound', () => {
+        const newSW = reg.installing;
+        newSW.addEventListener('statechange', () => {
+          if(newSW.state === 'activated') {
+            console.log('[APP] Nouvelle version disponible, rechargement...');
+            window.location.reload();
+          }
+        });
+      });
+      // Écouter le message du SW pour recharger
+      navigator.serviceWorker.addEventListener('message', e => {
+        if(e.data && e.data.type === 'SW_UPDATED') {
+          window.location.reload();
+        }
+      });
+    } catch(e) {}
+  });
+}
+</script>
+</body>
+</html
+};
 
   let touchStartX = 0;
   let touchStartY = 0;
