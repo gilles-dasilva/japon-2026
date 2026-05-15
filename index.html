@@ -1967,6 +1967,28 @@ function openLightboxStep(id,ck,dk){
 }
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
 window.openLightboxStep=openLightboxStep;window.showLightbox=showLightbox;window.closeLightbox=closeLightbox;
+
+// Swipe sur la lightbox elle-même
+(function(){
+  const lb = document.getElementById('lightbox');
+  if(!lb) return;
+  let lbTx = 0, lbTy = 0, lbTt = 0;
+  lb.addEventListener('touchstart', e => {
+    lbTx = e.touches[0].clientX;
+    lbTy = e.touches[0].clientY;
+    lbTt = Date.now();
+    e.stopPropagation(); // Bloquer le listener global
+  }, {passive: true});
+  lb.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - lbTx;
+    const dy = e.changedTouches[0].clientY - lbTy;
+    const dt = Date.now() - lbTt;
+    e.stopPropagation(); // Bloquer le listener global
+    if(Math.abs(dx) > 40 && dt < 400) {
+      lb.classList.remove('open'); // Fermer la lightbox
+    }
+  }, {passive: true});
+})();
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 
 
@@ -2616,11 +2638,24 @@ try {
   const BACK_MAP = {city:'home', day:'city', map:'day', resa:'home', comments:'home', urgences:'home', applis:'home'};
 
   let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+  let lbWasOpen = false; // Flag : lightbox était ouverte au moment du touchstart
+
+  function isLbOpen() {
+    const lb = document.getElementById('lightbox');
+    return lb && lb.classList.contains('open');
+  }
 
   document.addEventListener('touchstart', e => {
+    // Mémoriser si la lightbox est ouverte au début du geste
+    lbWasOpen = isLbOpen();
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchStartTime = Date.now();
+  }, {passive: true});
+
+  document.addEventListener('touchmove', e => {
+    // Si lightbox ouverte, bloquer le scroll/swipe natif
+    if(isLbOpen()) e.stopPropagation();
   }, {passive: true});
 
   document.addEventListener('touchend', e => {
@@ -2628,14 +2663,18 @@ try {
     const dy = e.changedTouches[0].clientY - touchStartY;
     const dt = Date.now() - touchStartTime;
 
-    // Si la lightbox est ouverte, le swipe la ferme
-    const lb = document.getElementById('lightbox');
-    if(lb && lb.classList.contains('open')) {
+    // Si la lightbox était ouverte au début du geste → fermer et stopper
+    if(lbWasOpen) {
       if(Math.abs(dx) > 40 && dt < 400) {
-        lb.classList.remove('open'); // Fermer comme le bouton X
+        const lb = document.getElementById('lightbox');
+        if(lb) lb.classList.remove('open');
       }
-      return; // Absorber le touch — ne pas déclencher la navigation
+      lbWasOpen = false;
+      return; // Bloquer toute navigation
     }
+
+    // Si la lightbox est ouverte maintenant (cas edge) → stopper
+    if(isLbOpen()) return;
 
     const active = document.querySelector('.screen.active');
     if(!active) return;
@@ -2648,6 +2687,13 @@ try {
   }, {passive: true});
 
   window.addEventListener('popstate', e => {
+    // Si lightbox ouverte, la fermer au lieu de naviguer
+    if(isLbOpen()) {
+      const lb = document.getElementById('lightbox');
+      if(lb) lb.classList.remove('open');
+      history.pushState(null, '', location.href);
+      return;
+    }
     const active = document.querySelector('.screen.active');
     if(!active) return;
     const id = active.id.replace('screen-','');
