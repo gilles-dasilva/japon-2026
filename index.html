@@ -2455,20 +2455,18 @@ try {
     const dy = e.changedTouches[0].clientY - touchStartY;
     const dt = Date.now() - touchStartTime;
 
-    // Swipe droite → gauche OU gauche → droite
-    // On intercepte seulement gauche→droite (retour) 
+    // Désactiver le swipe-retour si l'écran carte est actif
+    const active = document.querySelector('.screen.active');
+    if(!active) return;
+    const id = active.id.replace('screen-','');
+    if(id === 'map') return; // Sur la carte, ignorer le swipe — laisser Leaflet gérer
+
     // dx > 60 = swipe vers la droite (retour)
     // dt < 400ms = geste rapide
     // |dy| < |dx| = plus horizontal que vertical (pas un scroll)
     if(dx > 60 && dt < 400 && Math.abs(dy) < Math.abs(dx) * 0.8) {
-      // Trouver l'écran actif
-      const active = document.querySelector('.screen.active');
-      if(!active) return;
-      const id = active.id.replace('screen-','');
       const backTo = BACK_MAP[id];
       if(backTo) {
-        // Appeler goBack
-        if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
         window.goBack && window.goBack(backTo);
       }
     }
@@ -2482,10 +2480,16 @@ try {
     const active = document.querySelector('.screen.active');
     if(!active) return;
     const id = active.id.replace('screen-','');
+    // Sur la carte : le bouton retour Android fonctionne (mais pas le swipe)
+    if(id === 'map') {
+      history.pushState(null, '', location.href);
+      window.stopAnimation && window.stopAnimation();
+      window.goBack && window.goBack('day');
+      return;
+    }
     const backTo = BACK_MAP[id];
     if(backTo) {
       history.pushState(null, '', location.href);
-      if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
       window.goBack && window.goBack(backTo);
     }
   });
@@ -2539,20 +2543,18 @@ if('serviceWorker' in navigator){
     const dy = e.changedTouches[0].clientY - touchStartY;
     const dt = Date.now() - touchStartTime;
 
-    // Swipe droite → gauche OU gauche → droite
-    // On intercepte seulement gauche→droite (retour) 
+    // Désactiver le swipe-retour si l'écran carte est actif
+    const active = document.querySelector('.screen.active');
+    if(!active) return;
+    const id = active.id.replace('screen-','');
+    if(id === 'map') return; // Sur la carte, ignorer le swipe — laisser Leaflet gérer
+
     // dx > 60 = swipe vers la droite (retour)
     // dt < 400ms = geste rapide
     // |dy| < |dx| = plus horizontal que vertical (pas un scroll)
     if(dx > 60 && dt < 400 && Math.abs(dy) < Math.abs(dx) * 0.8) {
-      // Trouver l'écran actif
-      const active = document.querySelector('.screen.active');
-      if(!active) return;
-      const id = active.id.replace('screen-','');
       const backTo = BACK_MAP[id];
       if(backTo) {
-        // Appeler goBack
-        if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
         window.goBack && window.goBack(backTo);
       }
     }
@@ -2566,10 +2568,16 @@ if('serviceWorker' in navigator){
     const active = document.querySelector('.screen.active');
     if(!active) return;
     const id = active.id.replace('screen-','');
+    // Sur la carte : le bouton retour Android fonctionne (mais pas le swipe)
+    if(id === 'map') {
+      history.pushState(null, '', location.href);
+      window.stopAnimation && window.stopAnimation();
+      window.goBack && window.goBack('day');
+      return;
+    }
     const backTo = BACK_MAP[id];
     if(backTo) {
       history.pushState(null, '', location.href);
-      if(id === 'map') { window.stopAnimation && window.stopAnimation(); }
       window.goBack && window.goBack(backTo);
     }
   });
