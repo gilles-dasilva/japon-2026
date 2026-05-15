@@ -253,7 +253,8 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 .emoji-bar span{font-size:22px;cursor:pointer;flex-shrink:0;padding:2px 4px;border-radius:8px;transition:background 0.15s;}
 .emoji-bar span:active{background:rgba(212,175,55,0.2);}
 .comment-submit{width:100%;padding:12px;background:rgba(212,175,55,0.15);border:1px solid var(--gold);border-radius:10px;color:var(--gold);font-size:14px;font-weight:700;cursor:pointer;font-family:"Lora",serif;}
-.home-action-btns{display:flex;gap:10px;padding:0 16px 16px;}
+.home-action-btns{display:flex;flex-direction:column;gap:10px;padding:16px 16px calc(20px + var(--safe-bottom));}
+.home-action-row{display:flex;gap:10px;}
 .home-action-btn{flex:1;padding:14px 10px;border-radius:14px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:transform 0.15s;}
 .home-action-btn:active{transform:scale(0.97);}
 .home-action-icon{font-size:22px;display:block;margin-bottom:4px;}
@@ -346,6 +347,24 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
     <button class="tool-btn" id="btn-stations" onclick="toggleStations()">🚇 Stations</button>
     <button class="tool-btn" id="btn-anim" onclick="toggleAnimation()">▶ Animer</button>
   </div>
+</div>
+
+<!-- ÉCRAN URGENCES -->
+<div class="screen" id="screen-urgences">
+  <div class="app-header">
+    <button class="btn-back" onclick="goBack('home')">← Accueil</button>
+    <div><div class="header-title">🚨 Urgences & Santé</div></div>
+  </div>
+  <div class="resa-scroll" id="urgences-content"></div>
+</div>
+
+<!-- ÉCRAN APPLIS -->
+<div class="screen" id="screen-applis">
+  <div class="app-header">
+    <button class="btn-back" onclick="goBack('home')">← Accueil</button>
+    <div><div class="header-title">📱 Applis Utiles</div></div>
+  </div>
+  <div class="resa-scroll" id="applis-content"></div>
 </div>
 
 <!-- ÉCRAN RÉSERVATIONS -->
@@ -1443,8 +1462,8 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.remove('active','back');
   });
-  const screens = ['screen-home','screen-city','screen-day','screen-map','screen-resa','screen-comments'];
-  const order = {home:0,city:1,day:2,map:3,resa:1,comments:1};
+  const screens = ['screen-home','screen-city','screen-day','screen-map','screen-resa','screen-comments','screen-urgences','screen-applis'];
+  const order = {home:0,city:1,day:2,map:3,resa:1,comments:1,urgences:1,applis:1};
   const cur = order[id] ?? 0;
   screens.forEach((sid,i) => {
     const el = document.getElementById(sid);
@@ -1470,18 +1489,34 @@ function renderHome() {
   const btnWrap = document.createElement('div');
   btnWrap.className = 'home-action-btns';
   btnWrap.innerHTML = [
-    '<div class="home-action-btn" onclick="showScreen(\'resa\')">',
-      '<span class="home-action-icon">📋</span>',
-      '<div class="home-action-label">Réservations</div>',
-      '<div class="home-action-sub">Transports · Activités · Restos</div>',
+    // Rangée 1
+    '<div class="home-action-row">',
+      '<div class="home-action-btn" onclick="showScreen(\'resa\')">',
+        '<span class="home-action-icon">📋</span>',
+        '<div class="home-action-label">Réservations</div>',
+        '<div class="home-action-sub">Transports · Activités · Restos</div>',
+      '</div>',
+      '<div class="home-action-btn" onclick="openComments()">',
+        '<span class="home-action-icon">💬</span>',
+        '<div class="home-action-label">Commentaires</div>',
+        '<div class="home-action-sub" id="comments-count">Groupe · Questions</div>',
+      '</div>',
     '</div>',
-    '<div class="home-action-btn" onclick="openComments()">',
-      '<span class="home-action-icon">💬</span>',
-      '<div class="home-action-label">Commentaires</div>',
-      '<div class="home-action-sub" id="comments-count">Groupe · Questions</div>',
+    // Rangée 2
+    '<div class="home-action-row">',
+      '<div class="home-action-btn" onclick="showScreen(\'urgences\')">',
+        '<span class="home-action-icon">🚨</span>',
+        '<div class="home-action-label">Urgences & Santé</div>',
+        '<div class="home-action-sub">Numéros · Hôpitaux · Médicaments</div>',
+      '</div>',
+      '<div class="home-action-btn" onclick="showScreen(\'applis\')">',
+        '<span class="home-action-icon">📱</span>',
+        '<div class="home-action-label">Applis Utiles</div>',
+        '<div class="home-action-sub">Navigation · Traduction · Paiement</div>',
+      '</div>',
     '</div>',
   ].join('');
-  list.parentElement.insertBefore(btnWrap, list);
+  list.parentElement.appendChild(btnWrap);
 
   Object.keys(CITIES).forEach(ck => {
     const city = CITIES[ck];
@@ -2366,10 +2401,172 @@ function addEmoji(e){ const el=document.getElementById('comment-text'); if(el){ 
 window.addEmoji = addEmoji;
 window.openComments = openComments;
 
+// ============================================================
+// URGENCES & SANTÉ
+// ============================================================
+function renderUrgences(){
+  const el = document.getElementById('urgences-content');
+  if(!el) return;
+
+  const sections = [
+    {
+      title:'🚑 Numéros d\'urgence',
+      color:'#ef4444',
+      items:[
+        {icon:'🚒',label:'Ambulance / Pompiers',val:'119',big:true},
+        {icon:'👮',label:'Police',val:'110',big:true},
+        {icon:'🏥',label:'Consulat de France (Tokyo)',val:'+81 (0)3 5798 6000',sub:'4-11-44 Minami-Azabu, Minato-ku, Tokyo'},
+        {icon:'🌐',label:'Numéro d\'urgence universel',val:'#7119 (en anglais)'},
+      ]
+    },
+    {
+      title:'🏥 Hôpitaux avec interprètes',
+      color:'#f97316',
+      items:[
+        {icon:'🏨',label:'Tokyo Medical & Surgical Clinic',val:'Roppongi — anglais & français',sub:'+81 3-3436-3028'},
+        {icon:'🏨',label:'St. Luke\'s International Hospital',val:'Tsukiji — interprètes disponibles',sub:'+81 3-5550-7166'},
+        {icon:'🏨',label:'Osaka Red Cross Hospital',val:'Tennoji — proche votre hôtel',sub:'+81 6-6774-5111'},
+        {icon:'🏨',label:'Kyoto City Hospital',val:'Nakagyo Ward',sub:'+81 75-311-5311'},
+        {icon:'📱',label:'Application recommandée',val:'Safety Tips — alertes séismes & hôpitaux proches'},
+      ]
+    },
+    {
+      title:'💊 Médicaments',
+      color:'#10b981',
+      items:[
+        {icon:'🚫',label:'Médicaments INTERDITS au Japon',val:'Codéine · Vicks (pseudoéphédrine) · Sudafed · Actifed'},
+        {icon:'✅',label:'Autorisés sans problème',val:'Paracétamol (Doliprane) · Ibuprofène · Antihistaminiques'},
+        {icon:'📋',label:'Conseil',val:'Emportez les ordonnances originales et la notice en français pour tout médicament'},
+        {icon:'🏪',label:'Pharmacies japonaises (Kusuri)',val:'Matsumoto Kiyoshi · Welcia · Sundrug — ouvertes 24h/24 dans les gares'},
+      ]
+    },
+    {
+      title:'🛡️ Assurance voyage',
+      color:'#8b5cf6',
+      items:[
+        {icon:'⚠️',label:'Indispensable',val:'Souscrivez une assurance avec couverture médicale à l\'étranger'},
+        {icon:'💰',label:'Prix indicatif (14 jours)',val:'Adulte : ~50€ · Enfant : ~40€'},
+        {icon:'🏢',label:'Recommandé',val:'Chapka · ACS · AXA Travel Insurance'},
+        {icon:'📞',label:'Numéro assistance Chapka',val:'+33 3 20 20 92 09 (24h/24)'},
+        {icon:'📸',label:'En cas d\'urgence',val:'Photographiez votre carte d\'assurance et la mettez en favori sur votre téléphone'},
+      ]
+    },
+    {
+      title:'🌋 Sécurité & Catastrophes naturelles',
+      color:'#f59e0b',
+      items:[
+        {icon:'📱',label:'Application Safety Tips',val:'Alertes séismes, tsunamis et typhons en temps réel \u2014 gratuite'},
+        {icon:'🏃',label:'En cas de séisme',val:'Restez calme · Mettez-vous sous une table · NE sortez PAS dans la rue'},
+        {icon:'🌊',label:'Alerte tsunami',val:'Montez en hauteur immédiatement · Suivez les panneaux verts "Evacuation Route"'},
+        {icon:'🗺️',label:'Plans d\'évacuation',val:'Affichés dans tous les hôtels et gares — repérez-les à l\'arrivée'},
+      ]
+    },
+  ];
+
+  let html = '';
+  sections.forEach(sec => {
+    html += '<div class="resa-cat">';
+    html += '<div class="resa-cat-title" style="color:' + sec.color + '">' + sec.title + '</div>';
+    sec.items.forEach(item => {
+      html += '<div class="resa-card">';
+      html += '<div style="display:flex;gap:12px;align-items:flex-start;">';
+      html += '<span style="font-size:20px;flex-shrink:0">' + item.icon + '</span>';
+      html += '<div style="flex:1;">';
+      html += '<div style="font-size:11px;color:var(--muted);margin-bottom:2px;">' + item.label + '</div>';
+      if(item.big) {
+        html += '<div style="font-family:Playfair Display,serif;font-size:22px;color:' + sec.color + ';font-weight:700;">' + item.val + '</div>';
+      } else {
+        html += '<div style="font-size:13px;color:var(--text);line-height:1.5;">' + item.val + '</div>';
+      }
+      if(item.sub) html += '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + item.sub + '</div>';
+      html += '</div></div></div>';
+    });
+    html += '</div>';
+  });
+
+  el.innerHTML = html;
+}
+
+// ============================================================
+// APPLIS UTILES
+// ============================================================
+function renderApplis(){
+  const el = document.getElementById('applis-content');
+  if(!el) return;
+
+  const cats = [
+    {
+      title:'🗺️ Navigation',
+      color:'#0ea5e9',
+      apps:[
+        {name:'Google Maps',icon:'🗺️',desc:'Indispensable. Plans d\'étages des gares, horaires en temps réel, navigation piéton. Téléchargez les cartes Osaka, Kyoto et Tokyo hors-ligne avant de partir.'},
+        {name:'Navitime Japan Travel',icon:'🚇',desc:'Le meilleur pour les transports japonais. Filtres JR, numéros de quais précis, horaires shinkansen. Gratuit.'},
+        {name:'Suica / Pasmo (Wallet)',icon:'📲',desc:'Carte IC virtuelle dans Apple Wallet ou Google Pay. Paiement sans contact dans tous les transports et konbinis. Rechargeable en ligne.'},
+      ]
+    },
+    {
+      title:'🌐 Traduction',
+      color:'#10b981',
+      apps:[
+        {name:'Google Lens',icon:'📷',desc:'Pointez votre caméra sur n\'importe quel texte japonais (menus, panneaux, emballages) — traduction instantanée en réalité augmentée.'},
+        {name:'DeepL',icon:'🔤',desc:'Traduction plus naturelle que Google Translate pour rédiger des messages polis aux hôtels ou restaurants.'},
+        {name:'VoiceTra',icon:'🎙️',desc:'Application officielle du gouvernement japonais. Traduction vocale très précise. Idéale pour parler à un médecin ou en situation d\'urgence.'},
+      ]
+    },
+    {
+      title:'🍜 Gastronomie',
+      color:'#f97316',
+      apps:[
+        {name:'Tabelog',icon:'⭐',desc:'Référence des avis japonais. Un 3.5/5 sur Tabelog = excellent (les Japonais notent très sévèrement). Cherchez "Halal" dans les filtres.'},
+        {name:'Halal Navi / Halal Gourmet Japan',icon:'🌙',desc:'Recherche de restaurants halal certifiés par localisation. Indique le niveau de certification (halal total, pork-free, etc.).'},
+        {name:'Vegan Japan',icon:'🌱',desc:'Filtres alimentaires très précis. Utile aussi pour les allergies et régimes spécifiques.'},
+      ]
+    },
+    {
+      title:'💴 Argent & Paiement',
+      color:'#d4af37',
+      apps:[
+        {name:'Revolut / Wise',icon:'💳',desc:'Change en temps réel au meilleur taux. Retraits aux ATM 7-Eleven et Japan Post sans frais. Astuce : échangez vos euros en yens les jours ouvrés (meilleur taux).'},
+        {name:'7-Eleven ATM',icon:'🏧',desc:'Les ATM 7-Eleven acceptent toutes les cartes étrangères (Visa, Mastercard). Disponibles 24h/24 partout au Japon.'},
+      ]
+    },
+    {
+      title:'🛎️ Services pratiques',
+      color:'#8b5cf6',
+      apps:[
+        {name:'Yamato (Takkyubin)',icon:'📦',desc:'Service de livraison de bagages d\'hôtel à hôtel. Envoyez vos valises la veille (~1500¥/bagage). Idéal pour voyager léger en train.'},
+        {name:'Flush',icon:'🚻',desc:'Localisation des toilettes publiques les plus proches. Indique si équipées d\'un washlet. Vital avec 4 enfants !'},
+        {name:'Safety Tips',icon:'🚨',desc:'Application officielle de l\'Office du Tourisme Japonais. Alertes séismes, tsunamis, typhons en temps réel. En français. À installer avant le départ.'},
+        {name:'Japan Official Travel App',icon:'✈️',desc:'Application officielle du gouvernement japonais. Informations touristiques, traduction, itinéraires et actualités.'},
+      ]
+    },
+  ];
+
+  let html = '';
+  cats.forEach(cat => {
+    html += '<div class="resa-cat">';
+    html += '<div class="resa-cat-title" style="color:' + cat.color + '">' + cat.title + '</div>';
+    cat.apps.forEach(app => {
+      html += '<div class="resa-card" style="border-left:3px solid ' + cat.color + '33;">';
+      html += '<div style="display:flex;gap:12px;align-items:flex-start;">';
+      html += '<span style="font-size:24px;flex-shrink:0;">' + app.icon + '</span>';
+      html += '<div style="flex:1;">';
+      html += '<div style="font-family:\'Playfair Display\',serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">' + app.name + '</div>';
+      html += '<div style="font-size:12px;color:var(--muted);line-height:1.6;">' + app.desc + '</div>';
+      html += '</div></div></div>';
+    });
+    html += '</div>';
+  });
+
+  el.innerHTML = html;
+}
+
 // ── INIT ──
 try {
   renderHome();
   renderResa();
+  renderUrgences();
+  renderApplis();
 } catch(err) {
   console.error('[INIT ERROR]', err);
   document.getElementById('cities-list').innerHTML = 
