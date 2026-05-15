@@ -424,6 +424,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+
 // ============================================================================
 // Clé MapTiler — la carte est initialisée dans initMap()
 const MAPTILER_KEY = '1oBsmSWNFattubU4Bwxk';
@@ -2438,10 +2439,7 @@ function renderUrgences(){
         {icon:'✅',label:'Autorisés sans problème',val:'Paracétamol (Doliprane) · Ibuprofène · Antihistaminiques'},
         {icon:'📋',label:'Conseil',val:'Emportez les ordonnances originales et la notice en français pour tout médicament'},
         {icon:'🏪',label:'Pharmacies japonaises (Kusuri)',val:'Matsumoto Kiyoshi · Welcia · Sundrug — ouvertes 24h/24 dans les gares'},
-        {icon:'💰',label:'Prix consultation médicale',val:'5 000¥ (~31€) à 15 000¥ (~94€) sans assurance · Urgences : 20 000¥ (~125€) et plus'},
-        {icon:'🩸',label:'Groupe sanguin',val:'Notez le groupe de chaque membre dans vos contacts téléphoniques'},
-        {icon:'📸',label:'Cartes Vitales et Passeports',val:'Photographiez-les et stockez dans Google Drive ou iCloud AVANT le départ'},
-        {icon:'🇯🇵',label:'Allergies médicamenteuses en japonais',val:'Antibiotiques : 抗生物質アレルギー · Pénicilline : ペニシリン · Aspirine : アスピリン · Arachides : ピーナッツ · Lactose : 乳製品アレルギー · Gluten : グルテン'},
+
         {icon:'💰',label:'Prix consultation médicale',val:'5 000¥ (~31€) à 15 000¥ (~94€) sans assurance · Urgences : 20 000¥ (~125€) et plus'},
         {icon:'🩸',label:'Groupe sanguin',val:'Notez le groupe sanguin de chaque membre du groupe dans vos contacts téléphoniques'},
         {icon:'📸',label:'Cartes Vitales & Passeports',val:'Photographiez-les et mettez-les dans Google Drive ou iCloud AVANT le départ'},
@@ -2468,17 +2466,6 @@ function renderUrgences(){
         {icon:'🏃',label:'En cas de séisme',val:'Restez calme · Mettez-vous sous une table · NE sortez PAS dans la rue'},
         {icon:'🌊',label:'Alerte tsunami',val:'Montez en hauteur immédiatement · Suivez les panneaux verts "Evacuation Route"'},
         {icon:'🗺️',label:'Plans d\'évacuation',val:'Affichés dans tous les hôtels et gares — repérez-les à l\'arrivée'},
-      ]
-    },
-    {
-      title:'🛂 Vol / Perte de passeport',
-      color:'#ec4899',
-      items:[
-        {icon:'📸',label:'Avant le départ OBLIGATOIRE',val:'Photographiez votre passeport et stockez-le dans Google Drive, iCloud ou envoyez-le par email à vous-même'},
-        {icon:'1️⃣',label:'Étape 1 — Signaler à la police',val:'Rendez-vous au poste de police le plus proche · Demandez un "Lost Property Certificate" (証明書)'},
-        {icon:'2️⃣',label:'Étape 2 — Consulat de France',val:'4-11-44 Minami-Azabu, Minato-ku, Tokyo · +81 (0)3 5798 6000 · Lun-Ven 9h-12h30'},
-        {icon:'3️⃣',label:'Étape 3 — Passeport d\'urgence',val:'Le consulat peut délivrer un laissez-passer consulaire en 24-48h pour le retour en France'},
-        {icon:'💡',label:'Conseil',val:'Gardez une copie papier de votre passeport séparément de l\'original dans votre bagage'},
       ]
     },
     {
@@ -2618,6 +2605,7 @@ try {
     '<pre style="font-size:10px;color:#fbbf24;overflow:auto">' + err.stack + '</pre>' +
     '</div>';
 }
+
 </script>
 
 <script>
@@ -2625,68 +2613,9 @@ try {
 // SWIPE NAVIGATION — Retour arrière par glissement gauche→droite
 // ============================================================
 (function(){
-  const SCREEN_ORDER = ['home','city','day','map','resa','comments'];
-  const BACK_MAP = {city:'home', day:'city', map:'day', resa:'home', comments:'home',
-  j4_osaka:{
-    label:"J4 — Départ Osaka",date:"Dimanche 18 oct. (matin)",color:"#e879f9",
-    intro:"Sayonara Osaka ! ⛩️",
-    introSub:"Dernier matin à Osaka. Check-out, puis JR Special Rapid vers Kyoto (29 min, 580¥ (~4€)). La deuxième étape commence !",
-    tip:"💡 <strong>Trajet Osaka→Kyoto :</strong> JR Special Rapid depuis Osaka Station. 580¥ (~4€) (~3,60€) · 29 min · pas de réservation. Billet au distributeur automatique (interface anglaise).",
-    steps:[
-      {id:"checkout-j4-osaka",num:null,time:"09:00",name:"Check-out Hôtel Osaka",type:"Logistique",emoji:"🧳",isHotel:true,
-       address:"BON Condominium Namba Ebisu, 3-1-24 Ebisunishi, Naniwa Ward",lat:34.655735,lng:135.5064042,
-       img:"https://i.imgur.com/f01FWM4.jpeg",
-       desc:"Check-out à 11h au plus tard. Préparez vos bagages la veille. Petit-déjeuner au konbini (7-Eleven à 150m de l'hôtel).",
-       tags:[],wc:"Dans l'hôtel",transport:null},
-      {id:"tr-hotel-osaka-gare",num:null,time:"09:30",name:"Hôtel → Osaka Station",type:"Transit",emoji:"🚇",isTransit:true,
-       address:"Ebisucho → Osaka Station",lat:34.655735,lng:135.5064042,
-       transport:{icon:"🚇",from:"Ebisucho (K18)",to:"Osaka Station (Umeda)",line:"Sakaisuji Line → changer à Tanimachi 4-chome",duration:"20 min",price:"~240¥ (~2€) (~1,50€)",note:"Ou taxi direct ~1200¥ (~8€) si beaucoup de bagages"},
-       fromLat:34.655735,fromLng:135.5064042,toLat:34.7000,toLng:135.4975},
-      {id:"tr-osaka-kyoto",num:null,time:"10:30",name:"Osaka → Kyoto · JR Special Rapid",type:"Transit",emoji:"🚅",isTransit:true,
-       address:"Osaka Station → Kyoto Station",lat:34.7000,lng:135.4975,
-       transport:{icon:"🚅",from:"Osaka Station",to:"Kyoto Station",line:"JR Special Rapid (pas de réservation)",duration:"29 min",price:"580¥ (~4€) (~3,60€) · Enfant 290¥ (~2€)",note:"Toutes les 15 min. Billet au distributeur (interface anglaise). 🎁 -6 ans : GRATUIT (max 2 enfants/adulte en siège libre)"},
-       fromLat:34.7000,fromLng:135.4975,toLat:34.9858,toLng:135.7588},
-      {id:"arrivee-kyoto-j4",num:1,time:"11:30",name:"Départ Osaka",type:"Logistique",emoji:"⛩️",
-       address:"Kyoto Station, Shimogyo Ward, Kyoto",lat:34.9858,lng:135.7588,
-       img:"https://i.imgur.com/nD7mFd8.jpeg",
-       desc:"Arrivée à Kyoto ! Déposez les bagages à l'hôtel ou en coin locker à la gare (500¥ (~3€)). Check-in hôtel à partir de 15h. Direction Ninen-zaka et Kiyomizu-dera pour commencer l'exploration !",
-       tags:["gratuit","kids"],wc:"Gare de Kyoto (B1)",transport:null}
-    ]
-  }
-,
-  j8_kyoto:{
-    label:"J8 — Départ Kyoto",date:"Jeudi 22 oct. (matin)",color:"#6366f1",
-    intro:"Sayonara Kyoto ! 🚅",
-    introSub:"Dernier matin à Kyoto. Check-out et Shinkansen vers Tokyo — la dernière et plus grande étape du voyage !",
-    tip:"💡 <strong>Shinkansen :</strong> Réservez dès le 22 sept. sur SmartEX ou japan-bullettrain.com. Hikari (2h40) ou Nozomi (2h15) · 13850¥ (~87€)/adulte (~87€). Prenez un créneau 9h-11h.",
-    steps:[
-      {id:"checkout-j8-kyoto",num:null,time:"08:00",name:"Check-out Hôtel Kyoto",type:"Logistique",emoji:"🧳",isHotel:true,
-       address:"Stay SAKURA Kyoto Higashiyama Shirakawa, 507 Tsutsumicho, Higashiyama Ward",lat:35.0036,lng:135.7783,
-       img:"https://i.imgur.com/DdXw2tR.jpeg",
-       desc:"Check-out à 11h. Préparez les bagages la veille — le trajet jusqu'à la gare avec 11 personnes prend du temps. Petit-déjeuner au konbini Higashiyama.",
-       tags:[],wc:"Dans l'hôtel",transport:null},
-      {id:"tr-hotel-kyoto-gare",num:null,time:"08:30",name:"Hôtel → Kyoto Station",type:"Transit",emoji:"🚌",isTransit:true,
-       address:"Higashiyama → Kyoto Station",lat:35.0036,lng:135.7783,
-       transport:{icon:"🚌",from:"Hôtel Higashiyama",to:"Kyoto Station",line:"Bus 202/206 · arrêt Higashiyama Sanjo → Kyoto Station",duration:"25 min",price:"230¥ (~1€)/pers (~1,45€)",note:"Taxi de groupe recommandé avec bagages : ~1800¥ (~11€)"},
-       fromLat:35.0036,fromLng:135.7783,toLat:34.9858,toLng:135.7588},
-      {id:"tr-kyoto-tokyo",num:null,time:"10:00",name:"Kyoto → Tokyo · Shinkansen",type:"Transit",emoji:"🚅",isTransit:true,
-       address:"Kyoto Station → Tokyo Station",lat:34.9858,lng:135.7588,
-       transport:{icon:"🚅",from:"Kyoto Station",to:"Tokyo Station",line:"Shinkansen Hikari (2h40) ou Nozomi (2h15)",duration:"2h15–2h40",price:"13850¥ (~87€)/adulte (~87€) · 6930¥ (~43€)/enfant (~43€)",note:"Réserver dès le 22 sept. Wagon grand gabarit recommandé avec 4 enfants et bagages."},
-       fromLat:34.9858,fromLng:135.7588,toLat:35.6812,toLng:139.7671},
-      {id:"arrivee-tokyo-j8",num:1,time:"13:00",name:"Départ Kyoto",type:"Hébergement",emoji:"🗼",
-       address:"Float Inn Shin-Okachimachi, Taito Ward, Tokyo",lat:35.7072,lng:139.7793,
-       img:"https://i.imgur.com/kVrwsRp.jpeg",
-       desc:"Arrivée à Tokyo ! Check-in au Float Inn Shin-Okachimachi (check-in 15h). Si trop tôt, consigne bagages et direction Shinjuku pour la première immersion tokyoïte !",
-       tags:["kids"],wc:"Dans l'hôtel",
-       transport:{icon:"🚇",text:"Tokyo Station → Shin-Okachimachi (A18) · Hibiya Line · 15 min · ~200¥ (~1€)",detail:"Sortie A18 — Float Inn à 3 min à pied"},
-       fromLat:35.6812,fromLng:139.7671,toLat:35.7072,toLng:139.7793}
-    ]
-  }
-};
+  const BACK_MAP = {city:'home', day:'city', map:'day', resa:'home', comments:'home', urgences:'home', applis:'home'};
 
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchStartTime = 0;
+  let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
 
   document.addEventListener('touchstart', e => {
     touchStartX = e.touches[0].clientX;
@@ -2698,33 +2627,20 @@ try {
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
     const dt = Date.now() - touchStartTime;
-
-    // Désactiver le swipe-retour si l'écran carte est actif
     const active = document.querySelector('.screen.active');
     if(!active) return;
     const id = active.id.replace('screen-','');
-    if(id === 'map') return; // Sur la carte, ignorer le swipe — laisser Leaflet gérer
-
-    // dx > 60 = swipe vers la droite (retour)
-    // dt < 400ms = geste rapide
-    // |dy| < |dx| = plus horizontal que vertical (pas un scroll)
+    if(id === 'map') return;
     if(dx > 60 && dt < 400 && Math.abs(dy) < Math.abs(dx) * 0.8) {
       const backTo = BACK_MAP[id];
-      if(backTo) {
-        window.goBack && window.goBack(backTo);
-      }
+      if(backTo) window.goBack && window.goBack(backTo);
     }
   }, {passive: true});
 
-  // Empêcher le geste "précédent" du navigateur (history.back)
-  // en pushant un état dans l'historique à chaque changement d'écran
-  const origShowScreen = window.showScreen;
   window.addEventListener('popstate', e => {
-    // Intercepter le bouton retour physique Android
     const active = document.querySelector('.screen.active');
     if(!active) return;
     const id = active.id.replace('screen-','');
-    // Sur la carte : le bouton retour Android fonctionne (mais pas le swipe)
     if(id === 'map') {
       history.pushState(null, '', location.href);
       window.stopAnimation && window.stopAnimation();
@@ -2738,99 +2654,23 @@ try {
     }
   });
 
-  // Pousser un état initial pour capturer le popstate
   history.pushState(null, '', location.href);
 })();
 </script>
 
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load', async () => {
-    try {
-      const reg = await navigator.serviceWorker.register('sw.js');
-      // Quand un nouveau SW est installé, recharger la page automatiquement
-      reg.addEventListener('updatefound', () => {
-        const newSW = reg.installing;
-        newSW.addEventListener('statechange', () => {
-          if(newSW.state === 'activated') {
-            console.log('[APP] Nouvelle version disponible, rechargement...');
-            window.location.reload();
-          }
-        });
-      });
-      // Écouter le message du SW pour recharger
-      navigator.serviceWorker.addEventListener('message', e => {
-        if(e.data && e.data.type === 'SW_UPDATED') {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if(newWorker.state === 'installed' && navigator.serviceWorker.controller) {
           window.location.reload();
         }
       });
-    } catch(e) {}
-  });
+    });
+  }).catch(e => {});
 }
 </script>
-</body>
-</html
-};
-
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchStartTime = 0;
-
-  document.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-    touchStartTime = Date.now();
-  }, {passive: true});
-
-  document.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-    const dt = Date.now() - touchStartTime;
-
-    // Désactiver le swipe-retour si l'écran carte est actif
-    const active = document.querySelector('.screen.active');
-    if(!active) return;
-    const id = active.id.replace('screen-','');
-    if(id === 'map') return; // Sur la carte, ignorer le swipe — laisser Leaflet gérer
-
-    // dx > 60 = swipe vers la droite (retour)
-    // dt < 400ms = geste rapide
-    // |dy| < |dx| = plus horizontal que vertical (pas un scroll)
-    if(dx > 60 && dt < 400 && Math.abs(dy) < Math.abs(dx) * 0.8) {
-      const backTo = BACK_MAP[id];
-      if(backTo) {
-        window.goBack && window.goBack(backTo);
-      }
-    }
-  }, {passive: true});
-
-  // Empêcher le geste "précédent" du navigateur (history.back)
-  // en pushant un état dans l'historique à chaque changement d'écran
-  const origShowScreen = window.showScreen;
-  window.addEventListener('popstate', e => {
-    // Intercepter le bouton retour physique Android
-    const active = document.querySelector('.screen.active');
-    if(!active) return;
-    const id = active.id.replace('screen-','');
-    // Sur la carte : le bouton retour Android fonctionne (mais pas le swipe)
-    if(id === 'map') {
-      history.pushState(null, '', location.href);
-      window.stopAnimation && window.stopAnimation();
-      window.goBack && window.goBack('day');
-      return;
-    }
-    const backTo = BACK_MAP[id];
-    if(backTo) {
-      history.pushState(null, '', location.href);
-      window.goBack && window.goBack(backTo);
-    }
-  });
-
-  // Pousser un état initial pour capturer le popstate
-  history.pushState(null, '', location.href);
-})();
-</script>
-
-
 </body>
 </html>
