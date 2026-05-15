@@ -2424,7 +2424,7 @@ function renderUrgences(){
       color:'#f97316',
       items:[
         {icon:'🏨',label:'Tokyo Medical & Surgical Clinic',val:'Roppongi — anglais & français',sub:'+81 3-3436-3028'},
-        {icon:'🏨',label:'St. Luke\'s International Hospital',val:'Tsukiji — interprètes disponibles',sub:'+81 3-5550-7166'},
+        {icon:'🏨',label:'St. Luke\'s International Hospital',val:'Tsukiji — ligne francophone directe',sub:'+81 3-5550-7166 · Demandez "French interpreter"'},
         {icon:'🏨',label:'Osaka Red Cross Hospital',val:'Tennoji — proche votre hôtel',sub:'+81 6-6774-5111'},
         {icon:'🏨',label:'Kyoto City Hospital',val:'Nakagyo Ward',sub:'+81 75-311-5311'},
         {icon:'📱',label:'Application recommandée',val:'Safety Tips — alertes séismes & hôpitaux proches'},
@@ -2438,6 +2438,14 @@ function renderUrgences(){
         {icon:'✅',label:'Autorisés sans problème',val:'Paracétamol (Doliprane) · Ibuprofène · Antihistaminiques'},
         {icon:'📋',label:'Conseil',val:'Emportez les ordonnances originales et la notice en français pour tout médicament'},
         {icon:'🏪',label:'Pharmacies japonaises (Kusuri)',val:'Matsumoto Kiyoshi · Welcia · Sundrug — ouvertes 24h/24 dans les gares'},
+        {icon:'💰',label:'Prix consultation médicale',val:'5 000¥ (~31€) à 15 000¥ (~94€) sans assurance · Urgences : 20 000¥ (~125€) et plus'},
+        {icon:'🩸',label:'Groupe sanguin',val:'Notez le groupe de chaque membre dans vos contacts téléphoniques'},
+        {icon:'📸',label:'Cartes Vitales et Passeports',val:'Photographiez-les et stockez dans Google Drive ou iCloud AVANT le départ'},
+        {icon:'🇯🇵',label:'Allergies médicamenteuses en japonais',val:'Antibiotiques : 抗生物質アレルギー · Pénicilline : ペニシリン · Aspirine : アスピリン · Arachides : ピーナッツ · Lactose : 乳製品アレルギー · Gluten : グルテン'},
+        {icon:'💰',label:'Prix consultation médicale',val:'5 000¥ (~31€) à 15 000¥ (~94€) sans assurance · Urgences : 20 000¥ (~125€) et plus'},
+        {icon:'🩸',label:'Groupe sanguin',val:'Notez le groupe sanguin de chaque membre du groupe dans vos contacts téléphoniques'},
+        {icon:'📸',label:'Cartes Vitales & Passeports',val:'Photographiez-les et mettez-les dans Google Drive ou iCloud AVANT le départ'},
+        {icon:'🇯🇵',label:'Allergies médicamenteuses en japonais',val:'Allergie aux antibiotiques : 抗生物質アレルギー · Pénicilline : ペニシリン · Aspirine : アスピリンアレルギー · Arachides : ピーナッツアレルギー · Lactose : 乳糖不耐症 · Gluten : グルテンアレルギー'},
       ]
     },
     {
@@ -2448,6 +2456,7 @@ function renderUrgences(){
         {icon:'💰',label:'Prix indicatif (14 jours)',val:'Adulte : ~50€ · Enfant : ~40€'},
         {icon:'🏢',label:'Recommandé',val:'Chapka · ACS · AXA Travel Insurance'},
         {icon:'📞',label:'Numéro assistance Chapka',val:'+33 3 20 20 92 09 (24h/24)'},
+        {icon:'🇫🇷',label:'Ministère Affaires Étrangères FR (24h/24)',val:'+33 1 77 86 77 86',sub:'Depuis l\'étranger — urgences consulaires'},
         {icon:'📸',label:'En cas d\'urgence',val:'Photographiez votre carte d\'assurance et la mettez en favori sur votre téléphone'},
       ]
     },
@@ -2459,6 +2468,28 @@ function renderUrgences(){
         {icon:'🏃',label:'En cas de séisme',val:'Restez calme · Mettez-vous sous une table · NE sortez PAS dans la rue'},
         {icon:'🌊',label:'Alerte tsunami',val:'Montez en hauteur immédiatement · Suivez les panneaux verts "Evacuation Route"'},
         {icon:'🗺️',label:'Plans d\'évacuation',val:'Affichés dans tous les hôtels et gares — repérez-les à l\'arrivée'},
+      ]
+    },
+    {
+      title:'🛂 Vol / Perte de passeport',
+      color:'#ec4899',
+      items:[
+        {icon:'📸',label:'Avant le départ OBLIGATOIRE',val:'Photographiez votre passeport et stockez-le dans Google Drive, iCloud ou envoyez-le par email à vous-même'},
+        {icon:'1️⃣',label:'Étape 1 — Signaler à la police',val:'Rendez-vous au poste de police le plus proche · Demandez un "Lost Property Certificate" (証明書)'},
+        {icon:'2️⃣',label:'Étape 2 — Consulat de France',val:'4-11-44 Minami-Azabu, Minato-ku, Tokyo · +81 (0)3 5798 6000 · Lun-Ven 9h-12h30'},
+        {icon:'3️⃣',label:'Étape 3 — Passeport d\'urgence',val:'Le consulat peut délivrer un laissez-passer consulaire en 24-48h pour le retour en France'},
+        {icon:'💡',label:'Conseil',val:'Gardez une copie papier de votre passeport séparément de l\'original dans votre bagage'},
+      ]
+    },
+    {
+      title:'🛂 Vol et perte de passeport',
+      color:'#ec4899',
+      items:[
+        {icon:'📸',label:'Avant le départ OBLIGATOIRE',val:'Photographiez votre passeport et stockez dans Google Drive ou iCloud · Envoyez-le aussi par email'},
+        {icon:'1️⃣',label:'Étape 1 — Signaler à la police',val:'Rendez-vous au poste de police le plus proche · Demandez un "Lost Property Certificate"'},
+        {icon:'2️⃣',label:'Étape 2 — Consulat de France',val:'4-11-44 Minami-Azabu, Minato-ku, Tokyo · +81 (0)3 5798 6000 · Lun-Ven 9h-12h30'},
+        {icon:'3️⃣',label:'Étape 3 — Passeport urgence',val:'Le consulat délivre un laissez-passer consulaire en 24-48h pour le retour en France'},
+        {icon:'💡',label:'Conseil',val:'Gardez une copie papier séparément de l\'original dans un autre bagage'},
       ]
     },
   ];
@@ -2511,6 +2542,7 @@ function renderApplis(){
         {name:'Google Lens',icon:'📷',desc:'Pointez votre caméra sur n\'importe quel texte japonais (menus, panneaux, emballages) — traduction instantanée en réalité augmentée.'},
         {name:'DeepL',icon:'🔤',desc:'Traduction plus naturelle que Google Translate pour rédiger des messages polis aux hôtels ou restaurants.'},
         {name:'VoiceTra',icon:'🎙️',desc:'Application officielle du gouvernement japonais. Traduction vocale très précise. Idéale pour parler à un médecin ou en situation d\'urgence.'},
+        {name:'Google Translate — mode hors-ligne',icon:'📥',desc:'Téléchargez le pack japonais AVANT de partir (Paramètres → Langues hors-ligne). Fonctionne sans internet ni SIM. Indispensable dans les zones rurales autour du Fuji.'},
       ]
     },
     {
@@ -2538,6 +2570,17 @@ function renderApplis(){
         {name:'Flush',icon:'🚻',desc:'Localisation des toilettes publiques les plus proches. Indique si équipées d\'un washlet. Vital avec 4 enfants !'},
         {name:'Safety Tips',icon:'🚨',desc:'Application officielle de l\'Office du Tourisme Japonais. Alertes séismes, tsunamis, typhons en temps réel. En français. À installer avant le départ.'},
         {name:'Japan Official Travel App',icon:'✈️',desc:'Application officielle du gouvernement japonais. Informations touristiques, traduction, itinéraires et actualités.'},
+        {name:'Japan Connected Free Wi-Fi',icon:'📶',desc:'Accès à plus de 400 000 hotspots Wi-Fi gratuits au Japon (gares, konbinis, cafés, parcs). Inscrivez-vous AVANT de partir car la création de compte nécessite un email. Très utile les premiers jours.'},
+        {name:'tenki.jp',icon:'⛅',desc:'Météo japonaise ultra-précise heure par heure. Crucial pour planifier la journée Mont Fuji (J12) et les feux d\'artifice Tokyo Bay (J10). Les prévisions à 10 jours sont fiables.'},
+        {name:'Klook',icon:'🎟️',desc:'Vous avez déjà des réservations via Klook (Sumo Club, Shibuya Sky...). Installez l\'app avant le départ pour accéder à vos QR codes hors-ligne. Évite de chercher dans les emails en arrivant.'},
+      ]
+    },
+    {
+      title:'👶 Enfants & Transports',
+      color:'#3b82f6',
+      apps:[
+        {name:'Suica physique pour enfants -6 ans',icon:'💳',desc:'Les enfants de moins de 6 ans voyagent gratuits sur tous les transports. Cependant certains portiques automatiques (notamment les Shinkansen) nécessitent une carte IC physique pour passer. Demandez une Suica enfant à n\'importe quelle gare JR à l\'arrivée à l\'aéroport (gratuit, dépôt 500¥ récupérable).'},
+        {name:'Conseil poussettes',icon:'🛺',desc:'Les grandes gares ont des ascenseurs mais pas toutes les sorties. Utilisez Google Maps et cherchez "wheelchair accessible route" pour éviter les escaliers. Prévoyez une poussette légère pliable — les trottoirs japonais sont très bien entretenus.'},
       ]
     },
   ];
