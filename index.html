@@ -197,7 +197,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 /* LIGHTBOX */
 #lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.96);flex-direction:column;align-items:center;justify-content:center;padding:20px;}
 #lightbox.open{display:flex;}
-#lb-img{max-width:100%;max-height:65vh;object-fit:contain;border-radius:10px;}
+#lb-img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:10px;width:100%;}
 #lb-info{text-align:center;margin-top:16px;padding:0 10px;}
 #lb-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:4px;}
 #lb-addr{font-size:11px;color:var(--muted);margin-bottom:6px;}
@@ -1419,13 +1419,14 @@ const CITY_IMAGES = {
 };
 const CITY_COLORS = {osaka:'var(--osaka)',kyoto:'var(--kyoto)',tokyo:'var(--tokyo)'};
 const DAY_COLORS = {
-  j1:'#8B5CF6',j2:'#D85A30',j3:'#059669',
-  j4:'#e879f9',j5:'#f59e0b',j6:'#06b6d4',j7:'#ef4444',
+  j1:'#8B5CF6',j2:'#D85A30',j3:'#059669',j4_osaka:'#D85A30',
+  j4:'#e879f9',j5:'#f59e0b',j6:'#06b6d4',j7:'#ef4444',j8_kyoto:'#6366f1',
   j8:'#6366f1',j9:'#ec4899',j10:'#f97316',j11:'#0ea5e9',j12:'#10b981',j13:'#8b5cf6',j14:'#ef4444'
 };
 const DAY_DATES = {
-  j1:'15 oct',j2:'16 oct',j3:'17 oct',j4:'18 oct',j5:'19 oct',j6:'20 oct',j7:'21 oct',
-  j8:'22 oct',j9:'23 oct',j10:'24 oct',j11:'25 oct',j12:'26 oct',j13:'27 oct',j14:'28 oct'
+  j1:'15 oct',j2:'16 oct',j3:'17 oct',j4_osaka:'18 oct',
+  j4:'18 oct',j5:'19 oct',j6:'20 oct',j7:'21 oct',
+  j8_kyoto:'22 oct',j8:'22 oct',j9:'23 oct',j10:'24 oct',j11:'25 oct',j12:'26 oct',j13:'27 oct',j14:'28 oct'
 };
 
 let currentCity = null;
@@ -1524,11 +1525,13 @@ function openCity(ck) {
     const steps = day.steps.filter(s => s.num && !s.isTransit && !s.isHotel && !s.isAirport);
     const preview = steps.map(s => s.name.replace(/ — .*/,'').split('(')[0].trim()).slice(0,3).join(' · ');
     const nSteps = steps.length;
+    // Affichage propre du badge (J4_OSAKA → J4, J8_KYOTO → J8)
+    const dkDisplay = dk.replace('_osaka','').replace('_kyoto','').toUpperCase();
     const row = document.createElement('div');
     row.className = 'day-row';
     row.innerHTML = `
       <div class="day-badge" style="background:${color}22;border:2px solid ${color}">
-        <span class="day-badge-dk" style="color:${color}">${dk.toUpperCase()}</span>
+        <span class="day-badge-dk" style="color:${color}">${dkDisplay}</span>
         <span class="day-badge-date">${date}</span>
       </div>
       <div class="day-info">
@@ -1570,7 +1573,8 @@ function openDay(ck, dk) {
   const color = DAY_COLORS[dk] || '#888';
   const date = DAY_DATES[dk] || '';
 
-  document.getElementById('day-header-title').textContent = dk.toUpperCase() + ' — ' + date;
+  const dkLabel = dk.replace('_osaka','').replace('_kyoto','').toUpperCase();
+  document.getElementById('day-header-title').textContent = dkLabel + ' — ' + date;
   document.getElementById('day-header-sub').textContent = day.label;
 
   let html = `<div class="day-intro-box">
@@ -1915,10 +1919,11 @@ function showLightbox(imgEnc,nameEnc,addrEnc,descEnc){
   document.getElementById('lightbox').classList.add('open');
 }
 function openLightboxStep(id,ck,dk){
-  const allSteps=Object.values(CITIES[ck].days[dk].steps||CITIES[ck].days).flatMap(d=>Array.isArray(d)?d:d.steps||[]);
   const step=CITIES[ck].days[dk].steps.find(s=>s.id===id);
   if(!step||!step.img)return;
-  showLightbox(encodeURIComponent(step.img),encodeURIComponent(step.emoji+' '+step.name),encodeURIComponent(step.address||''),encodeURIComponent(step.desc||''));
+  // Haute résolution pour la lightbox
+  const fullImg = step.img.split('?')[0] + '?auto=compress&cs=tinysrgb&w=1200';
+  showLightbox(encodeURIComponent(fullImg),encodeURIComponent(step.emoji+' '+step.name),encodeURIComponent(step.address||''),encodeURIComponent(step.desc||''));
 }
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
 window.openLightboxStep=openLightboxStep;window.showLightbox=showLightbox;window.closeLightbox=closeLightbox;
