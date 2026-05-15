@@ -2628,14 +2628,13 @@ try {
     const dy = e.changedTouches[0].clientY - touchStartY;
     const dt = Date.now() - touchStartTime;
 
-    // Si la lightbox est ouverte, le swipe la ferme (dans n'importe quelle direction)
+    // Si la lightbox est ouverte, le swipe la ferme
     const lb = document.getElementById('lightbox');
-    if(lb && lb.style.display !== 'none' && lb.style.display !== '') {
+    if(lb && lb.classList.contains('open')) {
       if(Math.abs(dx) > 40 && dt < 400) {
-        lb.style.display = 'none';
-        return; // Ne pas déclencher la navigation
+        lb.classList.remove('open'); // Fermer comme le bouton X
       }
-      return; // Absorber tous les touches quand lightbox ouverte
+      return; // Absorber le touch — ne pas déclencher la navigation
     }
 
     const active = document.querySelector('.screen.active');
