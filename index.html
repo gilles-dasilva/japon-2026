@@ -1763,7 +1763,7 @@ function initMap() {
     hotelMarkers[ck] = L.marker([city.hotel.lat,city.hotel.lng],{icon:L.divIcon({
       html:`<div style="background:#d4af37;border:3px solid #fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 12px rgba(0,0,0,0.6)">🏨</div>`,
       className:'',iconSize:[36,36],iconAnchor:[18,18]})})
-      .bindPopup(function() {
+      .bindPopup((function() {
       var d = document.createElement('div');
       d.style.width = '230px';
       if(city.hotel.img) {
@@ -1777,11 +1777,11 @@ function initMap() {
         var btn = document.createElement('div');
         btn.className = 'popup-zoom';
         btn.textContent = '🔍 Voir en grand';
-        btn.addEventListener('click', function() { openHotelPhoto(ck); });
+        (function(k){btn.onclick = function(){ openHotelPhoto(k); };})(ck);
         d.appendChild(btn);
       }
       return d;
-    }(), {maxWidth:250});
+    })(), {maxWidth:250});
 
     // Optionnels
     city.optional.forEach(o => {
@@ -1841,12 +1841,12 @@ function initMap() {
           const hotelName = hotelData.name || step.name;
           const hotelAddr = hotelData.address || step.address || '';
           const imgH = hotelImg ? `<img src="${hotelImg}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">` : '';
-          L.marker([step.lat,step.lng],{icon:hotelIcon}).addTo(dayLayers[dk])
-            .bindPopup('<div style="width:230px">'+(hotelImg?'<img src="'+hotelImg+'" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">':'')+
-            '<div class="popup-name">🏨 '+hotelName+'</div>'+
-            '<div class="popup-addr">📍 '+hotelAddr+'</div>'+
-            '<div class="popup-desc">'+step.name+'</div>'+
-            '</div>',{maxWidth:250});
+          var hpop = document.createElement('div');
+          hpop.style.width = '230px';
+          if(hotelImg){var him=document.createElement('img');him.src=hotelImg;him.style.cssText='width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block';hpop.appendChild(him);}
+          hpop.innerHTML += '<div class="popup-name">🏨 '+hotelName+'</div><div class="popup-addr">📍 '+hotelAddr+'</div><div class="popup-desc">'+step.name+'</div>';
+          if(hotelImg){(function(el,k){var zb=document.createElement('div');zb.className='popup-zoom';zb.textContent='🔍 Voir en grand';zb.onclick=function(){openHotelPhoto(k);};el.appendChild(zb);})(hpop,ck);}
+          L.marker([step.lat,step.lng],{icon:hotelIcon}).addTo(dayLayers[dk]).bindPopup(hpop,{maxWidth:250});
           return;
         }
         const icon = step.isAirport
