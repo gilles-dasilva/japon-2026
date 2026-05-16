@@ -387,7 +387,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
     <div class="comment-form">
       <div class="comment-form-top">
         <input type="text" id="comment-name" placeholder="Prénom" maxlength="20" style="width:110px;flex-shrink:0;">
-        <input type="text" id="comment-text" placeholder="Ton commentaire..." maxlength="500" style="flex:1;">
+        <textarea id="comment-text" placeholder="Ton commentaire... (Shift+Entrée pour aller à la ligne)" maxlength="1000" rows="2" style="flex:1;resize:vertical;min-height:38px;max-height:120px;font-family:inherit;font-size:14px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);"></textarea>
       </div>
       <div class="emoji-bar">
         <span onclick="addEmoji('😊')">😊</span>
@@ -2350,7 +2350,7 @@ function renderCommentsList(data){
     '<div class="comment-bubble">' +
       '<div class="comment-header">' +
         '<span class="comment-author">' + escHtml(cm.author) + '</span>' +
-        '<span class="comment-date">' + escHtml(cm.date) + '</span>' +
+        '<span class="comment-date">' + escHtml(cm.date) + (cm.edited ? ' · <em style="font-size:10px;opacity:0.6">modifié</em>' : '') + '</span>' +
       '</div>' +
       '<div class="comment-text">' + escHtml(cm.text) + '</div>' +
     '</div>'
@@ -2372,6 +2372,42 @@ function deleteComment(key){
   if(!confirm('Supprimer ce commentaire ?')) return;
   if(commentsRef) commentsRef.child(key).remove();
 }
+
+function editComment(key){
+  const textDiv = document.getElementById('ct-' + key);
+  if(!textDiv) return;
+  // Déjà en mode édition ?
+  if(textDiv.querySelector('textarea')) return;
+  const currentText = textDiv.innerText;
+  textDiv.innerHTML = '';
+  const ta = document.createElement('textarea');
+  ta.value = currentText;
+  ta.rows = 3;
+  ta.style.cssText = 'width:100%;font-family:inherit;font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid var(--gold);background:var(--surface2);color:var(--text);resize:vertical;box-sizing:border-box;';
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+  const btnSave = document.createElement('button');
+  btnSave.textContent = '✅ Sauvegarder';
+  btnSave.style.cssText = 'flex:1;padding:6px;background:rgba(212,175,55,0.2);border:1px solid var(--gold);border-radius:8px;color:var(--gold);font-size:12px;cursor:pointer;';
+  const btnCancel = document.createElement('button');
+  btnCancel.textContent = '✕ Annuler';
+  btnCancel.style.cssText = 'padding:6px 10px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;cursor:pointer;';
+  btnSave.onclick = function() {
+    const newText = ta.value.trim();
+    if(!newText) return;
+    if(!commentsRef) return;
+    commentsRef.child(key).update({text: newText, edited: true});
+  };
+  btnCancel.onclick = function() {
+    renderCommentsList(lastCommentsData);
+  };
+  btnRow.appendChild(btnSave);
+  btnRow.appendChild(btnCancel);
+  textDiv.appendChild(ta);
+  textDiv.appendChild(btnRow);
+  ta.focus();
+}
+window.editComment = editComment;
 
 window.deleteComment = deleteComment;
 window.toggleAdmin = toggleAdmin;
@@ -2418,19 +2454,33 @@ function renderCommentsList(data){
     list.innerHTML = '<div class="no-comments">Aucun commentaire encore.<br>Sois le premier ! 💬</div>';
     return;
   }
-  list.innerHTML = arr.reverse().map(([key, cm]) =>
-    '<div class="comment-bubble">' +
+  const currentName = (document.getElementById('comment-name')?.value||'').trim();
+
+  list.innerHTML = arr.reverse().map(([key, cm]) => {
+    const isOwn = currentName && currentName.toLowerCase() === (cm.author||'').toLowerCase();
+    const canEdit = isOwn || isAdmin;
+    const canDelete = isAdmin;
+    return '<div class="comment-bubble" id="cb-' + key + '">' +
       '<div class="comment-header">' +
         '<span class="comment-author">' + escHtml(cm.author) + '</span>' +
-        '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<div style="display:flex;align-items:center;gap:6px;">' +
           '<span class="comment-date">' + escHtml(cm.date) + '</span>' +
-          (isAdmin ? '<button onclick="deleteComment(\'' + key + '\')" style="background:rgba(239,68,68,0.2);border:none;border-radius:6px;color:#f87171;font-size:11px;padding:2px 7px;cursor:pointer;">🗑️</button>' : '') +
+          (canEdit ? '<button onclick="editComment(\'' + key + '\')" style="background:rgba(212,175,55,0.15);border:1px solid var(--gold);border-radius:6px;color:var(--gold);font-size:11px;padding:2px 7px;cursor:pointer;">✏️</button>' : '') +
+          (canDelete ? '<button onclick="deleteComment(\'' + key + '\')" style="background:rgba(239,68,68,0.2);border:none;border-radius:6px;color:#f87171;font-size:11px;padding:2px 7px;cursor:pointer;">🗑️</button>' : '') +
         '</div>' +
       '</div>' +
-      '<div class="comment-text">' + escHtml(cm.text) + '</div>' +
-    '</div>'
-  ).join('');
+      '<div class="comment-text" id="ct-' + key + '">' + escHtml(cm.text).replace(/\n/g,'<br>') + '</div>' +
+    '</div>';
+  }).join('');
 }
+
+// Envoyer avec Ctrl+Entrée ou Cmd+Entrée sur le textarea
+document.addEventListener('keydown', function(e) {
+  if((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    const el = document.activeElement;
+    if(el && el.id === 'comment-text') postComment();
+  }
+});
 
 function postComment(){
   const nameEl = document.getElementById('comment-name');
