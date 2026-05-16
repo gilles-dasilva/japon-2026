@@ -1763,7 +1763,7 @@ function initMap() {
     hotelMarkers[ck] = L.marker([city.hotel.lat,city.hotel.lng],{icon:L.divIcon({
       html:`<div style="background:#d4af37;border:3px solid #fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 12px rgba(0,0,0,0.6)">🏨</div>`,
       className:'',iconSize:[36,36],iconAnchor:[18,18]})})
-      .bindPopup(`<div style="width:230px">${city.hotel.img?`<img src="${city.hotel.img}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">`:''}<div class="popup-name">🏨 ${city.hotel.name}</div><div class="popup-addr">📍 ${city.hotel.address}</div></div>`,{maxWidth:250});
+      .bindPopup(`<div style="width:230px">${city.hotel.img?`<img src="${city.hotel.img}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">`:''}<div class="popup-name">🏨 ${city.hotel.name}</div><div class="popup-addr">📍 ${city.hotel.address}</div>${city.hotel.img?`<div class="popup-zoom" onclick="showLightbox('${encodeURIComponent((city.hotel.img||'').split('?')[0]+'?auto=compress&cs=tinysrgb&w=1200')}','${encodeURIComponent('🏨 '+city.hotel.name)}','${encodeURIComponent(city.hotel.address)}','')">🔍 Voir en grand</div>`:''}${city.hotel.img?`<div class="popup-zoom" onclick="if(city&&city.hotel&&city.hotel.img){showLightbox(encodeURIComponent(city.hotel.img),encodeURIComponent('🏨 '+city.hotel.name),encodeURIComponent(city.hotel.address),'');}" style="cursor:pointer">🔍 Voir en grand</div>`:''}</div>`,{maxWidth:250});
 
     // Optionnels
     city.optional.forEach(o => {
@@ -1824,7 +1824,7 @@ function initMap() {
           const hotelAddr = hotelData.address || step.address || '';
           const imgH = hotelImg ? `<img src="${hotelImg}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">` : '';
           L.marker([step.lat,step.lng],{icon:hotelIcon}).addTo(dayLayers[dk])
-            .bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">🏨 ${hotelName}</div><div class="popup-addr">📍 ${hotelAddr}</div><div class="popup-desc">${step.name}</div></div>`,{maxWidth:250});
+            .bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">🏨 ${hotelName}</div><div class="popup-addr">📍 ${hotelAddr}</div><div class="popup-desc">${step.name}</div>${hotelImg?`<div class="popup-zoom" onclick="showLightbox('${encodeURIComponent(hotelImg.split('?')[0]+'?auto=compress&cs=tinysrgb&w=1200')}','${encodeURIComponent('🏨 '+hotelName)}','${encodeURIComponent(hotelAddr)}','')">🔍 Voir en grand</div>`:''}</div>`,{maxWidth:250});
           return;
         }
         const icon = step.isAirport
