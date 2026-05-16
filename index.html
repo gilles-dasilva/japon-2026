@@ -1816,11 +1816,15 @@ function initMap() {
         }
         if(!step.lat) return;
         if(step.isHotel) {
-          // Marker hôtel dans le parcours journée
+          // Marker hôtel dans le parcours journée — utiliser les infos de city.hotel
           const hotelIcon = L.divIcon({html:`<div style="background:#d4af37;border:3px solid #fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,0.5)">🏨</div>`,className:'',iconSize:[32,32],iconAnchor:[16,16]});
-          const imgH = step.img ? `<img src="${step.img}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">` : '';
+          const hotelData = CITIES[ck].hotel;
+          const hotelImg = hotelData.img || step.img;
+          const hotelName = hotelData.name || step.name;
+          const hotelAddr = hotelData.address || step.address || '';
+          const imgH = hotelImg ? `<img src="${hotelImg}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">` : '';
           L.marker([step.lat,step.lng],{icon:hotelIcon}).addTo(dayLayers[dk])
-            .bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">🏨 ${step.name}</div><div class="popup-addr">📍 ${step.address||''}</div><div class="popup-desc">${(step.desc||'').substring(0,100)}...</div></div>`,{maxWidth:250});
+            .bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">🏨 ${hotelName}</div><div class="popup-addr">📍 ${hotelAddr}</div><div class="popup-desc">${step.name}</div></div>`,{maxWidth:250});
           return;
         }
         const icon = step.isAirport
