@@ -432,7 +432,8 @@ const MAPTILER_KEY = '1oBsmSWNFattubU4Bwxk';
 // ============================================================================
 // DONNÉES — OSAKA
 // ============================================================================
-const OSAKA_HOTEL = {name:"BON Condominium Namba Ebisu",address:"3-1-24 Ebisunishi, Naniwa Ward, Osaka 556-0005",lat:34.655735,lng:135.5064042};
+const OSAKA_HOTEL = {name:"BON Condominium Namba Ebisu",address:"3-1-24 Ebisunishi, Naniwa Ward, Osaka 556-0005",lat:34.655735,lng:135.5064042,
+  img:"https://i.imgur.com/f01FWM4.jpeg"};
 
 const OSAKA_OPTIONAL = [
   {id:'oo-aquarium',name:'Aquarium Kaiyukan',emoji:'🦈',votes:3,address:'1-1-10 Kaigandori, Minato Ward, Osaka 552-0022',lat:34.6551,lng:135.4284,img:'https://images.pexels.com/photos/889848/pexels-photo-889848.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"L'un des plus grands aquariums du monde — requin baleine, raies manta, tunnel 360°. 2-3h. 2400¥ (~15€) adulte, 1200¥ (~8€) enfant."},
@@ -640,8 +641,7 @@ const OSAKA_DAYS = {
 // DONNÉES — KYOTO
 // ============================================================================
 const KYOTO_HOTEL = {name:"Stay SAKURA Kyoto Higashiyama Shirakawa",address:"507 Tsutsumicho, Higashiyama Ward, Kyoto 605-0025",lat:35.0036,lng:135.7783,
-  
-};
+  img:"https://i.imgur.com/DdXw2tR.jpeg"};
 
 const KYOTO_OPTIONAL = [
   {id:'ko-kinkaku',name:"Kinkaku-ji (Pavillon d'Or)",emoji:'🥇',votes:4,address:'1 Kinkakujicho, Kita Ward, Kyoto 603-8361',lat:35.0394,lng:135.7292,img:'https://images.pexels.com/photos/30643058/pexels-photo-30643058.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Temple recouvert de feuilles d'or se reflétant dans l'étang. 500¥ (~3€). Très touristique."},
@@ -882,8 +882,9 @@ const KYOTO_DAYS = {
 const TOKYO_HOTEL = {
   name:"Float Inn Shin-Okachimachi",
   address:"Shin-Okachimachi, Taito Ward, Tokyo — Station Shin-Okachimachi (A18)",
-  lat:35.7072, lng:139.7793
-};
+  lat:35.7072, lng:139.7793,
+  img:"https://i.imgur.com/kWMnl2p.jpeg"
+}
 
 const TOKYO_OPTIONAL = [
 
@@ -1757,7 +1758,7 @@ function initMap() {
     hotelMarkers[ck] = L.marker([city.hotel.lat,city.hotel.lng],{icon:L.divIcon({
       html:`<div style="background:#d4af37;border:3px solid #fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 12px rgba(0,0,0,0.6)">🏨</div>`,
       className:'',iconSize:[36,36],iconAnchor:[18,18]})})
-      .bindPopup(`<div class="popup-name">🏨 ${city.hotel.name}</div><div class="popup-addr">${city.hotel.address}</div>`);
+      .bindPopup(`<div style="width:230px">${city.hotel.img?`<img src="${city.hotel.img}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">`:''}<div class="popup-name">🏨 ${city.hotel.name}</div><div class="popup-addr">📍 ${city.hotel.address}</div></div>`,{maxWidth:250});
 
     // Optionnels
     city.optional.forEach(o => {
@@ -1808,7 +1809,15 @@ function initMap() {
           if(step.fromLat&&step.toLat) L.polyline([[step.fromLat,step.fromLng],[step.toLat,step.toLng]],{color:'#3b82f6',weight:3,dashArray:'8,6',opacity:0.7}).addTo(dayLayers[dk]);
           return;
         }
-        if(step.isHotel||!step.lat) return;
+        if(!step.lat) return;
+        if(step.isHotel) {
+          // Marker hôtel dans le parcours journée
+          const hotelIcon = L.divIcon({html:`<div style="background:#d4af37;border:3px solid #fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,0.5)">🏨</div>`,className:'',iconSize:[32,32],iconAnchor:[16,16]});
+          const imgH = step.img ? `<img src="${step.img}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">` : '';
+          L.marker([step.lat,step.lng],{icon:hotelIcon}).addTo(dayLayers[dk])
+            .bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">🏨 ${step.name}</div><div class="popup-addr">📍 ${step.address||''}</div><div class="popup-desc">${(step.desc||'').substring(0,100)}...</div></div>`,{maxWidth:250});
+          return;
+        }
         const icon = step.isAirport
           ? L.divIcon({html:`<div style="background:#6b7280;border:3px solid #fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:15px">✈️</div>`,className:'',iconSize:[34,34],iconAnchor:[17,17]})
           : L.divIcon({html:`<div style="background:${color};border:3px solid rgba(255,255,255,0.9);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:white;font-family:serif;box-shadow:0 2px 10px rgba(0,0,0,0.6)">${step.num||'•'}</div>`,className:'',iconSize:[32,32],iconAnchor:[16,16]});
