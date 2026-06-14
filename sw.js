@@ -3,7 +3,7 @@
 // Changer le numéro de version force la mise à jour pour tous
 // ============================================================
 
-const VERSION = '2026-v65';
+const VERSION = '2026-v66';
 const CACHE = 'japon-2026-' + VERSION;
 
 // À l'installation : cache uniquement le fichier principal
