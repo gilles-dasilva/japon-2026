@@ -2707,65 +2707,134 @@ function renderApplis(){
   const el = document.getElementById('applis-content');
   if(!el) return;
 
+  // ios: App Store ID, android: Play Store package name, null = pas d'app pour cette plateforme
   const cats = [
     {
       title:'🗺️ Navigation',
       color:'#0ea5e9',
       apps:[
-        {name:'Google Maps',icon:'🗺️',desc:'Indispensable. Plans d\'étages des gares, horaires en temps réel, navigation piéton. Téléchargez les cartes Osaka, Kyoto et Tokyo hors-ligne avant de partir.'},
-        {name:'Navitime Japan Travel',icon:'🚇',desc:'Le meilleur pour les transports japonais. Filtres JR, numéros de quais précis, horaires shinkansen. Gratuit.'},
-        {name:'Suica / Pasmo (Wallet)',icon:'📲',desc:'Carte IC virtuelle dans Apple Wallet ou Google Pay. Paiement sans contact dans tous les transports et konbinis. Rechargeable en ligne.'},
+        {name:'Google Maps',icon:'🗺️',
+         desc:'Indispensable. Plans d\'étages des gares, horaires en temps réel, navigation piéton. Téléchargez les cartes Osaka, Kyoto et Tokyo hors-ligne avant de partir.',
+         ios:'585027354',android:'com.google.android.apps.maps'},
+        {name:'Navitime Japan Travel',icon:'🚇',
+         desc:'Le meilleur pour les transports japonais. Filtres JR, numéros de quais précis, horaires shinkansen. Gratuit.',
+         ios:'510932502',android:'com.navitime.inbound.navitime_japan'},
+        {name:'Suica (Apple Wallet)',icon:'📲',
+         desc:'Carte IC virtuelle dans Apple Wallet ou Google Pay. Paiement sans contact dans tous les transports et konbinis. Rechargeable en ligne.',
+         ios:'1156875272',android:'com.jreeast.appsuica'},
       ]
     },
     {
       title:'🌐 Traduction',
       color:'#10b981',
       apps:[
-        {name:'Google Lens',icon:'📷',desc:'Pointez votre caméra sur n\'importe quel texte japonais (menus, panneaux, emballages) — traduction instantanée en réalité augmentée.'},
-        {name:'DeepL',icon:'🔤',desc:'Traduction plus naturelle que Google Translate pour rédiger des messages polis aux hôtels ou restaurants.'},
-        {name:'VoiceTra',icon:'🎙️',desc:'Application officielle du gouvernement japonais. Traduction vocale très précise. Idéale pour parler à un médecin ou en situation d\'urgence.'},
-        {name:'Google Translate — mode hors-ligne',icon:'📥',desc:'Téléchargez le pack japonais AVANT de partir (Paramètres → Langues hors-ligne). Fonctionne sans internet ni SIM. Indispensable dans les zones rurales autour du Fuji.'},
+        {name:'Google Lens',icon:'📷',
+         desc:'Pointez votre caméra sur n\'importe quel texte japonais (menus, panneaux, emballages) — traduction instantanée en réalité augmentée.',
+         ios:'1256997205',android:'com.google.ar.lens'},
+        {name:'DeepL',icon:'🔤',
+         desc:'Traduction plus naturelle que Google Translate pour rédiger des messages polis aux hôtels ou restaurants.',
+         ios:'1552407475',android:'com.deepl.mobiletranslator'},
+        {name:'VoiceTra',icon:'🎙️',
+         desc:'Application officielle du gouvernement japonais. Traduction vocale très précise. Idéale pour parler à un médecin ou en situation d\'urgence.',
+         ios:'1163950948',android:'jp.go.nict.VoiceTra'},
+        {name:'Google Translate — mode hors-ligne',icon:'📥',
+         desc:'Téléchargez le pack japonais AVANT de partir (Paramètres → Langues hors-ligne). Fonctionne sans internet ni SIM. Indispensable dans les zones rurales autour du Fuji.',
+         ios:'414706506',android:'com.google.android.apps.translate'},
       ]
     },
     {
       title:'🍜 Gastronomie',
       color:'#f97316',
       apps:[
-        {name:'Tabelog',icon:'⭐',desc:'Référence des avis japonais. Un 3.5/5 sur Tabelog = excellent (les Japonais notent très sévèrement). Cherchez "Halal" dans les filtres.'},
-        {name:'Halal Navi / Halal Gourmet Japan',icon:'🌙',desc:'Recherche de restaurants halal certifiés par localisation. Indique le niveau de certification (halal total, pork-free, etc.).'},
-        {name:'Vegan Japan',icon:'🌱',desc:'Filtres alimentaires très précis. Utile aussi pour les allergies et régimes spécifiques.'},
+        {name:'Tabelog',icon:'⭐',
+         desc:'Référence des avis japonais. Un 3.5/5 sur Tabelog = excellent (les Japonais notent très sévèrement). Cherchez "Halal" dans les filtres.',
+         ios:'445442977',android:'com.tabelog.android'},
+        {name:'Halal Gourmet Japan',icon:'🌙',
+         desc:'Recherche de restaurants halal certifiés par localisation. Indique le niveau de certification (halal total, pork-free, etc.).',
+         ios:'1072557238',android:'jp.co.halalgourmet.halalmap'},
+        {name:'HappyCow — Vegan & Vegetarian',icon:'🌱',
+         desc:'Filtres alimentaires très précis. Utile aussi pour les allergies et régimes spécifiques.',
+         ios:'435871950',android:'com.hcorp.happycow'},
       ]
     },
     {
       title:'💴 Argent & Paiement',
       color:'#d4af37',
       apps:[
-        {name:'Revolut / Wise',icon:'💳',desc:'Change en temps réel au meilleur taux. Retraits aux ATM 7-Eleven et Japan Post sans frais. Astuce : échangez vos euros en yens les jours ouvrés (meilleur taux).'},
-        {name:'7-Eleven ATM',icon:'🏧',desc:'Les ATM 7-Eleven acceptent toutes les cartes étrangères (Visa, Mastercard). Disponibles 24h/24 partout au Japon.'},
+        {name:'Revolut',icon:'💳',
+         desc:'Change en temps réel au meilleur taux. Retraits aux ATM 7-Eleven et Japan Post sans frais. Astuce : échangez vos euros en yens les jours ouvrés (meilleur taux).',
+         ios:'1173360325',android:'com.revolut.revolut'},
+        {name:'Wise',icon:'💸',
+         desc:'Alternative à Revolut, taux de change très compétitifs. Retraits ATM 7-Eleven sans frais jusqu\'à 200€/mois.',
+         ios:'612261027',android:'com.transferwise.android'},
       ]
     },
     {
       title:'🛎️ Services pratiques',
       color:'#8b5cf6',
       apps:[
-        {name:'Yamato (Takkyubin)',icon:'📦',desc:'Service de livraison de bagages d\'hôtel à hôtel. Envoyez vos valises la veille (~1500¥/bagage). Idéal pour voyager léger en train.'},
-        {name:'Flush',icon:'🚻',desc:'Localisation des toilettes publiques les plus proches. Indique si équipées d\'un washlet. Vital avec 4 enfants !'},
-        {name:'Safety Tips',icon:'🚨',desc:'Application officielle de l\'Office du Tourisme Japonais. Alertes séismes, tsunamis, typhons en temps réel. En français. À installer avant le départ.'},
-        {name:'Japan Official Travel App',icon:'✈️',desc:'Application officielle du gouvernement japonais. Informations touristiques, traduction, itinéraires et actualités.'},
-        {name:'Japan Connected Free Wi-Fi',icon:'📶',desc:'Accès à plus de 400 000 hotspots Wi-Fi gratuits au Japon (gares, konbinis, cafés, parcs). Inscrivez-vous AVANT de partir car la création de compte nécessite un email. Très utile les premiers jours.'},
-        {name:'tenki.jp',icon:'⛅',desc:'Météo japonaise ultra-précise heure par heure. Crucial pour planifier la journée Mont Fuji (J12) et les feux d\'artifice Tokyo Bay (J10). Les prévisions à 10 jours sont fiables.'},
-        {name:'Klook',icon:'🎟️',desc:'Vous avez déjà des réservations via Klook (Sumo Club, Shibuya Sky...). Installez l\'app avant le départ pour accéder à vos QR codes hors-ligne. Évite de chercher dans les emails en arrivant.'},
+        {name:'Yamato Transport (Takkyubin)',icon:'📦',
+         desc:'Service de livraison de bagages d\'hôtel à hôtel. Envoyez vos valises la veille (~1500¥/bagage). Idéal pour voyager léger en train.',
+         ios:'1498881571',android:'jp.co.yamato.yamatomobile'},
+        {name:'Flush — Toilettes proches',icon:'🚻',
+         desc:'Localisation des toilettes publiques les plus proches. Indique si équipées d\'un washlet. Vital avec 4 enfants !',
+         ios:'427082616',android:'com.flushtoilets.android'},
+        {name:'Safety Tips',icon:'🚨',
+         desc:'Application officielle de l\'Office du Tourisme Japonais. Alertes séismes, tsunamis, typhons en temps réel. En français. À installer avant le départ.',
+         ios:'858234553',android:'jp.co.rcsc.safetytips.android'},
+        {name:'Japan Official Travel App',icon:'✈️',
+         desc:'Application officielle du gouvernement japonais. Informations touristiques, traduction, itinéraires et actualités.',
+         ios:'1501355839',android:'org.jnto.jntoapp'},
+        {name:'Japan Wi-Fi auto-connect',icon:'📶',
+         desc:'Accès à plus de 400 000 hotspots Wi-Fi gratuits au Japon (gares, konbinis, cafés, parcs). Inscrivez-vous AVANT de partir car la création de compte nécessite un email. Très utile les premiers jours.',
+         ios:'1086698410',android:'com.ntt.jwc.android'},
+        {name:'tenki.jp',icon:'⛅',
+         desc:'Météo japonaise ultra-précise heure par heure. Crucial pour planifier la journée Mont Fuji (J12) et les feux d\'artifice Tokyo Bay (J10). Les prévisions à 10 jours sont fiables.',
+         ios:'433865536',android:'jp.co.jwa.tenkijp'},
+        {name:'Klook',icon:'🎟️',
+         desc:'Vous avez déjà des réservations via Klook (Sumo Club, Shibuya Sky...). Installez l\'app avant le départ pour accéder à vos QR codes hors-ligne. Évite de chercher dans les emails en arrivant.',
+         ios:'1026235630',android:'com.klook.klook_intl'},
       ]
     },
     {
       title:'👶 Enfants & Transports',
       color:'#3b82f6',
       apps:[
-        {name:'Suica physique pour enfants -6 ans',icon:'💳',desc:'Les enfants de moins de 6 ans voyagent gratuits sur tous les transports. Cependant certains portiques automatiques (notamment les Shinkansen) nécessitent une carte IC physique pour passer. Demandez une Suica enfant à n\'importe quelle gare JR à l\'arrivée à l\'aéroport (gratuit, dépôt 500¥ récupérable).'},
-        {name:'Conseil poussettes',icon:'🛺',desc:'Les grandes gares ont des ascenseurs mais pas toutes les sorties. Utilisez Google Maps et cherchez "wheelchair accessible route" pour éviter les escaliers. Prévoyez une poussette légère pliable — les trottoirs japonais sont très bien entretenus.'},
+        {name:'Suica physique pour enfants -6 ans',icon:'💳',
+         desc:'Les enfants de moins de 6 ans voyagent gratuits sur tous les transports. Cependant certains portiques automatiques (notamment les Shinkansen) nécessitent une carte IC physique pour passer. Demandez une Suica enfant à n\'importe quelle gare JR à l\'arrivée à l\'aéroport (gratuit, dépôt 500¥ récupérable).',
+         ios:null,android:null},
+        {name:'Conseil poussettes',icon:'🛺',
+         desc:'Les grandes gares ont des ascenseurs mais pas toutes les sorties. Utilisez Google Maps et cherchez "wheelchair accessible route" pour éviter les escaliers. Prévoyez une poussette légère pliable — les trottoirs japonais sont très bien entretenus.',
+         ios:null,android:null},
       ]
     },
   ];
+
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+
+  function buildStoreLinks(app) {
+    if(!app.ios && !app.android) return '';
+    const iosUrl = app.ios ? 'https://apps.apple.com/fr/app/id' + app.ios : null;
+    const androidUrl = app.android ? 'https://play.google.com/store/apps/details?id=' + app.android : null;
+    // Sur mobile : n'afficher que le store pertinent. Sur desktop : les deux.
+    const showIOS = iosUrl && !isAndroid;
+    const showAndroid = androidUrl && !isIOS;
+    if(!showIOS && !showAndroid) return '';
+    let links = '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">';
+    if(showIOS) {
+      links += '<a href="' + iosUrl + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;">'
+             + '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>'
+             + '📱 App Store</a>';
+    }
+    if(showAndroid) {
+      links += '<a href="' + androidUrl + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;">'
+             + '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.8508 12 7.8508s-3.5902.3931-5.1367 1.0989L4.841 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3435-4.1021-2.6892-7.5743-6.1185-9.4396"/></svg>'
+             + '🤖 Play Store</a>';
+    }
+    links += '</div>';
+    return links;
+  }
 
   let html = '';
   cats.forEach(cat => {
@@ -2778,6 +2847,7 @@ function renderApplis(){
       html += '<div style="flex:1;">';
       html += '<div style="font-family:\'Playfair Display\',serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">' + app.name + '</div>';
       html += '<div style="font-size:12px;color:var(--muted);line-height:1.6;">' + app.desc + '</div>';
+      html += buildStoreLinks(app);
       html += '</div></div></div>';
     });
     html += '</div>';
