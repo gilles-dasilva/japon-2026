@@ -1833,6 +1833,7 @@ let animRunning=false,animInterval=null,animMarker=null,animStep=0;
 function initMap() {
   if(mapInitialized) return;
   mapInitialized = true;
+  try {
   map = L.map('map-full',{center:[34.665,135.503],zoom:13,zoomControl:true,preferCanvas:true});
   const KEY='1oBsmSWNFattubU4Bwxk';
   L.tileLayer(`https://api.maptiler.com/maps/darkmatter/{z}/{x}/{y}.png?key=${KEY}`,{
@@ -1935,6 +1936,10 @@ function initMap() {
       }
     });
   });
+  } catch(err) {
+    mapInitialized = false;
+    alert('Erreur init carte : ' + err.message);
+  }
 }
 
 function mkTransitIcon(){
@@ -1942,6 +1947,11 @@ function mkTransitIcon(){
 }
 
 function openMap(ck, dk) {
+  try {
+  if(typeof L === 'undefined') {
+    alert('Carte non disponible — vérifiez votre connexion internet et rechargez l\'appli.');
+    return;
+  }
   initMap();
   currentCity = ck;
   currentDayKey = dk;
@@ -1985,6 +1995,9 @@ function openMap(ck, dk) {
       map.setView([hotel.lat, hotel.lng], 14);
     }
   }, 400);
+  } catch(err) {
+    alert('Erreur carte : ' + err.message);
+  }
 }
 
 function updateMapLegend(ck, dk) {
