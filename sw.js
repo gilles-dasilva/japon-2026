@@ -3,7 +3,7 @@
 // Changer le numéro de version force la mise à jour pour tous
 // ============================================================
 
-const VERSION = '2026-v67';
+const VERSION = '2026-v68';
 const CACHE = 'japon-2026-' + VERSION;
 const CACHE_IMGS = CACHE + '-imgs';
 const CACHE_TILES = CACHE + '-tiles';
@@ -74,7 +74,8 @@ const PRECACHE_IMGS = [
   'https://images.pexels.com/photos/33584293/pexels-photo-33584293.jpeg?auto=compress&cs=tinysrgb&w=1200',
   'https://images.pexels.com/photos/33701672/pexels-photo-33701672.jpeg?auto=compress&cs=tinysrgb&w=600',
   'https://images.pexels.com/photos/34013890/pexels-photo-34013890.jpeg?auto=compress&cs=tinysrgb&w=600',
-  'https://images.pexels.com/photos/34065646/pexels-photo-34065646.jpeg?auto=compresshttps://images.pexels.com/photos/5598520/pexels-photo-5598520.jpeg?auto=compress&cs=tinysrgb&w=600cs=tinysrgbhttps://images.pexels.com/photos/5598520/pexels-photo-5598520.jpeg?auto=compress&cs=tinysrgb&w=600w=600',
+  'https://images.pexels.com/photos/34065646/pexels-photo-34065646.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'https://images.pexels.com/photos/5598520/pexels-photo-5598520.jpeg?auto=compress&cs=tinysrgb&w=600',
   'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600',
   'https://images.pexels.com/photos/34247027/pexels-photo-34247027.jpeg?auto=compress&cs=tinysrgb&w=600',
   'https://images.pexels.com/photos/34438939/pexels-photo-34438939.jpeg?auto=compress&cs=tinysrgb&w=1200',
