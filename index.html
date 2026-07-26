@@ -2339,20 +2339,24 @@ window.goBack = goBack;
 function renderHome() {
   const list = document.getElementById('cities-list');
 
-  // Attacher les événements click sur les cards statiques
+  // Attacher les événements sur les cards — distinguer tap et scroll
   Object.keys(CITIES).forEach(ck => {
     const card = document.getElementById('card-' + ck);
     if(card) {
-      card.style.cursor = 'pointer';
+      let startY = 0, startX = 0;
+      card.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+      }, {passive:true});
       card.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        openCity(ck);
-      }, {passive:false});
-      card.addEventListener('click', () => openCity(ck));
+        const dy = Math.abs(e.changedTouches[0].clientY - startY);
+        const dx = Math.abs(e.changedTouches[0].clientX - startX);
+        if(dy < 10 && dx < 10) openCity(ck); // Seulement si pas de glissement
+      }, {passive:true});
     }
   });
 
-  // Boutons actions — créés via DOM
+  // Boutons actions
   document.querySelectorAll('.home-action-btns').forEach(el => el.remove());
   const btnWrap = document.createElement('div');
   btnWrap.className = 'home-action-btns';
@@ -2381,16 +2385,17 @@ function renderHome() {
       btn.innerHTML = '<span class="home-action-icon">' + cfg.icon + '</span>' +
         '<div class="home-action-label">' + cfg.label + '</div>' +
         '<div class="home-action-sub"' + (cfg.subId ? ' id="' + cfg.subId + '"' : '') + '>' + cfg.sub + '</div>';
-      let touched = false;
+      let startY = 0, startX = 0;
+      btn.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+      }, {passive:true});
       btn.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        touched = true;
-        cfg.action();
-      }, {passive:false});
-      btn.addEventListener('click', () => {
-        if(!touched) cfg.action();
-        touched = false;
-      });
+        const dy = Math.abs(e.changedTouches[0].clientY - startY);
+        const dx = Math.abs(e.changedTouches[0].clientX - startX);
+        if(dy < 10 && dx < 10) cfg.action();
+      }, {passive:true});
+      btn.addEventListener('click', cfg.action);
       rowEl.appendChild(btn);
     });
     btnWrap.appendChild(rowEl);
