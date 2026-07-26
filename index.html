@@ -1254,7 +1254,11 @@ const OSAKA_DAYS = {
        desc:"Néons géants, panneau Glico, takoyaki, foule festive. C'est ici que vous réaliserez vraiment que vous êtes au Japon !",
        tags:["gratuit","kids","incontournable","repas"],wc:"Toilettes publiques entrée du pont",
        photos:["https://images.pexels.com/photos/34438939/pexels-photo-34438939.jpeg?auto=compress&cs=tinysrgb&w=1200","https://images.pexels.com/photos/4456247/pexels-photo-4456247.jpeg?auto=compress&cs=tinysrgb&w=1200"],
-       transport:{icon:"🚇",text:"🏠 Retour hôtel — Nipponbashi (K17) → Ebisucho (K18) · Ligne Sakaisuji · 1 station · 2 min · 190¥ (~1€)",detail:"Option à pied : 20 min direction sud via Sennichimae-dori"}}
+       transport:{icon:"🚇",text:"Dotonbori → Nipponbashi · 5 min à pied",detail:"Remontez vers Nipponbashi (K17)"}},
+      {id:"tr-dotonbori-hotel-j1",num:null,time:"21:00",name:"Nipponbashi K17 → Ebisucho K18",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Retour BON Condominium",lat:34.6680,lng:135.5026,
+       transport:{icon:"🚇",from:"Nipponbashi (K17)",to:"Ebisucho (K18)",line:"Ligne Sakaisuji (marron) · 1 station · 2 min",duration:"2 min",price:"190¥ (~1€)",note:"À la sortie : BON Condominium à 3 min à pied direction sud"},
+       fromLat:34.6680,fromLng:135.5026,toLat:34.6543,toLng:135.5055}
     ]
   },
   j2:{label:"J2 — Namba / Château",date:"Vendredi 16 oct.",color:"#D85A30",
@@ -1328,7 +1332,7 @@ const OSAKA_DAYS = {
     introSub:"Excursion matinale au temple des Daruma dans la forêt de Minoh, puis Shitenno-ji et Shinsekai l'après-midi.",
     tip:"💡 <strong>Conseil :</strong> Partez tôt ! Bus bondé le samedi — arrivez au stop 8 de Minoh-Kayano 15 min avant. Les daruma font d'excellents souvenirs (500¥ (~3€)).",
     steps:[
-      {id:"depart-j3",num:null,time:"08:30",name:"Départ de l'hôtel — tôt !",type:"Point de départ",emoji:"🏨",isHotel:true,
+      {id:"depart-j3",num:null,time:"08:30",name:"Départ de l'hôtel — tôt !",type:"Point de départ",emoji:"🏨",isHotel:false,
        address:"BON Condominium Namba Ebisu, 3-1-24 Ebisunishi, Naniwa Ward, Osaka",lat:34.655735,lng:135.5064042,
        desc:"Départ matinal. Onigiri au 7-Eleven dans le train.",tags:[],wc:null,
        transport:null,
@@ -1357,7 +1361,7 @@ const OSAKA_DAYS = {
        fromLat:34.8317,fromLng:135.4892,toLat:34.8457,toLng:135.4705},
       {id:"katsuo-ji",num:1,time:"09:45",name:"Katsuō-ji — Temple des Daruma 🎎",type:"Temple bouddhiste · Nature",emoji:"🎎",
        address:"2 Katsuo-ji, Minoh, Osaka 562-0002",lat:34.8457,lng:135.4705,
-       img:"https://images.pexels.com/photos/5598520/pexels-photo-5598520.jpeg?auto=compress&cs=tinysrgb&w=600",
+       img:"https://media.gettyimages.com/id/482910612/fr/photo/minomo-japan-daruma-dolls-which-are-dedicated-to-the-temple-is-seen-at-katsuoji-temple-on.jpg?s=612x612&w=0&k=20&c=Fti1w2bdf-6EpRDd5RhrMzOPEJzxwklJMCs8U969HYU=",
        desc:"Temple du VIIIe siècle dans la forêt de Minoh. Milliers de daruma rouges partout ! Lac, cascade, pagode. Les enfants achètent un daruma et colorient un œil pour leur vœu. 500¥ (~3€) adulte.",
        tags:["payant","kids","incontournable"],wc:"Toilettes à l'entrée",
        photos:["https://media.gettyimages.com/id/2214646354/fr/photo/scenic-view-of-pagoda-of-katsuoji-temple-among-red-maple-trees-in-autumn-osaka-japan.jpg?s=612x612&w=0&k=20&c=rN1oHsLq-CFoGmT9Ph3NcwU0MrLI173Pqgx2QFqd0ro=","https://media.gettyimages.com/id/2250128988/fr/photo/colorful-maple-trees-background-in-autumn-katsuoji-temple-osaka-japan.jpg?s=612x612&w=0&k=20&c=o0-nFeTSZmJZVoyMw8q-Oa8OvfeMnVNwQjsvadEqNRQ="],
@@ -1405,7 +1409,11 @@ const OSAKA_DAYS = {
        desc:"Dernière soirée à Osaka. Dotonbori ou Hozenji selon l'humeur. Faire les bagages — départ Kyoto demain !",
        tags:["repas"],wc:"Toilettes côté canal",
        photos:["https://images.pexels.com/photos/34438939/pexels-photo-34438939.jpeg?auto=compress&cs=tinysrgb&w=1200","https://images.pexels.com/photos/4456247/pexels-photo-4456247.jpeg?auto=compress&cs=tinysrgb&w=1200"],
-       transport:{icon:"🚶",text:"15 min à pied Shinsekai → Dotonbori",detail:""}}
+       transport:{icon:"🚶",text:"15 min à pied Shinsekai → Dotonbori",detail:""}},
+      {id:"tr-dotonbori-hotel-j3",num:null,time:"21:30",name:"Dotonbori → BON Condominium",type:"Transit",emoji:"🚶",isTransit:true,
+       address:"Dotonbori → BON Condominium Namba Ebisu",lat:34.6687,lng:135.5013,
+       transport:{icon:"🚶",from:"Dotonbori",to:"BON Condominium Namba Ebisu",line:"À pied · 10 min",duration:"10 min",price:"Gratuit",note:"Longer le canal vers le sud — direction Ebisucho"},
+       fromLat:34.6687,fromLng:135.5013,toLat:34.6557,toLng:135.5064}
     ]
   },
   j4_osaka:{
@@ -1602,7 +1610,11 @@ const KYOTO_DAYS = {
        img:"https://images.pexels.com/photos/7526797/pexels-photo-7526797.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Retour à Pontocho pour le grand dîner du groupe. Restaurant avec terrasse kawayuka sur la rivière si possible. Réservation recommandée.",
        tags:["repas","incontournable"],wc:"Toilettes Ponto-cho",
-       transport:{icon:"🚇",text:"Métro Nijo-jo-mae → Karasuma-Oike, puis 10 min à pied",detail:"~230¥ (~1€)"}}
+       transport:{icon:"🚇",text:"Métro Nijo-jo-mae → Karasuma-Oike, puis 10 min à pied",detail:"~230¥ (~1€)"}},
+      {id:"tr-pontocho-hotel-j6",num:null,time:"21:30",name:"Pontocho → Hôtel Kyoto",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Pontocho → Hôtel Kyoto",lat:35.0074,lng:135.7694,
+       transport:{icon:"🚶",from:"Pontocho",to:"Hôtel Kyoto",line:"20 min à pied · longer la rivière Kamo vers le nord",duration:"20 min",price:"Gratuit",note:"Ou métro Keihan Gion-Shijo → Karasuma-Oike · 2 stations · ~230¥ (~1€)"},
+       fromLat:35.0074,fromLng:135.7694,toLat:35.0116,toLng:135.7680}
     ]
   },
   j7:{label:"J7 — Est de Kyoto & Adieux",date:"Mercredi 21 oct.",color:"#ef4444",
@@ -1643,7 +1655,11 @@ const KYOTO_DAYS = {
        img:"https://images.pexels.com/photos/28969414/pexels-photo-28969414.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Dernière soirée à Kyoto avant Tokyo demain. Dîner dans votre restaurant préféré de la semaine — ou un Kaiseki (repas traditionnel multi-services). Faites les bagages le soir !",
        tags:["repas","incontournable"],wc:"Dans les restaurants",
-       transport:{icon:"🚶",text:"5 min à pied depuis l'hôtel",detail:""}}
+       transport:{icon:"🚶",text:"5 min à pied depuis l'hôtel",detail:""}},
+      {id:"tr-gion-hotel-j7",num:null,time:"21:30",name:"Gion → Hôtel Kyoto",type:"Transit",emoji:"🚶",isTransit:true,
+       address:"Gion → Hôtel Kyoto",lat:35.0038,lng:135.7756,
+       transport:{icon:"🚶",from:"Gion",to:"Hôtel Kyoto",line:"15-20 min à pied",duration:"20 min",price:"Gratuit",note:"Longer Shijo-dori vers l'ouest · ou bus 100 (Kyoto sightseeing bus) · 2 arrêts"},
+       fromLat:35.0038,fromLng:135.7756,toLat:35.0116,toLng:135.7680}
     ]
   },
   j8_kyoto:{
@@ -1906,7 +1922,11 @@ const TOKYO_DAYS = {
        img:"https://images.pexels.com/photos/33701672/pexels-photo-33701672.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Golden Gai : 200 minibars thématiques dans 6 ruelles — chaque bar a 5-8 places max, chacun sa propre ambiance. Dîner dans les restaurants de Kabukicho. Les néons de Shinjuku la nuit sont absolument uniques.",
        tags:["repas","incontournable"],wc:"Toilettes publiques Kabukicho",
-       transport:{icon:"🚶",text:"5 min à pied depuis Omoide Yokocho",detail:"Traverser vers le côté est de la gare"}}
+       transport:{icon:"🚶",text:"5 min à pied depuis Omoide Yokocho",detail:"Traverser vers le côté est de la gare"}},
+      {id:"tr-goldengai-hotel-j8",num:null,time:"23:00",name:"Shinjuku → Hôtel Tokyo",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Shinjuku → Float Inn Shin-Okachimachi",lat:35.6940,lng:139.7040,
+       transport:{icon:"🚇",from:"Shinjuku (JY17)",to:"Shin-Okachimachi (A18)",line:"JR Yamanote → Akihabara · puis Hibiya Line 1 station",duration:"~25 min",price:"~250¥ (~2€)",note:"Ou taxi direct ~1500-2000¥ (~13€) si retour tardif"},
+       fromLat:35.6940,fromLng:139.7040,toLat:35.7072,toLng:139.7793}
     ]
   },
   j9:{
@@ -1954,7 +1974,11 @@ const TOKYO_DAYS = {
        img:"https://images.pexels.com/photos/13826151/pexels-photo-13826151.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Vendredi soir à Shibuya — parfait pour le clubbing ! Womb (Shibuya) : 4 dancefloors techno/house, l'une des meilleures références d'Asie. Contact (Shibuya) : plus underground et pointu. AGEHA (Shinkiba) : le plus grand club de Tokyo. Les clubs ouvrent à 23h. Entrée : 3000-5000¥ (~31€). Prévoir taxi retour.",
        tags:[],wc:"Dans les clubs",
-       transport:{icon:"🚶",text:"5 min à pied depuis les restaurants de Shibuya",detail:"Taxi retour recommandé (4h-6h du matin, ~2000-4000¥ (~25€))"}}
+       transport:{icon:"🚶",text:"5 min à pied depuis les restaurants de Shibuya",detail:"Taxi retour recommandé (4h-6h du matin, ~2000-4000¥ (~25€))"}},
+      {id:"tr-club-hotel-j9",num:null,time:"04:00",name:"Shibuya → Hôtel Tokyo",type:"Transit",emoji:"🚕",isTransit:true,
+       address:"Shibuya → Float Inn Shin-Okachimachi",lat:35.6550,lng:139.6985,
+       transport:{icon:"🚕",from:"Shibuya",to:"Float Inn Shin-Okachimachi",line:"Taxi direct · recommandé à cette heure",duration:"~25 min",price:"~2000-3000¥ (~20€)",note:"Métro reprend à 5h · ou taxi de nuit"},
+       fromLat:35.6550,fromLng:139.6985,toLat:35.7072,toLng:139.7793}
     ]
   },
   j10:{
@@ -1997,7 +2021,11 @@ const TOKYO_DAYS = {
        img:"https://static.tripzilla.ph/media/250883/conversions/01JY5TS1RVEMSACM5CHZQZD8F0-w1024.webp",
        desc:"12 200 feux d'artifice lancés depuis des barges sur la baie de Tokyo. Rainbow Bridge et les gratte-ciels en fond. Première édition depuis 11 ans ! Durée ~1h. Prévoyez chaud.",
        tags:["kids","incontournable"],wc:"Toilettes sur site",
-       transport:{icon:"🚇",text:"Retour : Yurikamome bondée — prévoir 30-40 min d'attente",detail:"Alternative : Rinkai Line depuis Shinonome, ou taxi"}}
+       transport:{icon:"🚇",text:"Retour : Yurikamome bondée — prévoir 30-40 min d'attente",detail:"Alternative : Rinkai Line depuis Shinonome, ou taxi"}},
+      {id:"tr-feux-hotel-j10",num:null,time:"21:30",name:"Tokyo Bay → Hôtel Tokyo",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Harumi → Float Inn Shin-Okachimachi",lat:35.6450,lng:139.7820,
+       transport:{icon:"🚇",from:"Harumi (Tokyo Bay)",to:"Float Inn Shin-Okachimachi",line:"Yurikamome → Shimbashi · JR Yamanote → Akihabara · Hibiya Line 1 station",duration:"~50 min (+ attente)",price:"~500¥ (~3€)",note:"⚠️ Foule intense après les feux — restez patients, ça avance vite"},
+       fromLat:35.6450,fromLng:139.7820,toLat:35.7072,toLng:139.7793}
     ]
   },
   j12:{
@@ -2114,7 +2142,11 @@ const TOKYO_DAYS = {
        address:"Tokyo",lat:35.6762,lng:139.6503,
        img:"https://images.pexels.com/photos/28057691/pexels-photo-28057691.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Dîner selon l'envie. Pour sortir le soir : Shimokitazawa (bars alternatifs, concerts live) ou Roppongi (clubs internationaux).",
-       tags:["repas"],wc:"Dans les restaurants",transport:null}
+       tags:["repas"],wc:"Dans les restaurants",transport:null},
+      {id:"tr-soiree-hotel-j11",num:null,time:"22:00",name:"Retour Hôtel Tokyo",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Tokyo → Float Inn Shin-Okachimachi",lat:35.6762,lng:139.6503,
+       transport:{icon:"🚇",from:"Quartier soirée",to:"Float Inn Shin-Okachimachi (A18)",line:"Métro Hibiya Line ou Ginza Line selon quartier",duration:"~20-30 min",price:"~200-300¥ (~2€)",note:"Vérifiez le dernier métro (env. minuit) — ou taxi si retard"},
+       fromLat:35.6762,fromLng:139.6503,toLat:35.7072,toLng:139.7793}
     ]
   },
   j13:{
@@ -2151,7 +2183,11 @@ const TOKYO_DAYS = {
        address:"Roppongi / Ginza, Tokyo",lat:35.6628,lng:139.7308,
        img:"https://images.pexels.com/photos/11307630/pexels-photo-11307630.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Le grand dîner final du voyage ! Restaurant avec vue sur Tokyo si possible. Célébrez deux semaines au Japon autour d\'un bon repas.",
-       tags:["repas","incontournable"],wc:"Dans le restaurant",transport:null}
+       tags:["repas","incontournable"],wc:"Dans le restaurant",transport:null},
+      {id:"tr-diner-hotel-j13",num:null,time:"22:00",name:"Roppongi → Hôtel Tokyo",type:"Transit",emoji:"🚇",isTransit:true,
+       address:"Roppongi/Ginza → Float Inn Shin-Okachimachi",lat:35.6628,lng:139.7308,
+       transport:{icon:"🚇",from:"Roppongi / Ginza",to:"Float Inn Shin-Okachimachi (A18)",line:"Hibiya Line directe depuis Roppongi (H04) ou Ginza (H08) → Shin-Okachimachi (A18)",duration:"~15-20 min",price:"~200¥ (~1€)",note:"Ligne directe Hibiya — très pratique depuis Roppongi ou Ginza"},
+       fromLat:35.6628,fromLng:139.7308,toLat:35.7072,toLng:139.7793}
     ]
   },
   j14:{
