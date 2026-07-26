@@ -964,7 +964,62 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
     <div class="home-title">Japon 2026</div>
     <div class="home-sub">15 — 28 octobre · 14 jours · 4 familles</div>
   </div>
-  <div class="cities-list" id="cities-list"></div>
+  <div class="cities-list" id="cities-list">
+    <div class="city-card" id="card-osaka">
+      <div class="city-card-bg" style="background-image:url('https://images.pexels.com/photos/34729046/pexels-photo-34729046.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <div class="city-card-top">
+          <span class="city-emoji-big">🏯</span>
+          <div>
+            <div class="city-card-name">Osaka</div>
+            <div class="city-card-dates">15 — 18 oct. 2026 · 3 nuits</div>
+          </div>
+        </div>
+        <div class="city-card-bottom">
+          <span class="city-card-days">4 journées</span>
+          <span class="city-card-arrow">›</span>
+        </div>
+      </div>
+      <div class="city-bar osaka-bar"></div>
+    </div>
+    <div class="city-card" id="card-kyoto">
+      <div class="city-card-bg" style="background-image:url('https://images.pexels.com/photos/36940470/pexels-photo-36940470.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <div class="city-card-top">
+          <span class="city-emoji-big">⛩️</span>
+          <div>
+            <div class="city-card-name">Kyoto</div>
+            <div class="city-card-dates">18 — 22 oct. 2026 · 4 nuits</div>
+          </div>
+        </div>
+        <div class="city-card-bottom">
+          <span class="city-card-days">5 journées</span>
+          <span class="city-card-arrow">›</span>
+        </div>
+      </div>
+      <div class="city-bar kyoto-bar"></div>
+    </div>
+    <div class="city-card" id="card-tokyo">
+      <div class="city-card-bg" style="background-image:url('https://images.pexels.com/photos/19693257/pexels-photo-19693257.jpeg?auto=compress&cs=tinysrgb&w=800')"></div>
+      <div class="city-card-overlay"></div>
+      <div class="city-card-content">
+        <div class="city-card-top">
+          <span class="city-emoji-big">🗼</span>
+          <div>
+            <div class="city-card-name">Tokyo</div>
+            <div class="city-card-dates">22 — 28 oct. 2026 · 6 nuits</div>
+          </div>
+        </div>
+        <div class="city-card-bottom">
+          <span class="city-card-days">7 journées</span>
+          <span class="city-card-arrow">›</span>
+        </div>
+      </div>
+      <div class="city-bar tokyo-bar"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════ -->
@@ -2282,37 +2337,21 @@ window.goBack = goBack;
 // ── ÉCRAN ACCUEIL ──
 function renderHome() {
   const list = document.getElementById('cities-list');
-  list.innerHTML = '';
 
+  // Attacher les événements click sur les cards statiques
   Object.keys(CITIES).forEach(ck => {
-    const city = CITIES[ck];
-    const nDays = city.dayKeys.length;
-    const color = CITY_COLORS[ck] || '#fff';
-    const img = CITY_IMAGES[ck] || '';
-    const div = document.createElement('div');
-    div.className = 'city-card';
-    div.innerHTML = `
-      <div class="city-card-bg" style="background-image:url('${img}')"></div>
-      <div class="city-card-overlay"></div>
-      <div class="city-card-content">
-        <div class="city-card-top">
-          <span class="city-emoji-big">${city.emoji}</span>
-          <div>
-            <div class="city-card-name">${city.label}</div>
-            <div class="city-card-dates">${city.dates}</div>
-          </div>
-        </div>
-        <div class="city-card-bottom">
-          <span class="city-card-days">${nDays} journée${nDays>1?'s':''}</span>
-          <span class="city-card-arrow">›</span>
-        </div>
-      </div>
-      <div class="city-bar ${ck}-bar"></div>`;
-    div.onclick = () => openCity(ck);
-    list.appendChild(div);
+    const card = document.getElementById('card-' + ck);
+    if(card) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        openCity(ck);
+      }, {passive:false});
+      card.addEventListener('click', () => openCity(ck));
+    }
   });
 
-  // Boutons actions — créés via DOM pour éviter tout problème d'échappement
+  // Boutons actions — créés via DOM
   document.querySelectorAll('.home-action-btns').forEach(el => el.remove());
   const btnWrap = document.createElement('div');
   btnWrap.className = 'home-action-btns';
@@ -2320,15 +2359,15 @@ function renderHome() {
   const buttons = [
     [
       {icon:'📋', label:'Réservations',  sub:'Transports · Activités · Restos', action:()=>showScreen('resa')},
-      {icon:'💬', label:'Commentaires',  sub:'Groupe · Questions',              action:()=>openComments(), subId:'comments-count'},
+      {icon:'💬', label:'Commentaires',  sub:'Groupe · Questions', action:()=>openComments(), subId:'comments-count'},
     ],
     [
       {icon:'🚨', label:'Urgences & Santé', sub:'Numéros · Hôpitaux · Médicaments', action:()=>showScreen('urgences')},
-      {icon:'📱', label:'Applis Utiles',    sub:'Navigation · Traduction · Paiement', action:()=>showScreen('applis')},
+      {icon:'📱', label:'Applis Utiles', sub:'Navigation · Traduction · Paiement', action:()=>showScreen('applis')},
     ],
     [
-      {icon:'🗺️', label:'Activités Libres', sub:'Osaka · Kyoto · Tokyo',           action:()=>showScreen('optionnel')},
-      {icon:'🍜', label:'Restaurants',      sub:'Adresses · Photos · Spécialités', action:()=>showScreen('restos')},
+      {icon:'🗺️', label:'Activités Libres', sub:'Osaka · Kyoto · Tokyo', action:()=>showScreen('optionnel')},
+      {icon:'🍜', label:'Restaurants', sub:'Adresses · Photos · Spécialités', action:()=>showScreen('restos')},
     ],
   ];
 
@@ -2341,7 +2380,6 @@ function renderHome() {
       btn.innerHTML = '<span class="home-action-icon">' + cfg.icon + '</span>' +
         '<div class="home-action-label">' + cfg.label + '</div>' +
         '<div class="home-action-sub"' + (cfg.subId ? ' id="' + cfg.subId + '"' : '') + '>' + cfg.sub + '</div>';
-      // Utiliser touchend + click pour couvrir tous les cas mobile/desktop
       let touched = false;
       btn.addEventListener('touchend', (e) => {
         e.preventDefault();
