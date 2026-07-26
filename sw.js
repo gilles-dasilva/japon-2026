@@ -3,7 +3,7 @@
 // Changer le numéro de version force la mise à jour pour tous
 // ============================================================
 
-const VERSION = '2026-v71';
+const VERSION = '2026-v72';
 const CACHE = 'japon-2026-' + VERSION;
 const CACHE_IMGS = CACHE + '-imgs';
 const CACHE_TILES = CACHE + '-tiles';
@@ -109,6 +109,12 @@ const PRECACHE_IMGS = [
   'https://travel.rakuten.com/contents/sites/contents/files/styles/max_1300x1300/public/2024-08/roppongi-hills-christmas-market-guide_4.jpg?itok=Uz1CL51P',
   'https://umamibites.com/wp-content/uploads/2024/09/UB236_10.jpg',
   'https://www.worldhistory.org/uploads/images/6755.jpg?v=1599464703-0',
+  'https://images.pexels.com/photos/17234727/pexels-photo-17234727.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/37746985/pexels-photo-37746985.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/15924875/pexels-photo-15924875.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/15924872/pexels-photo-15924872.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/32107693/pexels-photo-32107693.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/37800171/pexels-photo-37800171.jpeg?auto=compress&cs=tinysrgb&w=1200',
 ];
 
 // À l'installation : cache index.html + précache toutes les images

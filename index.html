@@ -1275,7 +1275,9 @@ const OSAKA_DAYS = {
        address:"1-1 Osakajo, Chuo Ward, Osaka 540-0002",lat:34.6864797,lng:135.5262114,
        img:"https://images.pexels.com/photos/30813051/pexels-photo-30813051.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Forteresse du XVIe siècle, douves et jardins. Parc immense pour les enfants. Montée optionnelle : 600¥ (~4€)/adulte, gratuit -15 ans. 1h30-2h.",
-       tags:["gratuit","kids","incontournable"],wc:"Nombreux blocs sanitaires dans le parc",transport:null},
+       tags:["gratuit","kids","incontournable"],wc:"Nombreux blocs sanitaires dans le parc",
+       photos:["https://images.pexels.com/photos/17234727/pexels-photo-17234727.jpeg?auto=compress&cs=tinysrgb&w=1200","https://images.pexels.com/photos/37746985/pexels-photo-37746985.jpeg?auto=compress&cs=tinysrgb&w=1200"],
+       transport:null},
       {id:"tr-castle-namba",num:null,time:"12:15",name:"Château → Namba",type:"Transit",emoji:"🚇",isTransit:true,
        address:"Tanimachi 4-chome → Namba",lat:34.6847,lng:135.5198,
        transport:{icon:"🚇",from:"Tanimachi 4-chome",to:"Namba",line:"Ligne Tanimachi (mauve) → Midosuji (rouge)",duration:"15 min",price:"~230¥ (~1€)",note:"Descendre à Namba Station"},
@@ -1285,24 +1287,28 @@ const OSAKA_DAYS = {
        img:"https://images.pexels.com/photos/27516858/pexels-photo-27516858.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Tête de lion géante (10m !) — les enfants adoreront. Gratuit, 20-30 min.",
        tags:["gratuit","kids"],wc:"Parc Namba avant",
+       photos:["https://images.pexels.com/photos/15924875/pexels-photo-15924875.jpeg?auto=compress&cs=tinysrgb&w=1200","https://images.pexels.com/photos/15924872/pexels-photo-15924872.jpeg?auto=compress&cs=tinysrgb&w=1200"],
        transport:{icon:"🚶",text:"Namba Station (M20) → Namba Yasaka Jinja · 12 min à pied",detail:"Sortie 12 direction sud-ouest · Longer Namba-suji vers le sud · Le sanctuaire est reconnaissable à sa tête de lion géante !"}},
       {id:"kuromon",num:3,time:"13:30",name:"Kuromon Ichiba — Déjeuner",type:"Marché · Gastronomie",emoji:"🐟",
        address:"2-21 Nipponbashi, Chuo Ward, Osaka 542-0073",lat:34.6653529,lng:135.5062406,
        img:"https://images.pexels.com/photos/2450697/pexels-photo-2450697.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"180 boutiques ! Wagyu, fraises géantes, fruits de mer. Déjeuner idéal avec les enfants.",
        tags:["repas","kids","incontournable"],wc:"Toilettes à l'intérieur du marché",
+       photos:["https://images.pexels.com/photos/32107693/pexels-photo-32107693.jpeg?auto=compress&cs=tinysrgb&w=1200","https://images.pexels.com/photos/37800171/pexels-photo-37800171.jpeg?auto=compress&cs=tinysrgb&w=1200"],
        transport:{icon:"🚶",text:"Namba Yasaka Jinja → Kuromon Ichiba · 8 min à pied",detail:"Direction nord-est vers Nipponbashi · Longer Sennichimae-dori puis tourner à droite"}},
       {id:"doguya",num:4,time:"15:00",name:"Rue Doguya-suji",type:"Shopping · Curiosité",emoji:"🍴",
        address:"9 Nanbasennichimae, Chuo Ward, Osaka 542-0075",lat:34.664014,lng:135.5035063,
        img:"https://images.pexels.com/photos/31384203/pexels-photo-31384203.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Ustensiles cuisine + faux plats en plastique ultra-réalistes. Souvenirs originaux.",
        tags:["gratuit","shopping","kids"],wc:"FamilyMart au bout de la rue",
+       photos:["https://www.kanpai.fr/sites/default/files/uploads/2020/07/sennichimae-doguyasuji-osaka-4.jpg","https://www.kanpai.fr/sites/default/files/styles/og/public/uploads/2020/07/sennichimae-doguyasuji-osaka-6.jpg"],
        transport:{icon:"🚶",text:"5 min depuis Kuromon",detail:"Direction ouest"}},
       {id:"shinsaibashi",num:5,time:"16:00",name:"Shinsaibashi & America-Mura",type:"Shopping · Culture",emoji:"🛍️",
        address:"2-2-22 Shinsaibashisuji, Chuo Ward, Osaka 542-0085",lat:34.6708677,lng:135.5013862,
        img:"https://images.pexels.com/photos/27082677/pexels-photo-27082677.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Arcade couverte 600m + America-Mura : street art, friperies, cafés branchés.",
        tags:["gratuit","shopping"],wc:"Grands magasins Daimaru",
+       photos:["https://media.gettyimages.com/id/1348049282/fr/photo/des-foules-de-pi%C3%A9tons-japonais-attendent-au-centre-commercial-de-nuit-traversant-osaka.jpg?s=612x612&w=0&k=20&c=ygX9vd70EjTCkj0kfSjCtBSPjoe5zJs_GR0llHCnhRY=","https://media.gettyimages.com/id/2255203006/fr/photo/shinsaibashi-shopping-street-%C3%A0-osaka.jpg?s=612x612&w=0&k=20&c=FhaSTUYBz81sECmuczY_HnSHRKRxEBX4JAVCq3jhYbQ="],
        transport:{icon:"🚶",text:"15 min depuis Doguya-suji",detail:"Direction nord par Midosuji"}},
       {id:"dotonbori-j2",num:6,time:"19:00",name:"Dotonbori — Dîner",type:"Gastronomie · Soirée",emoji:"🍜",
        address:"1-9 Dotonbori, Chuo Ward, Osaka 542-0071",lat:34.6687234,lng:135.5012971,
@@ -2419,6 +2425,12 @@ function openDay(ck, dk) {
       return `<span class="step-tag tag-${C[t]||t}">${L[t]||t}</span>`;
     }).join('');
 
+    // Transport AVANT l'activité (depuis l'activité précédente)
+    if(step.transport && !step.isTransit && !step.isHotel) {
+      const t = step.transport;
+      html += `<div class="transport-row"><strong>${t.icon} ${t.text||''}</strong><br>${t.detail||''}</div>`;
+    }
+
     html += '<div class="step-card">' +
       '<div class="step-header" onclick="openLightboxStep(\'' + step.id + '\',\'' + ck + '\',\'' + dk + '\')">' +
         '<div class="step-num-badge" style="' + numStyle + '">' + numDisplay + '</div>' +
@@ -2435,11 +2447,6 @@ function openDay(ck, dk) {
       (step.wc ? '<div class="wc-badge">🚻 ' + step.wc + '</div>' : '') +
       (tagsHtml ? '<div class="step-tags">' + tagsHtml + '</div>' : '') +
     '</div>';
-
-    if(step.transport && !step.isTransit && !step.isHotel) {
-      const t = step.transport;
-      html += `<div class="transport-row"><strong>${t.icon} ${t.text||''}</strong><br>${t.detail||''}</div>`;
-    }
   });
 
   html += `<div class="day-tip-box">${day.tip}</div><div style="height:20px"></div>`;
