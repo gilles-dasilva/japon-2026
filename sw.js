@@ -3,7 +3,7 @@
 // Changer le numéro de version force la mise à jour pour tous
 // ============================================================
 
-const VERSION = '2026-v76';
+const VERSION = '2026-v77';
 const CACHE = 'japon-2026-' + VERSION;
 const CACHE_IMGS = CACHE + '-imgs';
 const CACHE_TILES = CACHE + '-tiles';
