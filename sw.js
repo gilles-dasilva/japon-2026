@@ -3,7 +3,7 @@
 // Changer le numéro de version force la mise à jour pour tous
 // ============================================================
 
-const VERSION = '2026-v84';
+const VERSION = '2026-v85';
 const CACHE = 'japon-2026-' + VERSION;
 const CACHE_IMGS = CACHE + '-imgs';
 const CACHE_TILES = CACHE + '-tiles';
@@ -165,15 +165,10 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // index.html — Network First (toujours la dernière version)
+  // index.html — TOUJOURS depuis le réseau, jamais en cache
   if(url.pathname.endsWith('/') || url.pathname.endsWith('index.html')) {
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          const clone = response.clone();
-          caches.open(CACHE).then(c => c.put(event.request, clone));
-          return response;
-        })
+      fetch(event.request, {cache: 'no-store'})
         .catch(() => caches.match('./index.html'))
     );
     return;
