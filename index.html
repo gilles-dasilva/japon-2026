@@ -3925,12 +3925,8 @@ function safeRender(name, fn) {
     }
   }
 }
-// Forcer renderHome après chargement complet
-if(document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => safeRender('renderHome', renderHome));
-} else {
-  safeRender('renderHome', renderHome);
-}
+// Forcer renderHome à s'exécuter après chargement complet
+safeRender('renderHome', renderHome);
 safeRender('renderResa',      renderResa);
 safeRender('renderUrgences',  renderUrgences);
 safeRender('renderApplis',    renderApplis);
