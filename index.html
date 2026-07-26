@@ -3687,10 +3687,10 @@ function renderOptionel() {
         return '<span class="step-tag tag-' + (C[t]||t) + '">' + (L[t]||t) + '</span>';
       }).join('');
       html += '<div class="resa-card">';
-      html += '<div style="cursor:pointer" onclick="openOptionnelLightbox('' + item.id + '')">';
+      html += '<div style="cursor:pointer" onclick="openOptionnelLightbox(\'' + item.id + '\')">'; 
       html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">';
       html += '<span style="font-size:24px">' + item.emoji + '</span>';
-      html += '<div style="flex:1"><div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text)">' + item.name + '</div>';
+      html += '<div style="flex:1"><div style="font-family:Playfair Display,serif;font-size:14px;font-weight:700;color:var(--text)">' + item.name + '</div>';
       html += '<div style="font-size:11px;color:var(--gold)">' + item.type + '</div>';
       html += '<div style="font-size:11px;color:var(--muted);margin-top:2px">📍 ' + item.address + '</div></div></div>';
       if(item.img) html += '<img src="' + item.img + '" style="width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:8px">';
@@ -3716,7 +3716,7 @@ function openOptionnelLightbox(id) {
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;';
   function render() {
-    overlay.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;"><button onclick="this.closest('div[style*=fixed]').remove()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px">✕ Fermer</button><div style="color:#fff;font-size:13px">' + (slideIdx+1) + ' / ' + allPhotos.length + '</div></div>' +
+    overlay.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;"><button onclick="this.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px">✕ Fermer</button><div style="color:#fff;font-size:13px">' + (slideIdx+1) + ' / ' + allPhotos.length + '</div></div>' +
       '<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:16px;padding:0 16px">' +
       (allPhotos.length>1?'<button onclick="sl(-1)" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;flex-shrink:0">‹</button>':'') +
       '<img src="' + allPhotos[slideIdx] + '" style="max-width:100%;max-height:60vh;object-fit:contain;border-radius:12px">' +
@@ -3747,7 +3747,7 @@ function renderRestos() {
       html += '<div style="cursor:pointer" onclick="openRestoLightbox('' + item.id + '')">';
       html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">';
       html += '<span style="font-size:24px">' + item.emoji + '</span>';
-      html += '<div style="flex:1"><div style="display:flex;align-items:center;gap:6px"><div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text)">' + item.name + '</div>' + (item.must?'<span style="font-size:10px;background:#d4af37;color:#000;padding:2px 6px;border-radius:4px;font-weight:700">★ MUST</span>':'') + '</div>';
+      html += '<div style="flex:1"><div style="display:flex;align-items:center;gap:6px"><div style="font-family:Playfair Display,serif;font-size:14px;font-weight:700;color:var(--text)">' + item.name + '</div>' + (item.must?'<span style="font-size:10px;background:#d4af37;color:#000;padding:2px 6px;border-radius:4px;font-weight:700">★ MUST</span>':'') + '</div>';
       html += '<div style="font-size:11px;color:var(--gold)">' + item.type + '</div>';
       html += '<div style="font-size:11px;color:var(--muted);margin-top:2px">📍 ' + item.address + '</div>';
       html += '<div style="font-size:11px;margin-top:3px">' + budgetIcon(item.budget) + ' ' + item.budget + '</div></div></div>';
@@ -3959,21 +3959,16 @@ function renderApplis(){
 }
 
 // ── INIT ──
-try {
-  renderHome();
-  renderResa();
-  renderUrgences();
-  renderApplis();
-  renderOptionel();
-  renderRestos();
-} catch(err) {
-  console.error('[INIT ERROR]', err);
-  document.getElementById('cities-list').innerHTML = 
-    '<div style="padding:20px;color:#f87171;font-size:13px;line-height:1.6">' +
-    '<strong>Erreur de chargement:</strong><br>' + err.message + '<br><br>' +
-    '<pre style="font-size:10px;color:#fbbf24;overflow:auto">' + err.stack + '</pre>' +
-    '</div>';
+function safeRender(name, fn) {
+  try { fn(); }
+  catch(err) { console.error('[RENDER ERROR] ' + name + ':', err.message, err.stack); }
 }
+safeRender('renderHome',      renderHome);
+safeRender('renderResa',      renderResa);
+safeRender('renderUrgences',  renderUrgences);
+safeRender('renderApplis',    renderApplis);
+safeRender('renderOptionel',  renderOptionel);
+safeRender('renderRestos',    renderRestos);
 
 </script>
 
