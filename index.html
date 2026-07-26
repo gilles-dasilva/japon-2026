@@ -923,7 +923,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 .comment-submit{width:100%;padding:12px;background:rgba(212,175,55,0.15);border:1px solid var(--gold);border-radius:10px;color:var(--gold);font-size:14px;font-weight:700;cursor:pointer;font-family:"Lora",serif;}
 .home-action-btns{display:flex;flex-direction:column;gap:10px;padding:16px 16px calc(20px + var(--safe-bottom));}
 .home-action-row{display:flex;gap:10px;}
-.home-action-btn{flex:1;padding:14px 10px;border-radius:14px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:transform 0.15s;}
+.home-action-btn{flex:1;padding:14px 10px;border-radius:14px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:transform 0.15s;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 .home-action-btn:active{transform:scale(0.97);}
 .home-action-icon{font-size:22px;display:block;margin-bottom:4px;}
 .home-action-label{font-size:12px;font-weight:700;color:var(--text);}
@@ -1009,7 +1009,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
           <span class="city-card-arrow">›</span>
         </div>
       </div>
-      <div class="city-bar tokyo-bar"></div></div><div class="home-action-btns"><div class="home-action-row"><div class="home-action-btn" onclick="showScreen(&#39;resa&#39;)"><span class="home-action-icon">📋</span><div class="home-action-label">Réservations</div><div class="home-action-sub">Transports · Activités · Restos</div></div><div class="home-action-btn" onclick="openComments()"><span class="home-action-icon">💬</span><div class="home-action-label">Commentaires</div><div class="home-action-sub" id="comments-count">Groupe · Questions</div></div></div><div class="home-action-row"><div class="home-action-btn" onclick="showScreen(&#39;urgences&#39;)"><span class="home-action-icon">🚨</span><div class="home-action-label">Urgences &amp; Santé</div><div class="home-action-sub">Numéros · Hôpitaux · Médicaments</div></div><div class="home-action-btn" onclick="showScreen(&#39;applis&#39;)"><span class="home-action-icon">📱</span><div class="home-action-label">Applis Utiles</div><div class="home-action-sub">Navigation · Traduction · Paiement</div></div></div><div class="home-action-row"><div class="home-action-btn" onclick="showScreen(&#39;optionnel&#39;)"><span class="home-action-icon">🗺️</span><div class="home-action-label">Activités Libres</div><div class="home-action-sub">Osaka · Kyoto · Tokyo</div></div><div class="home-action-btn" onclick="showScreen(&#39;restos&#39;)"><span class="home-action-icon">🍜</span><div class="home-action-label">Restaurants</div><div class="home-action-sub">Adresses · Photos · Spécialités</div></div></div></div></div>
+      <div class="city-bar tokyo-bar"></div></div></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════ -->
@@ -2357,49 +2357,51 @@ function renderHome() {
     list.appendChild(div);
   });
 
-  // Boutons Réservations / Commentaires / Urgences / Applis — après les cartes
-  // Guard : supprimer si déjà présent (évite la duplication au rechargement SW)
+  // Boutons actions — créés via DOM pour éviter tout problème d'échappement
   document.querySelectorAll('.home-action-btns').forEach(el => el.remove());
   const btnWrap = document.createElement('div');
   btnWrap.className = 'home-action-btns';
-  btnWrap.innerHTML = [
-    '<div class="home-action-row">',
-      '<div class="home-action-btn" onclick="showScreen(\'resa\')">',
-        '<span class="home-action-icon">📋</span>',
-        '<div class="home-action-label">Réservations</div>',
-        '<div class="home-action-sub">Transports · Activités · Restos</div>',
-      '</div>',
-      '<div class="home-action-btn" onclick="openComments()">',
-        '<span class="home-action-icon">💬</span>',
-        '<div class="home-action-label">Commentaires</div>',
-        '<div class="home-action-sub" id="comments-count">Groupe · Questions</div>',
-      '</div>',
-    '</div>',
-    '<div class="home-action-row">',
-      '<div class="home-action-btn" onclick="showScreen(\'urgences\')">',
-        '<span class="home-action-icon">🚨</span>',
-        '<div class="home-action-label">Urgences & Santé</div>',
-        '<div class="home-action-sub">Numéros · Hôpitaux · Médicaments</div>',
-      '</div>',
-      '<div class="home-action-btn" onclick="showScreen(\'applis\')">',
-        '<span class="home-action-icon">📱</span>',
-        '<div class="home-action-label">Applis Utiles</div>',
-        '<div class="home-action-sub">Navigation · Traduction · Paiement</div>',
-      '</div>',
-    '</div>',
-    '<div class="home-action-row">',
-      '<div class="home-action-btn" onclick="showScreen(\'optionnel\')">',
-        '<span class="home-action-icon">🗺️</span>',
-        '<div class="home-action-label">Activités Libres</div>',
-        '<div class="home-action-sub">Osaka · Kyoto · Tokyo</div>',
-      '</div>',
-      '<div class="home-action-btn" onclick="showScreen(\'restos\')">',
-        '<span class="home-action-icon">🍜</span>',
-        '<div class="home-action-label">Restaurants</div>',
-        '<div class="home-action-sub">Adresses · Photos · Spécialités</div>',
-      '</div>',
-    '</div>',
-  ].join('');
+
+  const buttons = [
+    [
+      {icon:'📋', label:'Réservations',  sub:'Transports · Activités · Restos', action:()=>showScreen('resa')},
+      {icon:'💬', label:'Commentaires',  sub:'Groupe · Questions',              action:()=>openComments(), subId:'comments-count'},
+    ],
+    [
+      {icon:'🚨', label:'Urgences & Santé', sub:'Numéros · Hôpitaux · Médicaments', action:()=>showScreen('urgences')},
+      {icon:'📱', label:'Applis Utiles',    sub:'Navigation · Traduction · Paiement', action:()=>showScreen('applis')},
+    ],
+    [
+      {icon:'🗺️', label:'Activités Libres', sub:'Osaka · Kyoto · Tokyo',           action:()=>showScreen('optionnel')},
+      {icon:'🍜', label:'Restaurants',      sub:'Adresses · Photos · Spécialités', action:()=>showScreen('restos')},
+    ],
+  ];
+
+  buttons.forEach(row => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'home-action-row';
+    row.forEach(cfg => {
+      const btn = document.createElement('div');
+      btn.className = 'home-action-btn';
+      btn.innerHTML = '<span class="home-action-icon">' + cfg.icon + '</span>' +
+        '<div class="home-action-label">' + cfg.label + '</div>' +
+        '<div class="home-action-sub"' + (cfg.subId ? ' id="' + cfg.subId + '"' : '') + '>' + cfg.sub + '</div>';
+      // Utiliser touchend + click pour couvrir tous les cas mobile/desktop
+      let touched = false;
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        touched = true;
+        cfg.action();
+      }, {passive:false});
+      btn.addEventListener('click', () => {
+        if(!touched) cfg.action();
+        touched = false;
+      });
+      rowEl.appendChild(btn);
+    });
+    btnWrap.appendChild(rowEl);
+  });
+
   list.appendChild(btnWrap);
 }
 
