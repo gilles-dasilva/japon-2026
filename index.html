@@ -1009,7 +1009,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
           <span class="city-card-arrow">›</span>
         </div>
       </div>
-      <div class="city-bar tokyo-bar"></div></div><div class="home-action-btns"><div class="home-action-row"><div class="home-action-btn" onclick="showScreen(&#39;resa&#39;)"><span class="home-action-icon">📋</span><div class="home-action-label">Réservations</div><div class="home-action-sub">Transports · Activités · Restos</div></div><div class="home-action-btn" onclick="openComments()"><span class="home-action-icon">💬</span><div class="home-action-label">Commentaires</div><div class="home-action-sub" id="comments-count">Groupe · Questions</div></div></div><div class="home-action-row"><div class="home-action-btn" onclick="showScreen(&#39;urgences&#39;)"><span class="home-action-icon">🚨</span><div class="home-action-label">Urgences &amp; Santé</div><div class="home-action-sub">Numéros · Hôpitaux · Médicaments</div></div><div class="home-action-btn" onclick="showScreen(&#39;applis&#39;)"><span class="home-action-icon">📱</span><div class="home-action-label">Applis Utiles</div><div class="home-action-sub">Navigation · Traduction · Paiement</div></div></div></div></div>
+      <div class="city-bar tokyo-bar"></div></div><div class="home-action-btns"><div class="home-action-row"><div class="home-action-btn" onclick="showScreen(&#39;resa&#39;)"><span class="home-action-icon">📋</span><div class="home-action-label">Réservations</div><div class="home-action-sub">Transports · Activités · Restos</div></div><div class="home-action-btn" onclick="openComments()"><span class="home-action-icon">💬</span><div class="home-action-label">Commentaires</div><div class="home-action-sub" id="comments-count">Groupe · Questions</div></div></div><div class="home-action-row"><div class="home-action-btn" onclick="showScreen(&#39;urgences&#39;)"><span class="home-action-icon">🚨</span><div class="home-action-label">Urgences &amp; Santé</div><div class="home-action-sub">Numéros · Hôpitaux · Médicaments</div></div><div class="home-action-btn" onclick="showScreen(&#39;applis&#39;)"><span class="home-action-icon">📱</span><div class="home-action-label">Applis Utiles</div><div class="home-action-sub">Navigation · Traduction · Paiement</div></div></div><div class="home-action-row"><div class="home-action-btn" onclick="showScreen('optionnel')"><span class="home-action-icon">🗺️</span><div class="home-action-label">Activités Libres</div><div class="home-action-sub">Osaka · Kyoto · Tokyo</div></div><div class="home-action-btn" onclick="showScreen('restos')"><span class="home-action-icon">🍜</span><div class="home-action-label">Restaurants</div><div class="home-action-sub">Adresses · Photos · Spécialités</div></div></div></div></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════ -->
@@ -1059,6 +1059,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
     <button class="tool-btn" id="btn-toilettes" onclick="toggleToilettes()">🚻 Toilettes</button>
     <button class="tool-btn" id="btn-konbini" onclick="toggleKonbini()">🏪 Konbini</button>
     <button class="tool-btn" id="btn-stations" onclick="toggleStations()">🚇 Stations</button>
+    <button class="tool-btn" id="btn-restos" onclick="toggleRestos()">🍜 Restos</button>
     <button class="tool-btn" id="btn-anim" onclick="toggleAnimation()">▶ Animer</button>
   </div>
 </div>
@@ -1070,6 +1071,25 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
     <div><div class="header-title">🚨 Urgences &amp; Santé</div></div>
   </div>
   <div class="resa-scroll" id="urgences-content"><div class="resa-cat"><div class="resa-cat-title" style="color:#ef4444">🚑 Numéros d'urgence</div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🚒</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Ambulance / Pompiers</div><div style="font-family:Playfair Display,serif;font-size:22px;color:#ef4444;font-weight:700;">119</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">👮</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Police</div><div style="font-family:Playfair Display,serif;font-size:22px;color:#ef4444;font-weight:700;">110</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏥</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Consulat de France (Tokyo)</div><div style="font-size:13px;color:var(--text);line-height:1.5;">+81 (0)3 5798 6000</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">4-11-44 Minami-Azabu, Minato-ku, Tokyo</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🌐</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Numéro d'urgence universel</div><div style="font-size:13px;color:var(--text);line-height:1.5;">#7119 (en anglais)</div></div></div></div></div><div class="resa-cat"><div class="resa-cat-title" style="color:#f97316">🏥 Hôpitaux avec interprètes</div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏨</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Tokyo Medical &amp; Surgical Clinic</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Roppongi — anglais &amp; français</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">+81 3-3436-3028</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏨</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">St. Luke's International Hospital</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Tsukiji — ligne francophone directe</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">+81 3-5550-7166 · Demandez "French interpreter"</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏨</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Osaka Red Cross Hospital</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Tennoji — proche votre hôtel</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">+81 6-6774-5111</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏨</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Kyoto City Hospital</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Nakagyo Ward</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">+81 75-311-5311</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">📱</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Application recommandée</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Safety Tips — alertes séismes &amp; hôpitaux proches</div></div></div></div></div><div class="resa-cat"><div class="resa-cat-title" style="color:#10b981">💊 Médicaments</div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🚫</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Médicaments INTERDITS au Japon</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Codéine · Vicks (pseudoéphédrine) · Sudafed · Actifed</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">✅</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Autorisés sans problème</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Paracétamol (Doliprane) · Ibuprofène · Antihistaminiques</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">📋</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Conseil</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Emportez les ordonnances originales et la notice en français pour tout médicament</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏪</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Pharmacies japonaises (Kusuri)</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Matsumoto Kiyoshi · Welcia · Sundrug — ouvertes 24h/24 dans les gares</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">💰</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Prix consultation médicale</div><div style="font-size:13px;color:var(--text);line-height:1.5;">5 000¥ (~31€) à 15 000¥ (~94€) sans assurance · Urgences : 20 000¥ (~125€) et plus</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🩸</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Groupe sanguin</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Notez le groupe sanguin de chaque membre du groupe dans vos contacts téléphoniques</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">📸</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Cartes Vitales &amp; Passeports</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Photographiez-les et mettez-les dans Google Drive ou iCloud AVANT le départ</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🇯🇵</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Allergies médicamenteuses en japonais</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Allergie aux antibiotiques : 抗生物質アレルギー · Pénicilline : ペニシリン · Aspirine : アスピリンアレルギー · Arachides : ピーナッツアレルギー · Lactose : 乳糖不耐症 · Gluten : グルテンアレルギー</div></div></div></div></div><div class="resa-cat"><div class="resa-cat-title" style="color:#8b5cf6">🛡️ Assurance voyage</div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">⚠️</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Indispensable</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Souscrivez une assurance avec couverture médicale à l'étranger</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">💰</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Prix indicatif (14 jours)</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Adulte : ~50€ · Enfant : ~40€</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏢</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Recommandé</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Chapka · ACS · AXA Travel Insurance</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">📞</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Numéro assistance Chapka</div><div style="font-size:13px;color:var(--text);line-height:1.5;">+33 3 20 20 92 09 (24h/24)</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🇫🇷</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Ministère Affaires Étrangères FR (24h/24)</div><div style="font-size:13px;color:var(--text);line-height:1.5;">+33 1 77 86 77 86</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Depuis l'étranger — urgences consulaires</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">📸</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">En cas d'urgence</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Photographiez votre carte d'assurance et la mettez en favori sur votre téléphone</div></div></div></div></div><div class="resa-cat"><div class="resa-cat-title" style="color:#f59e0b">🌋 Sécurité &amp; Catastrophes naturelles</div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">📱</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Application Safety Tips</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Alertes séismes, tsunamis et typhons en temps réel — gratuite</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🏃</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">En cas de séisme</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Restez calme · Mettez-vous sous une table · NE sortez PAS dans la rue</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🌊</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Alerte tsunami</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Montez en hauteur immédiatement · Suivez les panneaux verts "Evacuation Route"</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">🗺️</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Plans d'évacuation</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Affichés dans tous les hôtels et gares — repérez-les à l'arrivée</div></div></div></div></div><div class="resa-cat"><div class="resa-cat-title" style="color:#ec4899">🛂 Vol et perte de passeport</div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">📸</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Avant le départ OBLIGATOIRE</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Photographiez votre passeport et stockez dans Google Drive ou iCloud · Envoyez-le aussi par email</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">1️⃣</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Étape 1 — Signaler à la police</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Rendez-vous au poste de police le plus proche · Demandez un "Lost Property Certificate"</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">2️⃣</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Étape 2 — Consulat de France</div><div style="font-size:13px;color:var(--text);line-height:1.5;">4-11-44 Minami-Azabu, Minato-ku, Tokyo · +81 (0)3 5798 6000 · Lun-Ven 9h-12h30</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">3️⃣</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Étape 3 — Passeport urgence</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Le consulat délivre un laissez-passer consulaire en 24-48h pour le retour en France</div></div></div></div><div class="resa-card"><div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-size:20px;flex-shrink:0">💡</span><div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:2px;">Conseil</div><div style="font-size:13px;color:var(--text);line-height:1.5;">Gardez une copie papier séparément de l'original dans un autre bagage</div></div></div></div></div></div>
+</div>
+
+
+<!-- ÉCRAN ACTIVITÉS LIBRES -->
+<div class="screen" id="screen-optionnel">
+  <div class="app-header">
+    <button class="btn-back" onclick="goBack('home')">← Accueil</button>
+    <div><div class="header-title">🗺️ Activités Libres</div></div>
+  </div>
+  <div class="resa-scroll" id="optionnel-content"></div>
+</div>
+
+<!-- ÉCRAN RESTAURANTS -->
+<div class="screen" id="screen-restos">
+  <div class="app-header">
+    <button class="btn-back" onclick="goBack('home')">← Accueil</button>
+    <div><div class="header-title">🍜 Restaurants & Spécialités</div></div>
+  </div>
+  <div class="resa-scroll" id="restos-content"></div>
 </div>
 
 <!-- ÉCRAN APPLIS -->
@@ -2283,7 +2303,7 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.remove('active','back');
   });
-  const screens = ['screen-home','screen-city','screen-day','screen-map','screen-resa','screen-comments','screen-urgences','screen-applis'];
+  const screens = ['screen-home','screen-city','screen-day','screen-map','screen-resa','screen-comments','screen-urgences','screen-applis','screen-optionnel','screen-restos'];
   const order = {home:0,city:1,day:2,map:3,resa:1,comments:1,urgences:1,applis:1};
   const cur = order[id] ?? 0;
   screens.forEach((sid,i) => {
@@ -2299,6 +2319,8 @@ function goBack(to) {
   else if(to === 'day') { stopAnimation(); showScreen('day'); }
   else if(to === 'resa') showScreen('resa');
   else if(to === 'comments') showScreen('comments');
+  else if(to === 'optionnel') showScreen('optionnel');
+  else if(to === 'restos') showScreen('restos');
 }
 window.goBack = goBack;
 
@@ -2363,6 +2385,18 @@ function renderHome() {
         '<span class="home-action-icon">📱</span>',
         '<div class="home-action-label">Applis Utiles</div>',
         '<div class="home-action-sub">Navigation · Traduction · Paiement</div>',
+      '</div>',
+    '</div>',
+    '<div class="home-action-row">',
+      '<div class="home-action-btn" onclick="showScreen(\'optionnel\')">',
+        '<span class="home-action-icon">🗺️</span>',
+        '<div class="home-action-label">Activités Libres</div>',
+        '<div class="home-action-sub">Osaka · Kyoto · Tokyo</div>',
+      '</div>',
+      '<div class="home-action-btn" onclick="showScreen(\'restos\')">',
+        '<span class="home-action-icon">🍜</span>',
+        '<div class="home-action-label">Restaurants</div>',
+        '<div class="home-action-sub">Adresses · Photos · Spécialités</div>',
       '</div>',
     '</div>',
   ].join('');
@@ -2555,6 +2589,8 @@ const stepMarkers = {};
 let optVisible=false,toilettesVisible=false,konbiniVisible=false,stationsVisible=false;
 let konbiniLoaded={osaka:false,kyoto:false,tokyo:false};
 let stationsLoaded={osaka:false,kyoto:false,tokyo:false};
+const restosLayer = {osaka:null,kyoto:null,tokyo:null};
+let restosVisible=false, restosLoaded={osaka:false,kyoto:false,tokyo:false};
 let animRunning=false,animInterval=null,animMarker=null,animStep=0;
 
 function initMap() {
@@ -2574,6 +2610,7 @@ function initMap() {
     toilettesLayers[ck] = L.layerGroup();
     konbiniLayer[ck] = L.layerGroup();
     stationsLayer[ck] = L.layerGroup();
+    restosLayer[ck] = L.layerGroup();
     const city = CITIES[ck];
 
     // Hôtel
@@ -2761,7 +2798,34 @@ function toggleStations(){
   if(stationsVisible){if(stationsLayer[currentCity])stationsLayer[currentCity].addTo(map);btn.classList.add('active');btn.textContent='✅ Stations';}
   else{if(stationsLayer[currentCity])map.removeLayer(stationsLayer[currentCity]);btn.classList.remove('active');btn.textContent='🚇 Stations';}
 }
-window.toggleOptional=toggleOptional;window.toggleToilettes=toggleToilettes;window.toggleKonbini=toggleKonbini;window.toggleStations=toggleStations;
+function toggleRestos(){
+  restosVisible=!restosVisible;
+  const btn=document.getElementById('btn-restos');
+  if(restosVisible){
+    if(!restosLoaded[currentCity]) loadRestosOnMap(currentCity);
+    if(restosLayer[currentCity])restosLayer[currentCity].addTo(map);
+    btn.classList.add('active');btn.textContent='✅ Restos';
+  } else {
+    if(restosLayer[currentCity])map.removeLayer(restosLayer[currentCity]);
+    btn.classList.remove('active');btn.textContent='🍜 Restos';
+  }
+}
+function loadRestosOnMap(ck){
+  if(restosLoaded[ck]||!restosLayer[ck]) return;
+  const cityKey = ck==='osaka'?'osaka':ck==='kyoto'?'kyoto':'tokyo';
+  const items = (RESTOS_DATA[cityKey]||{items:[]}).items;
+  items.forEach(r => {
+    if(!r.lat) return;
+    const icon = L.divIcon({
+      html:'<div style="background:' + (r.must?'#d4af37':'#e11d48') + ';border:2px solid #fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,0.5)">' + r.emoji + '</div>',
+      className:'',iconSize:[26,26],iconAnchor:[13,13]
+    });
+    L.marker([r.lat,r.lng],{icon}).addTo(restosLayer[ck])
+      .bindPopup('<div style="width:220px"><div style="font-weight:700;font-size:13px">' + r.emoji + ' ' + r.name + (r.must?' ★':'') + '</div><div style="font-size:11px;color:#d4af37">' + r.type + '</div><div style="font-size:11px;margin-top:4px">' + r.budget + '</div><div style="font-size:11px;color:#888;margin-top:2px">📍 ' + r.address + '</div></div>',{maxWidth:240});
+  });
+  restosLoaded[ck]=true;
+}
+window.toggleOptional=toggleOptional;window.toggleToilettes=toggleToilettes;window.toggleKonbini=toggleKonbini;window.toggleStations=toggleStations;window.toggleRestos=toggleRestos;
 
 // ── ANIMATION ──
 function getAnimPoints(ck,dk){
@@ -3488,6 +3552,237 @@ function renderUrgences(){
 }
 
 // ============================================================
+// ACTIVITÉS LIBRES (non planifiées)
+// ============================================================
+const OPTIONNEL_DATA = {
+  osaka: {
+    label: '🏯 Osaka',
+    color: '#f97316',
+    items: [
+      {
+        id:'oo-sumiyoshi', name:'Sumiyoshi Taisha', emoji:'⛩️',
+        type:'Sanctuaire shinto · Patrimoine',
+        address:'2-9-89 Sumiyoshi, Sumiyoshi Ward, Osaka 558-0045',
+        lat:34.6124, lng:135.4938,
+        desc:"L'un des sanctuaires shintoïstes les plus anciens du Japon (211 apr.J-C), fondé avant même que le bouddhisme n'arrive au pays. Son architecture unique 'Sumiyoshi-zukuri' ne doit rien aux influences étrangères. Le célèbre pont arqué rouge 'Sorihashi' traverse l'étang central — difficile à traverser avec une poussette mais très photogénique ! Gratuit. Accessible en tram Hankai (~25 min depuis Namba).",
+        tags:['gratuit','kids'],
+        img:'https://images.pexels.com/photos/5473056/pexels-photo-5473056.jpeg?auto=compress&cs=tinysrgb&w=600',
+        photos:['https://images.pexels.com/photos/5026334/pexels-photo-5026334.jpeg?auto=compress&cs=tinysrgb&w=1200','https://images.pexels.com/photos/6114840/pexels-photo-6114840.jpeg?auto=compress&cs=tinysrgb&w=1200']
+      },
+      {
+        id:'oo-nakazaki', name:'Nakazakicho', emoji:'☕',
+        type:'Quartier bohème · Café & Shopping',
+        address:'3-2-8 Nakazaki, Kita Ward, Osaka 530-0016',
+        lat:34.7082, lng:135.5053,
+        desc:"Le quartier le plus authentique et bohème d'Osaka — à l'exact opposé de la frénésie de Dotonbori. Ruelles de maisons Taishō-ère (début XXe siècle), friperies vintages, cafés indépendants avec terrasses, galeries d'art underground. Idéal pour flâner 1-2h. Les locaux adorent ce coin préservé de la spéculation immobilière. Nombreux cafés halal-friendly (matcha, sandwich). À 5 min à pied de Nakazakicho Station (Tanimachi Line).",
+        tags:['gratuit','shopping'],
+        img:'https://images.pexels.com/photos/34985795/pexels-photo-34985795.jpeg?auto=compress&cs=tinysrgb&w=600',
+        photos:['https://images.pexels.com/photos/19035807/pexels-photo-19035807.jpeg?auto=compress&cs=tinysrgb&w=1200','https://images.pexels.com/photos/20199421/pexels-photo-20199421.jpeg?auto=compress&cs=tinysrgb&w=1200']
+      },
+      {
+        id:'oo-aquarium', name:'Aquarium Kaiyukan', emoji:'🦈',
+        type:'Aquarium · Famille',
+        address:'1-1-10 Kaigandori, Minato Ward, Osaka 552-0022',
+        lat:34.6551, lng:135.4284,
+        desc:"L'un des plus grands aquariums du monde — 620 espèces, 35 000 animaux. Le clou du spectacle : deux requins-baleines géants et des raies manta qui évoluent dans un bassin central de 8 étages visibles depuis tous les niveaux. Tunnel 360° immersif, daltons des fonds marins, loutres de mer. Compter 2-3h. Les enfants sont fascinés. 2400¥ (~15€) adulte, 1200¥ (~8€) enfant (3-15 ans). Accessible depuis Osaka-ko Station (Chuo Line, 10 min depuis Namba).",
+        tags:['payant','kids'],
+        img:'https://images.pexels.com/photos/889848/pexels-photo-889848.jpeg?auto=compress&cs=tinysrgb&w=600',
+        photos:['https://images.pexels.com/photos/8285079/pexels-photo-8285079.jpeg?auto=compress&cs=tinysrgb&w=1200','https://images.pexels.com/photos/8606805/pexels-photo-8606805.jpeg?auto=compress&cs=tinysrgb&w=1200']
+      },
+      {
+        id:'oo-usj', name:'Universal Studios Japan', emoji:'🎢',
+        type:'Parc d'attraction · Famille',
+        address:'2-1-33 Sakurajima, Konohana Ward, Osaka 554-0031',
+        lat:34.6654, lng:135.4323,
+        desc:"Le parc d'attractions le plus fréquenté du Japon — et l'un des meilleurs USJ au monde. Zones incontournables : The Wizarding World of Harry Potter (butterbeer, château de Poudlard), Super Nintendo World (immersif, interactif, parfait pour les enfants), Minion Park. Prévoir la journée entière. Réservation des Express Pass vivement recommandée pour éviter 2-3h d'attente sur les grandes attractions. ~8800¥ (~55€) adulte, ~5600¥ (~35€) enfant. JR Yumesaki Line depuis Osaka Station (5 min).",
+        tags:['payant','kids'],
+        img:'https://images.pexels.com/photos/35663408/pexels-photo-35663408.jpeg?auto=compress&cs=tinysrgb&w=600',
+        photos:['https://images.pexels.com/photos/5745136/pexels-photo-5745136.jpeg?auto=compress&cs=tinysrgb&w=1200','https://images.pexels.com/photos/1701747/pexels-photo-1701747.jpeg?auto=compress&cs=tinysrgb&w=1200']
+      },
+      {
+        id:'oo-umeda', name:'Umeda Sky Building', emoji:'🏙️',
+        type:'Observatoire · Architecture',
+        address:'1-1-88 Oyodonaka, Kita Ward, Osaka 531-6023',
+        lat:34.7053, lng:135.4906,
+        desc:"L'un des édifices les plus audacieux du Japon : deux tours reliées au sommet par un anneau flottant à 173m d'altitude. L'observatoire "Floating Garden" offre une vue 360° sur Osaka, le Rokko et la baie. L'escalier roulant transparent qui monte aux derniers niveaux est vertigineux et mémorable. Idéal au coucher du soleil ou la nuit. 1500¥ (~9€) adulte, 700¥ (~4€) enfant. Ouvert 9h30-22h30. À 5 min à pied d'Osaka Station.",
+        tags:['payant'],
+        img:'https://images.pexels.com/photos/15924871/pexels-photo-15924871.jpeg?auto=compress&cs=tinysrgb&w=600',
+        photos:['https://images.pexels.com/photos/20259602/pexels-photo-20259602.jpeg?auto=compress&cs=tinysrgb&w=1200','https://images.pexels.com/photos/30215354/pexels-photo-30215354.jpeg?auto=compress&cs=tinysrgb&w=1200']
+      },
+      {
+        id:'oo-round1', name:'Round1 Stadium Sennichimae', emoji:'🎳',
+        type:'Loisirs · Entertainment',
+        address:'7-13 Sennichimae, Chuo Ward, Osaka 542-0074',
+        lat:34.6645, lng:135.5038,
+        desc:"Un complexe de loisirs japonais comme vous n'en verrez nulle part ailleurs : bowling, karaoké privé, arcade (daiko, purikura, claw machines), billard, darts électroniques, table tennis, sports simulés. Ambiance 100% japonaise, clientèle locale, ouvert 24h/24. Les enfants adorent l'arcade. Idéal si une soirée se libère ou en cas de pluie. Tarifs variables selon activité (1000-2500¥/h). À 2 min à pied de Namba.",
+        tags:['payant','kids'],
+        img:'https://images.pexels.com/photos/35663408/pexels-photo-35663408.jpeg?auto=compress&cs=tinysrgb&w=600',
+        photos:['https://images.pexels.com/photos/3121302/pexels-photo-3121302.jpeg?auto=compress&cs=tinysrgb&w=1200','https://images.pexels.com/photos/19848334/pexels-photo-19848334.jpeg?auto=compress&cs=tinysrgb&w=1200']
+      }
+    ]
+  },
+  kyoto: { label: '🏯 Kyoto', color: '#8b5cf6', items: [] },
+  tokyo: { label: '🗼 Tokyo', color: '#3b82f6', items: [] }
+};
+
+// ── Restos Osaka ──
+const RESTOS_DATA = {
+  osaka: {
+    label: '🏯 Osaka',
+    color: '#f97316',
+    items: [
+      {id:'r-mugito',name:'Mugito Mensuke',emoji:'🍜',type:'Ramen · Michelin Bib Gourmand',address:'3-4-12 Toyosaki, Kita Ward, Osaka 531-0072',lat:34.7175,lng:135.5050,budget:'¥ (~1000-1500¥)',must:true,desc:"Le meilleur ramen d'Osaka selon beaucoup — récompensé Michelin Bib Gourmand. Bouillon préparé à partir de poulet fermier et pintade pour un maximum de saveur. Nouilles faites maison à la texture parfaite. Won-ton fourrés au wagyu — un luxe. Comptez 45min-1h30 d'attente (arrivez avant l'ouverture). Toute la tablée doit être présente ensemble.",img:'https://images.pexels.com/photos/2450697/pexels-photo-2450697.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-melonbread',name:'Melon Bread Dotonbori',emoji:'🍞',type:'Boulangerie · Street food',address:'Dotonbori, Chuo Ward, Osaka',lat:34.6687,lng:135.5013,budget:'¥ (~200-400¥)',must:false,desc:"Melon bread fraîchement sorti du four, à la croûte sucrée et caramélisée. Incontournable du street food japonais. À chercher dans les ruelles de Dotonbori.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-mooken',name:'Mooken',emoji:'🍖',type:'Shabu-shabu · Viande',address:'Namba, Chuo Ward, Osaka',lat:34.6632,lng:135.5020,budget:'¥¥ (~2000-3500¥)',must:false,desc:"Shabu-shabu et sukiyaki réputés. Viandes de qualité dans un cadre convivial. Idéal pour une soirée groupe.",img:'https://images.pexels.com/photos/2450697/pexels-photo-2450697.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-idaten',name:'Wagyu Idaten',emoji:'🥩',type:'Wagyu · Yakiniku',address:'Namba, Chuo Ward, Osaka',lat:34.6647,lng:135.5007,budget:'¥¥¥ (~4000-8000¥)',must:false,desc:"Yakiniku wagyu de premier choix. Viande persillée à fondre en bouche, grillée à table. Expérience premium.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-grenier',name:'Grenier (Crème brûlée)',emoji:'🍮',type:'Pâtisserie française · Café',address:'Shinsaibashi, Chuo Ward, Osaka',lat:34.6720,lng:135.5015,budget:'¥ (~500-800¥)',must:false,desc:"Crème brûlée à la française façon japonaise — précise, délicate, en plusieurs parfums. Beau cadre pour une pause sucrée.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-kintaro',name:'Udon Kintaro',emoji:'🍝',type:'Udon · Traditionnel',address:'Nipponbashi, Chuo Ward, Osaka',lat:34.6653,lng:135.5062,budget:'¥ (~800-1200¥)',must:false,desc:"Udon épais dans un bouillon dashi subtil. Ambiance populaire japonaise. File d'attente rapide, service efficace.",img:'https://images.pexels.com/photos/2450697/pexels-photo-2450697.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-gorichan',name:'Onigiri Gorichan',emoji:'🍙',type:'Onigiri artisanal',address:'Namba, Chuo Ward, Osaka',lat:34.6640,lng:135.5030,budget:'¥ (~200-400¥)',must:false,desc:"Onigiri faits minute avec du riz japonica premium et des garnitures originales. Parfait pour un déjeuner rapide ou un encas. Certaines garnitures sans porc disponibles.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-okono-namba',name:'Namba Okonomiyaki',emoji:'🥞',type:'Okonomiyaki · Osaka soul food',address:'Namba, Chuo Ward, Osaka',lat:34.6643,lng:135.5024,budget:'¥¥ (~1000-1800¥)',must:true,desc:"L'okonomiyaki c'est le plat emblématique d'Osaka — la galette japonaise garnie de chou, œuf, poisson séché, mayonnaise et sauce okono. On le cuit soi-même sur la plaque. Les enfants adorent. Incontournable à Namba.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-chitose',name:'Chitose',emoji:'🍱',type:'Kaiseki · Cuisine japonaise',address:'Shinsaibashi, Chuo Ward, Osaka',lat:34.6730,lng:135.5020,budget:'¥¥¥ (~5000-10000¥)',must:false,desc:"Kaiseki raffiné dans un cadre élégant. Multi-services de saison, présentation soignée. Pour une soirée gastronomique mémorable.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-tanoshi',name:'Tanoshi',emoji:'🍣',type:'Sushi · Poisson frais',address:'Namba, Chuo Ward, Osaka',lat:34.6638,lng:135.5015,budget:'¥¥ (~2000-4000¥)',must:false,desc:"Sushi de qualité dans un cadre décontracté. Poisson ultra-frais, prix raisonnables. Idéal pour un déjeuner ou dîner en famille.",img:'https://images.pexels.com/photos/2450697/pexels-photo-2450697.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-iroha',name:'Mizutaki Iroha Soemoncho',emoji:'🍲',type:'Mizutaki · Bouillon de poulet',address:'Soemoncho, Chuo Ward, Osaka',lat:34.6680,lng:135.5025,budget:'¥¥ (~2500-4000¥)',must:false,desc:"Spécialité mizutaki (bouillon de poulet clair) servie en pot commun. Poulet mijoté longuement, légumes frais, sauce ponzu. Très réchauffant en soirée d'automne.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-tonkatsu',name:'Osaka Tonkatsu Umeda',emoji:'🍖',type:'Tonkatsu · Porc pané',address:'Umeda, Kita Ward, Osaka',lat:34.7025,lng:135.4987,budget:'¥¥ (~1500-2500¥)',must:false,desc:"Tonkatsu croustillant à souhait — filet ou côte de porc pané dans la chapelure panko. Servi avec riz, miso et chou. L'une des meilleures adresses Umeda.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-crepe',name:'Crêpe to Espresso to Kyuchome',emoji:'🥐',type:'Café · Crêpes',address:'Kyuchome, Chuo Ward, Osaka',lat:34.6715,lng:135.5010,budget:'¥ (~500-900¥)',must:false,desc:"Crêpes légères à la japonaise — beaucoup plus fines que les françaises — avec des garnitures créatives. Café espresso de qualité. Cadre minimaliste très instagrammable.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-hitokuchi',name:'Hitokuchi no Shiawase Tenmangu',emoji:'🍡',type:'Wagashi · Douceurs japonaises',address:'Osaka Tenmangu, Kita Ward, Osaka',lat:34.6938,lng:135.5148,budget:'¥ (~300-600¥)',must:false,desc:"Wagashi (pâtisseries japonaises traditionnelles) préparés à la main près du sanctuaire Osaka Tenmangu. Parfait pour découvrir mochi, dorayaki et daifuku faits maison.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-dontaku',name:'Dontaku',emoji:'🍱',type:'Bento · Cuisine du marché',address:'Kuromon Ichiba, Chuo Ward, Osaka',lat:34.6654,lng:135.5062,budget:'¥ (~1000-1500¥)',must:false,desc:"Bento et plats du marché Kuromon — poisson frais, légumes de saison. Parfait pour un déjeuner rapide à l'intérieur du marché.",img:'https://images.pexels.com/photos/2450697/pexels-photo-2450697.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-wagyuoniku',name:'Wagyu Oniku',emoji:'🥩',type:'Wagyu · Viande grillée',address:'Shinsaibashi, Chuo Ward, Osaka',lat:34.6710,lng:135.5005,budget:'¥¥¥ (~5000-10000¥)',must:false,desc:"Wagyu haut de gamme servi en tranches fines et grillées à table. Persillage exceptionnel. Pour une occasion spéciale.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-fugetsu',name:'Fugetsu',emoji:'🥞',type:'Okonomiyaki · Chaîne iconique',address:'Dotonbori, Chuo Ward, Osaka',lat:34.6695,lng:135.5020,budget:'¥¥ (~1200-2000¥)',must:true,desc:"La chaîne d'okonomiyaki et takoyaki la plus connue d'Osaka. 'Kuidaore' — se ruiner en mangeant ! Fugetsu est l'adresse classique pour les deux spécialités osakeennes. File d'attente fréquente.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-izumo',name:'Izumo',emoji:'🍱',type:'Cuisine traditionnelle japonaise',address:'Namba, Chuo Ward, Osaka',lat:34.6627,lng:135.5011,budget:'¥¥ (~2000-3500¥)',must:false,desc:"Cuisine du terroir japonais dans un cadre authentique. Poissons de saison, légumes locaux, présentation soignée.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-gyutan',name:'Gyutan no Remon',emoji:'🥩',type:'Gyutan · Langue de bœuf grillée',address:'Namba, Chuo Ward, Osaka',lat:34.6636,lng:135.5018,budget:'¥¥ (~2000-3500¥)',must:false,desc:"Gyutan — langue de bœuf grillée, spécialité de Sendai revisitée à Osaka. Tranches épaisses et savoureuses, accompagnement riz et soupe. Très apprécié des locaux.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-munimuni',name:'Munimuni',emoji:'🍛',type:'Cuisine créative japonaise',address:'Shinsaibashi, Chuo Ward, Osaka',lat:34.6720,lng:135.5010,budget:'¥¥ (~1500-2500¥)',must:false,desc:"Cuisine japonaise créative et fusion, cadre intime. Carte courte mais travaillée. Bonne adresse pour sortir des sentiers battus.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-tables',name:'Tables Café',emoji:'☕',type:'Café brunch · Végétarien-friendly',address:'Nakazakicho, Kita Ward, Osaka',lat:34.7080,lng:135.5050,budget:'¥ (~800-1500¥)',must:false,desc:"Café brunch dans le quartier bohème de Nakazakicho. Plats végétariens et alternatifs, café de spécialité. Cadre relaxant, clientèle locale artiste.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-rikuro',name:"Rikuro's Cheesecake",emoji:'🎂',type:'Pâtisserie · Cheesecake japonais',address:'Namba, Chuo Ward, Osaka',lat:34.6637,lng:135.5019,budget:'¥ (~900¥ le gâteau)',must:true,desc:"LE cheesecake soufflé d'Osaka — fondant, tremblotant à la sortie du four, tamponné au fer rouge. La queue devant le four en vaut la peine. À partager ou à emporter. Un souvenir gastronomique inoubliable.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-sakimoto',name:'Sakimoto Bakery',emoji:'🥖',type:'Boulangerie japonaise',address:'Namba, Chuo Ward, Osaka',lat:34.6641,lng:135.5028,budget:'¥ (~200-500¥)',must:false,desc:"Boulangerie artisanale japonaise — pains de mie laiteux (shokupan), brioches fourrées, croissants. Un petit-déjeuner parfait avant une longue journée.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-waka',name:'Waka',emoji:'🍱',type:'Cuisine kaiseki abordable',address:'Shinsaibashi, Chuo Ward, Osaka',lat:34.6715,lng:135.5025,budget:'¥¥ (~2000-4000¥)',must:false,desc:"Kaiseki simplifié à prix accessible. Bento multi-plats élégants, service attentionné. Bon rapport qualité-prix pour une initiation à la haute cuisine japonaise.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-kankando',name:'Kankando',emoji:'🍡',type:'Wagashi · Thé matcha',address:'Nakazakicho, Kita Ward, Osaka',lat:34.7078,lng:135.5055,budget:'¥ (~600-1200¥)',must:false,desc:"Salon de thé matcha avec wagashi maison dans le quartier Nakazakicho. Ambiance traditionnelle dans un espace rénové. Parfait pour une pause après le shopping vintage.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-amato',name:'Amato Maeda',emoji:'🍰',type:'Pâtisserie japonaise',address:'Namba, Chuo Ward, Osaka',lat:34.6633,lng:135.5014,budget:'¥ (~400-800¥)',must:false,desc:"Pâtisserie japonaise traditionnelle depuis plusieurs générations. Mochi, anmitsu, dorayaki artisanaux. Ingrédients de saison, recettes transmises.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-ninjomenya',name:'Ninjomenya Gyukotsuo',emoji:'🍜',type:'Ramen au bouillon de bœuf',address:'Namba, Chuo Ward, Osaka',lat:34.6642,lng:135.5020,budget:'¥ (~1000-1500¥)',must:false,desc:"Ramen au bouillon de bœuf riche et profond — rare à Osaka où le porc domine. Spécialité originale, file d'attente garantie le midi.",img:'https://images.pexels.com/photos/2450697/pexels-photo-2450697.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-wanaka',name:'Takoyaki Wanaka',emoji:'🐙',type:'Takoyaki · Street food iconique',address:'Dotonbori, Chuo Ward, Osaka',lat:34.6688,lng:135.5016,budget:'¥ (~600-800¥ les 8)',must:true,desc:"Takoyaki de référence — petites boules de poulpe grillées, croustillantes dehors, fondantes dedans. Sauce okono, mayonnaise, flocons de bonite dansants. La meilleure adresse Dotonbori selon les locaux. À manger debout sur le pont.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-kanidoraku',name:'Kani Doraku',emoji:'🦀',type:'Crabe · Fruits de mer · Spécialité',address:'Dotonbori, Chuo Ward, Osaka 542-0071',lat:34.6690,lng:135.5017,budget:'¥¥¥ (~5000-15000¥)',must:false,desc:"L'adresse mythique de Dotonbori avec son immense crabe mécanique sur la façade. Crabe servi de toutes les façons : cuit à la vapeur, grillé, en sashimi, en ragoût. Réservation recommandée. Plus cher que la moyenne mais expérience unique.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-daruma',name:'Kushikatsu Daruma',emoji:'🍡',type:'Kushikatsu · Spécialité Osaka',address:'Dotonbori, Chuo Ward, Osaka',lat:34.6693,lng:135.5022,budget:'¥ (~150-250¥ par broche)',must:true,desc:"LA référence du kushikatsu à Osaka — brochettes panées et frites (viande, légumes, fromage). Règle absolue : ON NE DOUBLE-TREMPE PAS dans la sauce. Ambiance populaire, assiettes qui s'enchaînent. Plusieurs adresses à Dotonbori et Shinsekai.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-dekasan',name:'Dekasan',emoji:'🍱',type:'Cuisine japonaise conviviale',address:'Namba, Chuo Ward, Osaka',lat:34.6640,lng:135.5016,budget:'¥¥ (~1500-2500¥)',must:false,desc:"Izakaya convivial avec une carte variée — sashimi, yakitori, edamame, bières Asahi. Idéal pour une soirée de groupe dans l'ambiance japonaise.",img:'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-toichi',name:'Toichipancake',emoji:'🥞',type:'Pancake japonais soufflé',address:'Shinsaibashi, Chuo Ward, Osaka',lat:34.6718,lng:135.5020,budget:'¥¥ (~1500-2000¥)',must:false,desc:"Pancakes japonais ultra-épais et soufflés — rien à voir avec les pancakes occidentaux. 15-20 min de cuisson pour une texture cotonneuse unique. File d'attente fréquente le week-end.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'},
+      {id:'r-juen',name:'Ju-en Pan',emoji:'🍞',type:'Boulangerie 100¥ · Insolite',address:'Namba, Chuo Ward, Osaka',lat:34.6635,lng:135.5015,budget:'¥ (~100¥ par pièce)',must:false,desc:"Boulangerie où tout coûte 100¥ (~0,60€). Pains variés et sucreries — qualité surprenante pour le prix. Concept populaire très japonais.",img:'https://images.pexels.com/photos/3408348/pexels-photo-3408348.jpeg?auto=compress&cs=tinysrgb&w=600'}
+    ]
+  },
+  kyoto: { label: '🏯 Kyoto', color: '#8b5cf6', items: [] },
+  tokyo: { label: '🗼 Tokyo', color: '#3b82f6', items: [] }
+};
+
+function renderOptionel() {
+  const el = document.getElementById('optionnel-content');
+  if(!el) return;
+  let html = '';
+  Object.entries(OPTIONNEL_DATA).forEach(([city, data]) => {
+    if(!data.items.length) return;
+    html += '<div class="resa-cat">';
+    html += '<div class="resa-cat-title" style="color:' + data.color + '">' + data.label + '</div>';
+    data.items.forEach(item => {
+      const tagsHtml = (item.tags||[]).map(t => {
+        const L={gratuit:'Gratuit',payant:'Payant',kids:'👶 Kids',shopping:'🛍️ Shopping'};
+        const C={gratuit:'gratuit',payant:'payant',kids:'kids',shopping:'shopping'};
+        return '<span class="step-tag tag-' + (C[t]||t) + '">' + (L[t]||t) + '</span>';
+      }).join('');
+      html += '<div class="resa-card">';
+      html += '<div style="cursor:pointer" onclick="openOptionnelLightbox('' + item.id + '')">';
+      html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">';
+      html += '<span style="font-size:24px">' + item.emoji + '</span>';
+      html += '<div style="flex:1"><div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text)">' + item.name + '</div>';
+      html += '<div style="font-size:11px;color:var(--gold)">' + item.type + '</div>';
+      html += '<div style="font-size:11px;color:var(--muted);margin-top:2px">📍 ' + item.address + '</div></div></div>';
+      if(item.img) html += '<img src="' + item.img + '" style="width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:8px">';
+      html += '<div style="font-size:12px;color:var(--muted);line-height:1.6">' + item.desc + '</div>';
+      if(tagsHtml) html += '<div class="step-tags" style="margin-top:8px">' + tagsHtml + '</div>';
+      html += '</div></div>';
+    });
+    html += '</div>';
+  });
+  if(!html) html = '<div style="padding:40px;text-align:center;color:var(--muted)">Activités à venir...</div>';
+  el.innerHTML = html;
+}
+
+function openOptionnelLightbox(id) {
+  let found = null, cityData = null;
+  Object.values(OPTIONNEL_DATA).forEach(d => {
+    const item = d.items.find(i => i.id === id);
+    if(item) { found = item; cityData = d; }
+  });
+  if(!found) return;
+  const allPhotos = [found.img, ...(found.photos||[])].filter(Boolean);
+  let slideIdx = 0;
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;';
+  function render() {
+    overlay.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;"><button onclick="this.closest('div[style*=fixed]').remove()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px">✕ Fermer</button><div style="color:#fff;font-size:13px">' + (slideIdx+1) + ' / ' + allPhotos.length + '</div></div>' +
+      '<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:16px;padding:0 16px">' +
+      (allPhotos.length>1?'<button onclick="sl(-1)" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;flex-shrink:0">‹</button>':'') +
+      '<img src="' + allPhotos[slideIdx] + '" style="max-width:100%;max-height:60vh;object-fit:contain;border-radius:12px">' +
+      (allPhotos.length>1?'<button onclick="sl(1)" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;flex-shrink:0">›</button>':'') +
+      '</div>' +
+      '<div style="padding:16px 20px 24px;color:#fff"><div style="font-size:18px;font-weight:700;margin-bottom:4px">' + found.emoji + ' ' + found.name + '</div>' +
+      '<div style="font-size:12px;color:#d4af37;margin-bottom:8px">' + found.type + '</div>' +
+      '<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.6">' + found.desc + '</div>' +
+      '<div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px">📍 ' + found.address + '</div></div>';
+    const sl = (d) => { slideIdx = (slideIdx+d+allPhotos.length)%allPhotos.length; render(); };
+    overlay.querySelectorAll('button[onclick*="sl"]').forEach(btn => btn.onclick = () => { slideIdx = (slideIdx + (btn.textContent==='›'?1:-1) + allPhotos.length)%allPhotos.length; render(); });
+  }
+  render();
+  document.body.appendChild(overlay);
+}
+
+function renderRestos() {
+  const el = document.getElementById('restos-content');
+  if(!el) return;
+  let html = '';
+  const budgetIcon = b => b.startsWith('¥¥¥')?'💎':b.startsWith('¥¥')?'💰':'✅';
+  Object.entries(RESTOS_DATA).forEach(([city, data]) => {
+    if(!data.items.length) return;
+    html += '<div class="resa-cat">';
+    html += '<div class="resa-cat-title" style="color:' + data.color + '">' + data.label + '</div>';
+    data.items.forEach(item => {
+      html += '<div class="resa-card" style="border-left:3px solid ' + (item.must?'#d4af37':'transparent') + '">';
+      html += '<div style="cursor:pointer" onclick="openRestoLightbox('' + item.id + '')">';
+      html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">';
+      html += '<span style="font-size:24px">' + item.emoji + '</span>';
+      html += '<div style="flex:1"><div style="display:flex;align-items:center;gap:6px"><div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text)">' + item.name + '</div>' + (item.must?'<span style="font-size:10px;background:#d4af37;color:#000;padding:2px 6px;border-radius:4px;font-weight:700">★ MUST</span>':'') + '</div>';
+      html += '<div style="font-size:11px;color:var(--gold)">' + item.type + '</div>';
+      html += '<div style="font-size:11px;color:var(--muted);margin-top:2px">📍 ' + item.address + '</div>';
+      html += '<div style="font-size:11px;margin-top:3px">' + budgetIcon(item.budget) + ' ' + item.budget + '</div></div></div>';
+      if(item.img) html += '<img src="' + item.img + '" style="width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:8px">';
+      html += '<div style="font-size:12px;color:var(--muted);line-height:1.6">' + item.desc + '</div>';
+      html += '</div></div>';
+    });
+    html += '</div>';
+  });
+  if(!html) html = '<div style="padding:40px;text-align:center;color:var(--muted)">Restaurants à venir...</div>';
+  el.innerHTML = html;
+}
+
+function openRestoLightbox(id) {
+  let found = null;
+  Object.values(RESTOS_DATA).forEach(d => {
+    const item = d.items.find(i => i.id === id);
+    if(item) found = item;
+  });
+  if(!found) return;
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;overflow-y:auto';
+  overlay.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;position:sticky;top:0;background:rgba(15,23,42,0.95);z-index:1"><button onclick="this.closest('[style*=fixed]').remove()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px">✕ Fermer</button></div>' +
+    (found.img?'<img src="' + found.img + '" style="width:100%;height:220px;object-fit:cover">':'') +
+    '<div style="padding:20px;color:#fff">' +
+    '<div style="font-size:22px;font-weight:700;margin-bottom:4px">' + found.emoji + ' ' + found.name + (found.must?' <span style="font-size:12px;background:#d4af37;color:#000;padding:2px 8px;border-radius:4px;font-weight:700">★ MUST</span>':'') + '</div>' +
+    '<div style="font-size:13px;color:#d4af37;margin-bottom:6px">' + found.type + '</div>' +
+    '<div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px">' + found.budget + '</div>' +
+    '<div style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.85)">' + found.desc + '</div>' +
+    '<div style="margin-top:16px;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px">' +
+    '<div style="font-size:12px;color:rgba(255,255,255,0.5)">📍 Adresse</div>' +
+    '<div style="font-size:13px;color:#fff;margin-top:4px">' + found.address + '</div>' +
+    '<a href="https://maps.google.com/?q=' + found.lat + ',' + found.lng + '" target="_blank" style="display:inline-block;margin-top:10px;background:#d4af37;color:#000;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">🗺️ Ouvrir dans Google Maps</a></div></div>';
+  document.body.appendChild(overlay);
+}
+
+// ============================================================
 // APPLIS UTILES
 // ============================================================
 function renderApplis(){
@@ -3667,6 +3962,8 @@ try {
   renderResa();
   renderUrgences();
   renderApplis();
+  renderOptionel();
+  renderRestos();
 } catch(err) {
   console.error('[INIT ERROR]', err);
   document.getElementById('cities-list').innerHTML = 
