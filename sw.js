@@ -1,7 +1,7 @@
-// SW v2026-v87 — Reset complet
+// SW v2026-v88 — Reset complet
 // Supprimer tous les anciens caches à l'installation
 self.addEventListener('install', event => {
-  console.log('[SW] Install v2026-v87');
+  console.log('[SW] Install v2026-v88');
   self.skipWaiting();
   event.waitUntil(
     caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
@@ -9,7 +9,7 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  console.log('[SW] Activate v2026-v87');
+  console.log('[SW] Activate v2026-v88');
   event.waitUntil(
     caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
     .then(() => self.clients.claim())

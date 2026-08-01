@@ -3703,35 +3703,6 @@ function renderOptionel() {
   el.innerHTML = html;
 }
 
-function openOptionnelLightbox(id) {
-  let found = null, cityData = null;
-  Object.values(OPTIONNEL_DATA).forEach(d => {
-    const item = d.items.find(i => i.id === id);
-    if(item) { found = item; cityData = d; }
-  });
-  if(!found) return;
-  const allPhotos = [found.img, ...(found.photos||[])].filter(Boolean);
-  let slideIdx = 0;
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;';
-  function render() {
-    overlay.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;"><button onclick="this.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px">✕ Fermer</button><div style="color:#fff;font-size:13px">' + (slideIdx+1) + ' / ' + allPhotos.length + '</div></div>' +
-      '<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:16px;padding:0 16px">' +
-      (allPhotos.length>1?'<button onclick="sl(-1)" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;flex-shrink:0">‹</button>':'') +
-      '<img src="' + allPhotos[slideIdx] + '" style="max-width:100%;max-height:60vh;object-fit:contain;border-radius:12px">' +
-      (allPhotos.length>1?'<button onclick="sl(1)" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;flex-shrink:0">›</button>':'') +
-      '</div>' +
-      '<div style="padding:16px 20px 24px;color:#fff"><div style="font-size:18px;font-weight:700;margin-bottom:4px">' + found.emoji + ' ' + found.name + '</div>' +
-      '<div style="font-size:12px;color:#d4af37;margin-bottom:8px">' + found.type + '</div>' +
-      '<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.6">' + found.desc + '</div>' +
-      '<div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px">📍 ' + found.address + '</div></div>';
-    const sl = (d) => { slideIdx = (slideIdx+d+allPhotos.length)%allPhotos.length; render(); };
-    overlay.querySelectorAll('button[onclick*="sl"]').forEach(btn => btn.onclick = () => { slideIdx = (slideIdx + (btn.textContent==='›'?1:-1) + allPhotos.length)%allPhotos.length; render(); });
-  }
-  render();
-  document.body.appendChild(overlay);
-}
-
 function renderRestos() {
   const el = document.getElementById('restos-content');
   if(!el) return;
@@ -3767,20 +3738,94 @@ function openRestoLightbox(id) {
     if(item) found = item;
   });
   if(!found) return;
+  _openSlideLightbox(found);
+}
+
+function openOptionnelLightbox(id) {
+  let found = null;
+  Object.values(OPTIONNEL_DATA).forEach(d => {
+    const item = d.items.find(i => i.id === id);
+    if(item) found = item;
+  });
+  if(!found) return;
+  _openSlideLightbox(found);
+}
+
+function _openSlideLightbox(item) {
+  const allPhotos = [item.img, ...(item.photos||[])].filter(Boolean);
+  let idx = 0;
+
+  // Overlay
   const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;overflow-y:auto';
-  overlay.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;position:sticky;top:0;background:rgba(15,23,42,0.95);z-index:1"><button onclick="this.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px">✕ Fermer</button></div>' +
-    (found.img?'<img src="' + found.img + '" style="width:100%;height:220px;object-fit:cover">':'') +
-    '<div style="padding:20px;color:#fff">' +
-    '<div style="font-size:22px;font-weight:700;margin-bottom:4px">' + found.emoji + ' ' + found.name + (found.must?' <span style="font-size:12px;background:#d4af37;color:#000;padding:2px 8px;border-radius:4px;font-weight:700">★ MUST</span>':'') + '</div>' +
-    '<div style="font-size:13px;color:#d4af37;margin-bottom:6px">' + found.type + '</div>' +
-    '<div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px">' + found.budget + '</div>' +
-    '<div style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.85)">' + found.desc + '</div>' +
-    '<div style="margin-top:16px;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px">' +
-    '<div style="font-size:12px;color:rgba(255,255,255,0.5)">📍 Adresse</div>' +
-    '<div style="font-size:13px;color:#fff;margin-top:4px">' + found.address + '</div>' +
-    '<a href="https://maps.google.com/?q=' + found.lat + ',' + found.lng + '" target="_blank" style="display:inline-block;margin-top:10px;background:#d4af37;color:#000;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">🗺️ Ouvrir dans Google Maps</a></div></div>';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.97);display:flex;flex-direction:column;';
+
+  // Header
+  const header = document.createElement('div');
+  header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:14px 16px;position:sticky;top:0;background:rgba(15,23,42,0.95);z-index:1;flex-shrink:0;';
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕ Fermer';
+  closeBtn.style.cssText = 'background:rgba(255,255,255,0.1);border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px;cursor:pointer;';
+  closeBtn.onclick = () => overlay.remove();
+  const counter = document.createElement('div');
+  counter.style.cssText = 'color:rgba(255,255,255,0.6);font-size:13px;';
+  header.appendChild(closeBtn);
+  header.appendChild(counter);
+  overlay.appendChild(header);
+
+  // Zone image
+  const imgZone = document.createElement('div');
+  imgZone.style.cssText = 'position:relative;flex-shrink:0;background:#000;';
+  const img = document.createElement('img');
+  img.style.cssText = 'width:100%;height:240px;object-fit:cover;display:block;';
+  imgZone.appendChild(img);
+
+  // Boutons prev/next — seulement si plusieurs photos
+  if(allPhotos.length > 1) {
+    const btnStyle = 'position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;';
+    const prev = document.createElement('button');
+    prev.style.cssText = btnStyle + 'left:10px;';
+    prev.textContent = '‹';
+    const next = document.createElement('button');
+    next.style.cssText = btnStyle + 'right:10px;';
+    next.textContent = '›';
+    prev.addEventListener('touchend', (e) => { e.preventDefault(); go(-1); }, {passive:false});
+    next.addEventListener('touchend', (e) => { e.preventDefault(); go(1); }, {passive:false});
+    prev.onclick = () => go(-1);
+    next.onclick = () => go(1);
+    imgZone.appendChild(prev);
+    imgZone.appendChild(next);
+  }
+  overlay.appendChild(imgZone);
+
+  // Contenu texte (scrollable)
+  const content = document.createElement('div');
+  content.style.cssText = 'padding:20px;color:#fff;overflow-y:auto;flex:1;';
+  content.innerHTML =
+    '<div style="font-size:20px;font-weight:700;margin-bottom:4px">' + item.emoji + ' ' + item.name +
+    (item.must ? ' <span style="font-size:11px;background:#d4af37;color:#000;padding:2px 7px;border-radius:4px;font-weight:700">★ MUST</span>' : '') +
+    '</div>' +
+    '<div style="font-size:13px;color:#d4af37;margin-bottom:6px">' + item.type + '</div>' +
+    (item.budget ? '<div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:10px">' + item.budget + '</div>' : '') +
+    '<div style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.85);margin-bottom:14px">' + item.desc + '</div>' +
+    '<div style="padding:12px;background:rgba(255,255,255,0.05);border-radius:8px;">' +
+    '<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px">📍 Adresse</div>' +
+    '<div style="font-size:13px;color:#fff">' + item.address + '</div>' +
+    (item.lat ? '<a href="https://maps.google.com/?q=' + item.lat + ',' + item.lng + '" target="_blank" style="display:inline-block;margin-top:10px;background:#d4af37;color:#000;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">🗺️ Ouvrir dans Google Maps</a>' : '') +
+    '</div>';
+  overlay.appendChild(content);
+
+  function go(dir) {
+    idx = (idx + dir + allPhotos.length) % allPhotos.length;
+    render();
+  }
+
+  function render() {
+    img.src = allPhotos[idx];
+    counter.textContent = allPhotos.length > 1 ? (idx + 1) + ' / ' + allPhotos.length : '';
+  }
+
   document.body.appendChild(overlay);
+  render();
 }
 
 // ============================================================
