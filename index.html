@@ -1299,6 +1299,7 @@ const OSAKA_DAYS = {
     steps:[
       {id:"depart-j2",num:null,time:"09:00",name:"Départ de l'hôtel",type:"Point de départ",emoji:"🏨",isHotel:true,
        address:"3-1-24 Ebisunishi, Naniwa Ward, Osaka",lat:34.655735,lng:135.5064042,
+       img:"https://i.imgur.com/f01FWM4.jpeg",
        desc:"Direction station Ebisucho (K18) à 3 min à pied.",tags:[],wc:null,
        transport:{icon:"🚇",text:"Ebisucho K18 → Tanimachi 4-chome · 20 min · ~280¥ (~2€)",detail:"Ligne Sakaisuji (marron) → correspondance Tanimachi (mauve) 2 stations nord"},
        fromLat:34.6543,fromLng:135.5055,toLat:34.6847,toLng:135.5198},
@@ -1365,6 +1366,7 @@ const OSAKA_DAYS = {
     steps:[
       {id:"depart-j3",num:null,time:"08:30",name:"Départ de l'hôtel — tôt !",type:"Point de départ",emoji:"🏨",isHotel:false,
        address:"BON Condominium Namba Ebisu, 3-1-24 Ebisunishi, Naniwa Ward, Osaka",lat:34.655735,lng:135.5064042,
+       img:"https://i.imgur.com/f01FWM4.jpeg",
        desc:"Départ matinal. Onigiri au 7-Eleven dans le train.",tags:[],wc:null,transport:null},
       {id:"tr-j3-1",num:null,time:"08:35",name:"① Hôtel → Ebisucho (K18)",type:"Étape 1/4 — 3 min à pied",emoji:"🚶",isTransit:true,
        transport:{icon:"🚶",from:"BON Condominium",to:"Ebisucho (K18)",line:"3 min à pied",duration:"3 min",price:"Gratuit",note:"Sortez de l'hôtel, prenez direction nord"},
@@ -1550,6 +1552,7 @@ const KYOTO_DAYS = {
     steps:[
       {id:"depart-nara-j5",num:null,time:"08:00",name:"Départ vers Nara — tôt !",type:"Point de départ",emoji:"🏨",isHotel:true,
        address:"507 Tsutsumicho, Higashiyama Ward, Kyoto",lat:35.0036,lng:135.7783,
+       img:"https://i.imgur.com/DdXw2tR.jpeg",
        desc:"Départ matinal pour Nara avant la foule.",tags:[],wc:null,
        transport:{icon:"🚇",text:"Higashiyama T10 → Kyoto Station · puis JR Nara Line direct · 50 min total · ~720¥ (~4€)",detail:"Métro Tozai → Kyoto Station, puis JR Nara Line jusqu'à Nara Station"},
        fromLat:35.0036,fromLng:135.7783,toLat:34.6851,toLng:135.8329},
@@ -1599,6 +1602,7 @@ const KYOTO_DAYS = {
     steps:[
       {id:"depart-j6",num:null,time:"08:45",name:"Départ de l'hôtel",type:"Point de départ",emoji:"🏨",isHotel:true,
        address:"507 Tsutsumicho, Higashiyama Ward, Kyoto",lat:35.0036,lng:135.7783,
+       img:"https://i.imgur.com/DdXw2tR.jpeg",
        desc:"Direction Ryoan-ji au nord-ouest. Bus direct depuis Higashiyama.",tags:[],wc:null,
        transport:{icon:"🚌",text:"Bus 204 depuis Higashiyama → Ryoanji-michi · ~35 min · 230¥ (~1€)",detail:"Ou taxi ~1200¥ (~8€) (plus simple avec enfants)"},
        fromLat:35.0036,fromLng:135.7783,toLat:35.0345,toLng:135.7185},
@@ -1648,6 +1652,7 @@ const KYOTO_DAYS = {
     steps:[
       {id:"depart-j7",num:null,time:"09:30",name:"Départ de l'hôtel",type:"Point de départ",emoji:"🏨",isHotel:true,
        address:"507 Tsutsumicho, Higashiyama Ward, Kyoto",lat:35.0036,lng:135.7783,
+       img:"https://i.imgur.com/DdXw2tR.jpeg",
        desc:"Départ tranquille. Profitez du petit-déjeuner. Tout est à pied ou en train aujourd'hui.",tags:[],wc:null,transport:null},
       {id:"nanzenji",num:1,time:"10:00",name:"Nanzen-ji & Aqueduc",type:"Temple · Architecture",emoji:"⛩️",
        address:"86 Nanzenji Fukuchicho, Sakyo Ward, Kyoto 606-8435",lat:35.0115,lng:135.7933,
@@ -2371,6 +2376,7 @@ function renderHome() {
         const dx = Math.abs(e.changedTouches[0].clientX - startX);
         if(dy < 10 && dx < 10) openCity(ck); // Seulement si pas de glissement
       }, {passive:true});
+      card.addEventListener('click', () => openCity(ck));
     }
   });
 
@@ -2839,9 +2845,9 @@ function loadRestosOnMap(ck){
       html:'<div style="background:' + (r.must?'#d4af37':'#e11d48') + ';border:2px solid #fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,0.5)">' + r.emoji + '</div>',
       className:'',iconSize:[26,26],iconAnchor:[13,13]
     });
-    const restoImgH = r.img ? '<img src="' + r.img + '" class="popup-img" onclick="showLightbox(\'' + encodeURIComponent(r.img) + '\',\'' + encodeURIComponent(r.emoji+' '+r.name) + '\',\'' + encodeURIComponent(r.address||'') + '\',\'' + encodeURIComponent(r.desc||'') + '\')" onerror="this.style.display=\'none\'">' : '';
+    const restoImgH = r.img ? '<img src="' + r.img + '" class="popup-img" onclick="openRestoLightbox(\'' + r.id + '\')" onerror="this.style.display=\'none\'">' : '';
     L.marker([r.lat,r.lng],{icon}).addTo(restosLayer[ck])
-      .bindPopup('<div style="width:220px">' + restoImgH + '<div style="font-weight:700;font-size:13px">' + r.emoji + ' ' + r.name + (r.must?' ★':'') + '</div><div style="font-size:11px;color:#d4af37">' + r.type + '</div><div style="font-size:11px;margin-top:4px">' + r.budget + '</div><div style="font-size:11px;color:#888;margin-top:2px">📍 ' + r.address + '</div>' + (r.desc?'<div style="font-size:11px;color:#ccc;margin-top:4px">'+r.desc.substring(0,120)+'...</div>':'') + '<div class="popup-zoom" onclick="showLightbox(\'' + (r.img?encodeURIComponent(r.img):'') + '\',\'' + encodeURIComponent(r.emoji+' '+r.name) + '\',\'' + encodeURIComponent(r.address||'') + '\',\'' + encodeURIComponent(r.desc||'') + '\')">🔍 Voir en grand</div></div>',{maxWidth:240});
+      .bindPopup('<div style="width:220px">' + restoImgH + '<div style="font-weight:700;font-size:13px">' + r.emoji + ' ' + r.name + (r.must?' ★':'') + '</div><div style="font-size:11px;color:#d4af37">' + r.type + '</div><div style="font-size:11px;margin-top:4px">' + r.budget + '</div><div style="font-size:11px;color:#888;margin-top:2px">📍 ' + r.address + '</div>' + (r.desc?'<div style="font-size:11px;color:#ccc;margin-top:4px">'+r.desc.substring(0,120)+'...</div>':'') + '<div class="popup-zoom" onclick="openRestoLightbox(\'' + r.id + '\')">🔍 Voir en grand · photos & itinéraire</div></div>',{maxWidth:240});
   });
   restosLoaded[ck]=true;
 }
