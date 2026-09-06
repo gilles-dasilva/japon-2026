@@ -1221,7 +1221,6 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
 </script>
 
 <script>
-tMap()
 const MAPTILER_KEY = '1oBsmSWNFattubU4Bwxk';
 
 // ============================================================================
@@ -2514,7 +2513,7 @@ function openCity(ck) {
   showScreen('city');
   
   // Précharger silencieusement la 1ère image de chaque journée
-  requestIdleCallback ? requestIdleCallback(() => prefetchDayImages(ck)) : setTimeout(() => prefetchDayImages(ck), 500);
+  (typeof requestIdleCallback !== 'undefined') ? requestIdleCallback(() => prefetchDayImages(ck)) : setTimeout(() => prefetchDayImages(ck), 500);
 }
 
 function prefetchDayImages(ck) {
