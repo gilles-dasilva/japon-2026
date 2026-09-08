@@ -1072,6 +1072,7 @@ html,body{height:100%;font-family:'Lora',serif;background:var(--dark);color:var(
     <button class="tool-btn" id="btn-stations" onclick="toggleStations()">🚇 Stations</button>
     <button class="tool-btn" id="btn-restos" onclick="toggleRestos()">🍜 Restos</button>
     <button class="tool-btn" id="btn-anim" onclick="toggleAnimation()">▶ Animer</button>
+    <button class="tool-btn" id="btn-geoloc" onclick="toggleGeoloc()">📍 Ma position</button>
   </div>
 </div>
 
@@ -1509,8 +1510,12 @@ const KYOTO_OPTIONAL = [
   {id:'ko-philosopher',name:"Chemin de la Philosophie",emoji:'🌸',votes:4,address:'Tetsugaku-no-michi, Sakyo Ward, Kyoto',lat:35.0175,lng:135.7945,img:'https://images.pexels.com/photos/37184733/pexels-photo-37184733.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Promenade 2km le long d\'un canal entre Ginkaku-ji et Nanzen-ji. Gratuit."},
   {id:'ko-theiere',name:'Cérémonie du thé',emoji:'🍵',votes:3,address:'Gion, Higashiyama Ward, Kyoto',lat:35.0027,lng:135.7754,img:'https://images.pexels.com/photos/8952612/pexels-photo-8952612.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Chado traditionnel dans une maison de thé. De 1500¥ (~9€) à 5000¥ (~31€)."},
   {id:'ko-kameyama',name:'Parc Kameyama & Berges',emoji:'🛶',votes:2,address:'Sagakameyama, Ukyo Ward, Kyoto',lat:35.0182,lng:135.6730,img:'https://images.pexels.com/photos/34247027/pexels-photo-34247027.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Partie haute d'Arashiyama, vue sur la rivière Hozu, loin de la foule. Gratuit."},
-  {id:'ko-iwatayama',name:'Iwatayama (Parc des Singes)',emoji:'🐒',votes:4,address:'Nakaoshitacho, Ukyo Ward, Kyoto',lat:35.0104,lng:135.6727,img:'https://images.pexels.com/photos/20259602/pexels-photo-20259602.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Macaques en liberté sur la montagne. Vue sur Kyoto. 550¥ (~3€) adulte, 250¥ (~2€) enfant."},
+  
   {id:'ko-heian',name:'Sanctuaire Heian-jingu',emoji:'🏯',votes:0,address:'97 Okazaki Nishitennocho, Sakyo Ward, Kyoto',lat:35.0163,lng:135.7826,img:'https://images.pexels.com/photos/20150829/pexels-photo-20150829.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Torii géant rouge vif visible depuis loin. Jardins magnifiques. 600¥ (~4€) adulte."},
+
+  {id:'ko-nishiki',name:'Nishiki Market',emoji:'🐟',votes:4,address:'Nishikikoji-dori, Nakagyo Ward, Kyoto 604-8054',lat:35.0050,lng:135.7659,img:'https://images.pexels.com/photos/5946647/pexels-photo-5946647.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"'La cuisine de Kyoto' — marché couvert de 400m, street food, produits locaux, échantillons à goûter. Gratuit (achats optionnels)."},
+  {id:'ko-chionin',name:'Chion-in & Nanzen-ji',emoji:'⛩️',votes:2,address:'400 Rinkacho, Higashiyama Ward, Kyoto 605-8686',lat:35.0049,lng:135.7823,img:'https://images.pexels.com/photos/30979559/pexels-photo-30979559.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Chion-in : l'un des plus grands portails de temple du Japon (Sanmon), siège du bouddhisme Jodo. À combiner avec une deuxième visite de Nanzen-ji tout proche. Entrée Chion-in : 500¥ (~3€)."},
+  {id:'ko-gioncorner',name:'Gion Corner',emoji:'🎭',votes:3,address:'570-2 Gionmachi Minamigawa, Higashiyama Ward, Kyoto 605-0074',lat:35.0021,lng:135.7754,img:'https://images.pexels.com/photos/8951800/pexels-photo-8951800.jpeg?auto=compress&cs=tinysrgb&w=600',desc:"Spectacle condensé des arts traditionnels de Kyoto : danse Kyomai, thé, koto, ikebana, bunraku, kyogen. ~3400¥ (~21€) adulte. Réservation conseillée."},
 ];
 
 const KYOTO_TOILETTES = [
@@ -1666,20 +1671,26 @@ const KYOTO_DAYS = {
        img:"https://images.pexels.com/photos/36395896/pexels-photo-36395896.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Le pont 'Passage de la Lune' et vue sur les collines boisées d'Arashiyama. Déjeunez dans l'un des restaurants du bord de rivière ou dans un café d'Arashiyama. Moins de monde qu'à Bambous !",
        tags:["gratuit","kids","incontournable","repas"],wc:"Toilettes près du pont",transport:null},
-      {id:"mousse-j6",num:3,time:"13:30",name:"Temples de Mousse (Giō-ji & Jōjakkō-ji)",type:"Temples secrets · Nature",emoji:"🌿",
+      {id:"iwatayama-j6",num:3,time:"12:00",name:"Iwatayama — Parc des Singes",type:"Nature · Enfants",emoji:"🐒",
+       address:"8 Genrokuzancho, Nishikyo Ward, Kyoto 616-0004",lat:35.0071,lng:135.6773,
+       img:"https://images.pexels.com/photos/6626783/pexels-photo-6626783.jpeg?auto=compress&cs=tinysrgb&w=600",
+       desc:"Juste à côté du pont Togetsukyō ! Montée à pied de 20 min dans la forêt jusqu'au sommet, où une centaine de macaques japonais vivent en liberté. Vue superbe sur Kyoto depuis le sommet. Possibilité de nourrir les singes depuis une cabane (100¥ le sachet). 550¥ (~4€) adulte, 250¥ (~2€) enfant.",
+       tags:["payant","kids","incontournable"],wc:"Toilettes à l'entrée et au sommet",
+       transport:{icon:"🚶",text:"5 min à pied depuis le pont Togetsukyō, entrée juste sur la rive sud",detail:"Suivre les panneaux 'Monkey Park Iwatayama' près du pont"}},
+      {id:"mousse-j6",num:4,time:"13:30",name:"Temples de Mousse (Giō-ji & Jōjakkō-ji)",type:"Temples secrets · Nature",emoji:"🌿",
        address:"Sagagioji, Ukyo Ward, Kyoto 616-8435",lat:35.0285,lng:135.6740,
        img:"https://images.pexels.com/photos/31418368/pexels-photo-31418368.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Deux petits temples secrets dans la forêt d'Arashiyama — tapis de mousse d\'un vert intense et mystérieux. Parmi les lieux les plus apaisants de tout Kyoto. Giō-ji : 300¥ (~2€) · Jōjakkō-ji : 500¥ (~3€). 15 min à pied entre les deux.",
        tags:["payant","kids"],wc:"Boutiques alentour",
-       transport:{icon:"🚶",text:"20 min à pied depuis le pont, dans la forêt vers le nord",detail:"Suivre les panneaux Giō-ji depuis la rue principale d'Arashiyama"}},
-      {id:"nijo-j6",num:4,time:"15:30",name:"Nijo-jo — Château du shogun",type:"Château · Histoire",emoji:"🏰",
+       transport:{icon:"🚶",text:"20 min à pied depuis Iwatayama, dans la forêt vers le nord",detail:"Suivre les panneaux Giō-ji depuis la rue principale d'Arashiyama"}},
+      {id:"nijo-j6",num:5,time:"15:30",name:"Nijo-jo — Château du shogun",type:"Château · Histoire",emoji:"🏰",
        address:"541 Nijojo-cho, Nakagyo Ward, Kyoto 604-8301",lat:35.0142,lng:135.7481,
        img:"https://images.pexels.com/photos/20199421/pexels-photo-20199421.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Château du shogun avec les 'planchers rossignols' qui craquent à chaque pas — les enfants trouvent ça magique ! Jardins Ninomaru superbes. 1300¥ (~8€) adulte, 400¥ (~2€) enfant. Fermé à 17h — arrivez avant 15h30.",
        tags:["payant","kids"],wc:"Toilettes dans le château",
        transport:{icon:"🚌",text:"Bus 11 depuis Arashiyama → Nijo-jo-mae · 30 min · 230¥ (~1€)",detail:"Direction est, direction centre de Kyoto"},
        fromLat:35.0154,fromLng:135.6751,toLat:35.0142,toLng:135.7481},
-      {id:"soiree-j6",num:5,time:"19:00",name:"Pontocho — Dîner de groupe",type:"Gastronomie",emoji:"🏮",
+      {id:"soiree-j6",num:6,time:"19:00",name:"Pontocho — Dîner de groupe",type:"Gastronomie",emoji:"🏮",
        address:"Pontocho, Nakagyo Ward, Kyoto",lat:35.0074,lng:135.7694,
        img:"https://images.pexels.com/photos/7526797/pexels-photo-7526797.jpeg?auto=compress&cs=tinysrgb&w=600",
        desc:"Retour à Pontocho pour le grand dîner du groupe. Restaurant avec terrasse kawayuka sur la rivière si possible. Réservation recommandée.",
@@ -2398,7 +2409,7 @@ function showScreen(id) {
 function goBack(to) {
   if(to === 'home') showScreen('home');
   else if(to === 'city') showScreen('city');
-  else if(to === 'day') { stopAnimation(); showScreen('day'); }
+  else if(to === 'day') { stopAnimation(); stopGeoloc(); showScreen('day'); }
   else if(to === 'resa') showScreen('resa');
   else if(to === 'comments') showScreen('comments');
   else if(to === 'optionnel') showScreen('optionnel');
@@ -2747,15 +2758,7 @@ function initMap() {
         }
         if(!step.lat) return;
         if(step.isHotel) {
-          // Marker hôtel dans le parcours journée — utiliser les infos de city.hotel
-          const hotelIcon = L.divIcon({html:`<div style="background:#d4af37;border:3px solid #fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,0.5)">🏨</div>`,className:'',iconSize:[32,32],iconAnchor:[16,16]});
-          const hotelData = CITIES[ck].hotel;
-          const hotelImg = hotelData.img || step.img;
-          const hotelName = hotelData.name || step.name;
-          const hotelAddr = hotelData.address || step.address || '';
-          const imgH = hotelImg ? `<img src="${hotelImg}" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">` : '';
-          L.marker([step.lat,step.lng],{icon:hotelIcon}).addTo(dayLayers[dk])
-            .bindPopup(`<div style="width:230px">${imgH}<div class="popup-name">🏨 ${hotelName}</div><div class="popup-addr">📍 ${hotelAddr}</div><div class="popup-desc">${step.name}</div>${hotelImg ? '<div class="popup-zoom" onclick="openHotelPhoto(\'' + ck + '\')">🔍 Voir en grand</div>' : ''}</div>`,{maxWidth:250});
+          // Le marqueur hôtel persistant (hotelMarkers[ck]) couvre déjà ce point — pas de doublon ici.
           return;
         }
         const icon = step.isAirport
@@ -2938,6 +2941,69 @@ function stopAnimation(){
   document.getElementById('btn-anim').textContent='▶ Animer';
 }
 window.toggleAnimation=toggleAnimation;
+
+// ── GÉOLOCALISATION EN DIRECT ──
+let geolocActive = false;
+let geolocWatchId = null;
+let geolocMarker = null;
+let geolocCircle = null;
+let geolocCentered = false;
+
+function toggleGeoloc(){
+  geolocActive ? stopGeoloc() : startGeoloc();
+}
+function startGeoloc(){
+  if(!map) return;
+  if(!navigator.geolocation){
+    alert("La géolocalisation n'est pas disponible sur cet appareil/navigateur.");
+    return;
+  }
+  geolocActive = true;
+  geolocCentered = false;
+  const btn = document.getElementById('btn-geoloc');
+  if(btn){ btn.classList.add('anim-active'); btn.textContent = '📍 Suivi...'; }
+  geolocWatchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      const lat = pos.coords.latitude, lng = pos.coords.longitude, acc = pos.coords.accuracy || 50;
+      if(!geolocMarker){
+        const icon = L.divIcon({
+          html:'<div style="width:18px;height:18px;border-radius:50%;background:#3b82f6;border:3px solid #fff;box-shadow:0 0 0 2px rgba(59,130,246,0.5),0 2px 8px rgba(0,0,0,0.5)"></div>',
+          className:'',iconSize:[18,18],iconAnchor:[9,9]
+        });
+        geolocMarker = L.marker([lat,lng],{icon,zIndexOffset:10000}).addTo(map).bindPopup('📍 Vous êtes ici');
+        geolocCircle = L.circle([lat,lng],{radius:acc,color:'#3b82f6',weight:1,fillColor:'#3b82f6',fillOpacity:0.12}).addTo(map);
+      } else {
+        geolocMarker.setLatLng([lat,lng]);
+        geolocCircle.setLatLng([lat,lng]);
+        geolocCircle.setRadius(acc);
+      }
+      if(!geolocCentered){
+        map.flyTo([lat,lng], 16, {duration:0.8});
+        geolocCentered = true;
+      }
+    },
+    (err) => {
+      console.warn('Geoloc error', err);
+      if(err.code === 1){
+        alert("La localisation a été refusée. Autorisez-la dans les réglages du navigateur pour voir votre position sur la carte.");
+      }
+      stopGeoloc();
+    },
+    { enableHighAccuracy:true, maximumAge:5000, timeout:15000 }
+  );
+}
+function stopGeoloc(){
+  geolocActive = false;
+  if(geolocWatchId !== null && navigator.geolocation){
+    navigator.geolocation.clearWatch(geolocWatchId);
+    geolocWatchId = null;
+  }
+  if(geolocMarker && map){ try{ map.removeLayer(geolocMarker); }catch(e){} geolocMarker = null; }
+  if(geolocCircle && map){ try{ map.removeLayer(geolocCircle); }catch(e){} geolocCircle = null; }
+  const btn = document.getElementById('btn-geoloc');
+  if(btn){ btn.classList.remove('anim-active'); btn.textContent = '📍 Ma position'; }
+}
+window.toggleGeoloc = toggleGeoloc;
 
 // ── LIGHTBOX ──
 let _lbPhotos=[], _lbIdx=0;
