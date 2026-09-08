@@ -1,7 +1,7 @@
-// SW v2026-v90 — Reset complet
+// SW v2026-v91 — Reset complet + bypass cache HTTP
 // Supprimer tous les anciens caches à l'installation
 self.addEventListener('install', event => {
-  console.log('[SW] Install v2026-v90');
+  console.log('[SW] Install v2026-v91');
   self.skipWaiting();
   event.waitUntil(
     caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
@@ -9,7 +9,7 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  console.log('[SW] Activate v2026-v90');
+  console.log('[SW] Activate v2026-v91');
   event.waitUntil(
     caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
     .then(() => self.clients.claim())
@@ -19,7 +19,10 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Ne rien mettre en cache — tout depuis le réseau
+// Ne rien mettre en cache — tout depuis le réseau, en forçant le
+// contournement du cache HTTP du navigateur (pas seulement la Cache API).
 self.addEventListener('fetch', event => {
-  event.respondWith(fetch(event.request));
+  event.respondWith(
+    fetch(event.request, { cache: 'no-store' }).catch(() => fetch(event.request))
+  );
 });
