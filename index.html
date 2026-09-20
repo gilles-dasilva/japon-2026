@@ -3154,23 +3154,6 @@ function yenEur(yen){ return Math.round(yen/TAUX); }
 const RESERVATIONS = {
   transport:[
     {
-      id:'r-osaka-kyoto',
-      name:'Shinkansen Osaka → Kyoto',
-      jour:'J4 — Dimanche 18 octobre (matin)',
-      badge:'ok',
-      badge_label:'Simple à faire',
-      rows:[
-        {label:'Trajet',val:'Osaka Station → Kyoto Station'},
-        {label:'Train',val:'JR Special Rapid (pas Shinkansen — plus économique !)'},
-        {label:'Durée',val:'29 min'},
-        {label:'Prix adulte',val:'580¥ (~'+yenEur(580)+'€) · 🎁 -6 ans : GRATUIT (max 2/adulte, siège libre) · 6-11 ans : 290¥ (~'+yenEur(290)+'€)'},
-        {label:'Réservation',val:'Aucune nécessaire — trains toutes les 15 min'},
-        {label:'Alternative',val:'JR Shinkansen Hikari : 1420¥ (~'+yenEur(1420)+'€) · 15 min · Réservation possible sur place'},
-      ],
-      warn:'💡 Le JR Special Rapid est LARGEMENT suffisant (29 min, 580¥ (~4€) ~3,60€). Inutile de prendre le Shinkansen pour Osaka→Kyoto. Achetez le billet au guichet ou distributeur le matin même.',
-      note:'Pas de réservation nécessaire. Payez avec votre carte bancaire aux bornes automatiques en gare d\'Osaka (interface en anglais disponible).'
-    },
-    {
       id:'r-kyoto-tokyo',
       name:'Shinkansen Kyoto → Tokyo',
       jour:'J8 — Jeudi 22 octobre (matin)',
@@ -3202,20 +3185,6 @@ const RESERVATIONS = {
       ],
       warn:'Bus souvent complet le dimanche. Réservez en ligne dès que possible.',
       note:'Départ depuis Busta Shinjuku (8e étage de la gare de Shinjuku). Accepte les cartes bancaires étrangères en ligne.'
-    },
-    {
-      id:'r-nara-train',
-      name:'Train Kyoto → Nara (excursion J5)',
-      jour:'J5 — Lundi 19 octobre',
-      badge:'ok',
-      badge_label:'Pas nécessaire',
-      rows:[
-        {label:'Trajet',val:'Kyoto Station → Nara Station (JR Nara Line)'},
-        {label:'Durée',val:'45 min'},
-        {label:'Prix adulte',val:'720¥ (~'+yenEur(720)+'€) · Couvert par JR Pass'},
-        {label:'Réservation',val:'Aucune nécessaire — trains fréquents toutes les 20 min'},
-      ],
-      note:'Pas besoin de réserver à l\'avance. Achetez au guichet ou utilisez votre JR Pass le matin même.'
     },
   ],
   activites:[
@@ -3252,22 +3221,6 @@ const RESERVATIONS = {
       note:'Billets pour enfants vendus uniquement au guichet le jour J (14e étage). Réservation non annulable.'
     },
     {
-      id:'r-sumo',
-      name:'Sumo — Visite dojo / Morning Practice',
-      jour:'J10 — Samedi 24 octobre (matin)',
-      badge:'warn',
-      badge_label:'Pas de tournoi',
-      rows:[
-        {label:'Situation',val:'Aucun tournoi officiel en octobre à Tokyo (suivant : nov. à Fukuoka)'},
-        {label:'Alternative 1',val:'Morning practice dans un dojo à Ryogoku — 5 000-8000¥ (~50€)/pers (~'+yenEur(6000)+'€)'},
-        {label:'Alternative 2',val:'Visite guidée Sumo + musée via Klook (14500¥ (~91€)/pers ~'+yenEur(14500)+'€)'},
-        {label:'Réserver sur',val:'hyperlink:https://www.klook.com/fr/search/?query=sumo+tokyo:Klook — "Tokyo Sumo Morning Practice"'},
-        {label:'Ouverture',val:'Réservation possible dès maintenant'},
-      ],
-      warn:'⚠️ Il n\'y a pas de grand tournoi de sumo en octobre à Tokyo (tournoi sept. 13-27, suivant à Fukuoka en nov.). Optez pour une visite de pratique matinale dans les dojos de Ryogoku.',
-      note:'Les visites morning practice se font entre 6h et 9h. Spectacle authentique et unique. Réservez plusieurs semaines à l\'avance.'
-    },
-    {
       id:'r-katsuoji',
       name:'Bus Hankyu — Katsuō-ji (Temple Daruma)',
       jour:'J3 — Samedi 17 octobre (matin)',
@@ -3282,57 +3235,6 @@ const RESERVATIONS = {
       note:'Pas de réservation nécessaire mais partez tôt ! Dernier bus retour vers 17h-18h selon saison.'
     },
   ],
-  restaurants:[
-    {
-      id:'r-resto-pontocho',
-      name:'Restaurant Pontocho — Kyoto',
-      jour:'J4 ou J6 — Soir',
-      badge:'info',
-      badge_label:'À planifier',
-      rows:[
-        {label:'Style',val:'Kaiseki ou restaurant avec terrasse Kawayuka sur la rivière'},
-        {label:'Prix moyen',val:'5 000-15000¥ (~94€)/pers (~'+yenEur(8000)+'€) selon restaurant'},
-        {label:'Réservation',val:'Obligatoire pour les restaurants avec terrasse rivière'},
-        {label:'Réserver sur',val:'hyperlink:https://www.tablecheck.com/fr/japan/reserve/:TableCheck.com ou Tableall.com'},
-        {label:'À faire',val:'Dès que les dates sont confirmées — 1-2 mois à l\'avance'},
-      ],
-      warn:'Les tables kawayuka (terrasse sur la rivière) se réservent très tôt. Incontournable pour l\'expérience Pontocho complète.',
-      note:'Section à compléter avec le restaurant choisi. Nous pourrons affiner ensemble.'
-    },
-    {
-      id:'r-asakusa-sumo',
-      name:'Asakusa Sumo Club — Dîner + Combat',
-      jour:'J10 — Samedi 24 octobre (soirée avant les feux)',
-      badge:'urgent',
-      badge_label:'⚠️ Réserver tôt',
-      rows:[
-        {label:'Lieu',val:'Rokku Broadway, Asakusa (10 min à pied d\'Asakusa Station)'},
-        {label:'Séances',val:'11h30 · 14h30 · 17h30 · 20h30 — durée 2h'},
-        {label:'Séance J10',val:'17h30 recommandée (avant les feux à 19h)'},
-        {label:'Prix standard',val:'16000¥ (~100€)/adulte (~'+yenEur(16000)+'€) · 13000¥ (~81€) enfant -12 ans (~'+yenEur(13000)+'€)'},
-        {label:'Prix VIP',val:'20000¥ (~125€)/adulte (~'+yenEur(20000)+'€) — siège côté ring'},
-        {label:'Inclus',val:'Chanko-nabe (soupe sumos) · Poulet karaage · Sushi inari · Dessert · 1 boisson'},
-        {label:'Show inclus',val:'Danse geisha · Démonstration rikishi · Combat en 3 rounds · Photo souvenir'},
-        {label:'Bonus',val:'Possibilité de défier un lutteur en costume sumo !'},
-        {label:'Réserver sur',val:'hyperlink:https://www.klook.com/fr/search/?query=asakusa+sumo+club:Klook — "Asakusa Sumo Club"'},
-      ],
-      warn:'⚠️ Très populaire — souvent complet le week-end. Réservez plusieurs semaines à l\'avance. Note : séance 17h30 parfaite avant les feux d\'artifice (feux à 19h, 30 min de trajet vers Odaiba).',
-      note:'Annulation gratuite jusqu\'à 24h avant. Options végétariennes disponibles (précisez à la réservation). Adapté aux enfants — format familial et interactif.'
-    },
-    {
-      id:'r-resto-tsukiji',
-      name:'Sushis Tsukiji — Tokyo',
-      jour:'J13 — Mardi 27 octobre (matin)',
-      badge:'ok',
-      badge_label:'Sans réservation',
-      rows:[
-        {label:'Style',val:'Sushis ultra-frais au marché extérieur de Tsukiji'},
-        {label:'Prix moyen',val:'1 500-3000¥ (~19€)/pers (~'+yenEur(2000)+'€)'},
-        {label:'Réservation',val:'Aucune nécessaire — arriver avant 9h pour éviter les files'},
-      ],
-      note:'Pas de réservation. Daidaiya, Sushizanmai et Tsukiji Itadori sont parmi les meilleures adresses.'
-    },
-  ]
 };
 
 function renderResa(){
@@ -3342,11 +3244,9 @@ function renderResa(){
   const today = new Date();
   const ALERTS = [
     {date:'2026-09-01', label:'TeamLab Planets', icon:'🌊', desc:'Ouverture billetterie — réserver créneau 9h J12 (26 oct)', url:'https://teamlabplanets.dmm.com', urgence:'high'},
-    {date:'2026-09-18', label:'Shinkansen Osaka → Kyoto', icon:'🚅', desc:'Billets dispo 1 mois avant le J4 (18 oct) — guichet ou borne', url:'', urgence:'medium'},
     {date:'2026-09-22', label:'Shinkansen Kyoto → Tokyo', icon:'🚅', desc:'Réserver dès ce jour sur SmartEX ou japan-bullettrain.com — J8 (22 oct)', url:'https://www.japan-bullettrain.com/fr', urgence:'high'},
     {date:'2026-09-25', label:'Shibuya Sky', icon:'🏙️', desc:'Ouverture billetterie 4 semaines avant — créneau coucher de soleil J9 (23 oct)', url:'https://www.shibuya-scramble-square.com/sky/ticket/', urgence:'high'},
     {date:'2026-09-25', label:'Bus Mont Fuji (Kawaguchiko)', icon:'🗻', desc:'Réserver le bus Shinjuku→Kawaguchiko — J11 dimanche (bondé)', url:'https://highway-buses.jp', urgence:'medium'},
-    {date:'2026-10-01', label:'Asakusa Sumo Club', icon:'🤼', desc:'Réserver séance 17h30 J10 (24 oct) sur Klook — se remplit vite', url:'https://www.klook.com/fr/search/?query=asakusa+sumo+club', urgence:'medium'},
   ];
 
   const STATUS = {high:'🔴',medium:'🟡',done:'🟢'};
